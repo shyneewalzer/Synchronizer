@@ -2,7 +2,6 @@ package com.example.mobileapplicationproject.model;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 public class Travel {
     @SerializedName("destination")
     @Expose
@@ -26,4 +25,5 @@ public class Travel {
     public void setAccEmail(List<String> accEmail) {
         this.accEmail = accEmail;
     }
+
 }

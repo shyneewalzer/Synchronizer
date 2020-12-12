@@ -6,24 +6,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.mobileapplicationproject.model.GetProfile;
+import com.example.mobileapplicationproject.model.Login;
+import com.example.mobileapplicationproject.model.ResponesTravel;
+import com.example.mobileapplicationproject.model.Travel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class UserLocationForm extends AppCompatActivity {
+    private static final String FILE_NAME = "example.txt";
     private TextInputEditText itemText, location;
+    APIInterface apiInterface;
     ArrayList<String> itemList;
     ArrayAdapter<String> adapter;
     Button addEmail, setProfile;
@@ -31,7 +43,9 @@ public class UserLocationForm extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        apiInterface = APIClient.getClient().create(APIInterface.class);
         setContentView(R.layout.activity_user_location_form);
         lv = (ListView) findViewById(R.id.listview);
         itemText = (TextInputEditText) findViewById(R.id.emailRegister);
@@ -103,17 +117,85 @@ public class UserLocationForm extends AppCompatActivity {
             }
         });
         addEmail.setOnClickListener(addlistner);
+        lv.setAdapter(adapter);
         setProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), MainMenuForm.class);
-                intent.putExtra("location", location.getText().toString());
-                intent.putStringArrayListExtra("email", itemList);
-                startActivity(intent);
+                addTravel();
 
             }
         });
-        lv.setAdapter(adapter);
+    }
+
+    private void addTravel() {
+        FileInputStream fis = null;
+        try {
+            fis = openFileInput(FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+            while ((text = br.readLine()) != null) {
+                sb.append(text);
+            }
+            Travel travel = new Travel();
+            travel.setDestination(location.getText().toString());
+            travel.setAccEmail(itemList);
+            Call<ResponesTravel> travelCall = apiInterface.travelPost(sb.toString(),travel);
+            travelCall.enqueue(new Callback<ResponesTravel>() {
+                @Override
+                public void onResponse(Call<ResponesTravel> call, Response<ResponesTravel> response) {
+                    if (!response.isSuccessful()) {
+
+                        APIError apiError = ErrorUtils.parseError(response);
+                        Toast.makeText(getApplicationContext(), "error "+ apiError.getMessage(), Toast.LENGTH_LONG).show();
+
+                        return;
+                    }
+                    ResponesTravel postResponse = response.body();
+                    Intent intent = new Intent(getBaseContext(), MainMenuForm.class);
+                    intent.putExtra("travelID", postResponse.getTravelId().toString());
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(Call<ResponesTravel> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "error "+ t.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+            });
+//            callTravel.enqueue(new Callback<Travel>() {
+//                @Override
+//                public void onResponse(Call<Travel> call, Response<Travel> response) {
+//                    if (!response.isSuccessful()) {
+//
+//                        APIError apiError = ErrorUtils.parseError(response);
+//                        Toast.makeText(getApplicationContext(), "error "+ apiError.getMessage(), Toast.LENGTH_LONG).show();
+//
+//                        return;
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Travel> call, Throwable t) {
+//                    Toast.makeText(getApplicationContext(), "error "+ t.getMessage(), Toast.LENGTH_LONG).show();
+//
+//                }
+//            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     public void Set(View view) {

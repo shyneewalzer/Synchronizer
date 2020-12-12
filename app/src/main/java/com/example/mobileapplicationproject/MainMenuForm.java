@@ -44,7 +44,8 @@ public class MainMenuForm extends AppCompatActivity {
     APIInterface apiInterface;
     androidx.constraintlayout.utils.widget.ImageFilterView imageView;
     ArrayList<String> email;
-    String location;
+    Bundle extras;
+    String travelID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         apiInterface = APIClient.getClient().create(APIInterface.class);
@@ -53,12 +54,16 @@ public class MainMenuForm extends AppCompatActivity {
         FirstName = findViewById(R.id.firstNameUser);
         LastName = findViewById(R.id.lastNameUser);
         imageView = findViewById(R.id.imageview);
-        email = getIntent().getStringArrayListExtra("email");
-        location = getIntent().getStringExtra("location");
+        extras = getIntent().getExtras();
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_menu);
         bottomNavigationView.setSelectedItemId(R.id.home);
         getName();
+        if (extras != null) {
+            travelID = getIntent().getStringExtra("travelID");
+            createQR(travelID);
+        }
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -89,6 +94,7 @@ public class MainMenuForm extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
     private void getName() {
@@ -117,17 +123,6 @@ public class MainMenuForm extends AppCompatActivity {
                     GetProfile getProfile = response.body();
                     FirstName.setText(getProfile.getFirstname());
                     LastName.setText(getProfile.getLastname());
-                        String content = "";
-//                    String content = "";
-                    if (email == null) {
-                        return;
-                    }
-
-                    content =  "locatin: " + location + "\n";
-                    for (int i = 0; i < email.size(); i++) {
-                        content += "email: " + email.get(i) + "\n";
-                    }
-                    createQR(content);
 
 
 
