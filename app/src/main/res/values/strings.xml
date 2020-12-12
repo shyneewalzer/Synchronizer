@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">ScanGapo</string>
+
+    <!--    MAIN FORM    -->
+    <string name="scangapo">ScanGapo</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+
+
+    <!--    REGISTER FORM  -->
+    <string name="create_acc">Create Account</string>
+    <string name="email_regis">Email</string>
+    <string name="password_regis">Password</string>
+    <string name="login_regis">Sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="user">User</string>
+    <string name="driver">Driver</string>
+    <string name="employee">Employee</string>
+
+    <!--    TRAVEL HISTORY FORM-->
+    <string name="travel_history">TRAVEL HISTORY</string>
+
+    <!--    LOCATION FORM-->
+    <string name="set_location">SET A LOCATION</string>
+
+    <!--    PROFILE FORM -->
+    <string name="account">Account</string>
+    <string name="profile"><u>Profile</u></string>
+    <string name="accountprofile"><u>Account</u></string>
+    <string name="profilee">Profile</string>
+    <string name="lastname">Lastname</string>
+    <string name="age">Age</string>
+    <string name="middlename">Middlename</string>
+    <string name="firstname">Firstname</string>
+    <string name="house_lot_building">House/Lot/Building#</string>
+    <string name="barangay">Barangay</string>
+    <string name="city">City</string>
+    <string name="update">Update</string>
+
+
+</resources>

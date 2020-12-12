@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenuForm">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/table_menu_user"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@id/imageview"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/firstNameUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="FirstName"
+                    android:textColor="@color/dark_green"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/lastNameUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LastName"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_green"
+                    android:textSize="25sp"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/position_menu_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="USER"
+                    android:textColor="@color/dark_green"
+                    android:textStyle="bold"
+                    android:textSize="35sp"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal" />
+            </TableRow>
+        </TableLayout>
+
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/imageview"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            app:layout_constraintBottom_toTopOf="@id/scanme_user_user"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table_menu_user" />
+
+
+        <TextView
+            android:id="@+id/scanme_user_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="SCAN ME"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/dark_green"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toTopOf="@id/reset_user_menu"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageview" />
+
+        <Button
+            android:id="@+id/reset_user_menu"
+            android:layout_width="240dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="60dp"
+            android:textAllCaps="false"
+            android:background="@drawable/main_button"
+            android:text="Reset"
+            android:textColor="#fff"
+            android:textSize="30sp"
+            app:backgroundTint="@color/dark_green"
+            app:layout_constraintBottom_toTopOf="@id/nav_menu"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scanme_user_user" />
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/windowBackground"
+            app:backgroundTint="#FFFFFF"
+            app:itemIconTint="@color/navigation_selector"
+            app:itemTextColor="@color/dark_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/menu_navigation_user" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
+
+
+
+
