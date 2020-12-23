@@ -12,9 +12,4 @@
         android:icon="@drawable/profile_icon"
         />
 
-    <item
-        android:id="@+id/logout_emplo"
-        android:title="Logout"
-        android:icon="@drawable/logout_icon"
-        />
 </menu>

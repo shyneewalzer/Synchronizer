@@ -30,7 +30,7 @@ public class RegisterForm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_form);
+        setContentView(R.layout.register);
         apiInterface = APIClient.getClient().create(APIInterface.class);
         emailInput = (TextInputEditText) findViewById(R.id.emailInput);
         passwordInput = (TextInputEditText) findViewById(R.id.passwordInput);
@@ -82,7 +82,7 @@ public class RegisterForm extends AppCompatActivity {
                     return;
                 }
                 Toast.makeText(RegisterForm.this, "We send a verification to your email address", Toast.LENGTH_LONG).show();
-                Intent myIntent = new Intent(RegisterForm.this, MainForm.class);
+                Intent myIntent = new Intent(RegisterForm.this, Login.class);
                 startActivity(myIntent);
 
             }
@@ -95,12 +95,12 @@ public class RegisterForm extends AppCompatActivity {
     }
 
     public void login_register_txt(View view) {
-        Intent intent = new Intent(this,MainForm.class);
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
 
     public void back_arrow_register(View view) {
-        Intent intent = new Intent(this,MainForm.class);
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
 

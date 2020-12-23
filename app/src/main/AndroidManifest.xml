@@ -3,7 +3,7 @@
     package="com.example.mobileapplicationproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,27 +13,15 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MobileApplicationProject">
         <activity android:name=".EmployeeeProfileForm" />
-        <activity android:name=".EmployeeProfileFormAccount" />
-        <activity android:name=".EmployeeProfileViewFormAccount" />
-        <activity android:name=".EmployeeeProfileViewForm" />
+        <activity android:name=".AccountsForm" />
         <activity android:name=".MainMenuFormEmployee" />
-        <activity android:name=".DriverrProfileViewFormAccount" />
-        <activity android:name=".DriverrProfileViewForm" />
-        <activity android:name=".DriverrTravelForm" />
-        <activity android:name=".DriverrLocationForm" />
-        <activity android:name=".MainMenuFormDriverr" />
-        <activity android:name=".UserProfileViewAccountForm" />
-        <activity android:name=".UserProfileViewForm" />
-        <activity android:name=".DriverProfileFormAccount" />
-        <activity android:name=".DriverProfileForm" />
-        <activity android:name=".UserProfileFormAccount" />
-        <activity android:name=".UserTravelForm" />
-        <activity android:name=".UserLocationForm" />
-        <activity android:name=".UserProfileForm" />
-        <activity
-            android:name=".MainMenuForm"
-            android:screenOrientation="locked" />
-        <activity android:name=".MainForm" />
+        <activity android:name=".UserDriverDashboard" />
+        <activity android:name=".UserDriverPassword" />
+        <activity android:name=".TravelHistory" />
+        <activity android:name=".SetLocation" />
+        <activity android:name=".SetLocationGroup" />
+        <activity android:name=".UserDriverProfile" />
+        <activity android:name=".Login" />
         <activity android:name=".RegisterForm" />
         <activity
             android:name=".IntroForm"
@@ -44,6 +32,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name= ".CaptureAct"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
     </application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
 </manifest>

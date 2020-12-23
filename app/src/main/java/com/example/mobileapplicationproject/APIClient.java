@@ -13,7 +13,7 @@ public class APIClient {
     static Retrofit getClient() {
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.100.79:6060/api/v1/")
+                .baseUrl("http://scanolongapo-api.com/api/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

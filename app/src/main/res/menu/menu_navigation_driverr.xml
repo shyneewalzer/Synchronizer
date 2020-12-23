@@ -23,8 +23,8 @@
         android:icon="@drawable/travel_history_icon"
         />
     <item
-        android:id="@+id/logout_driver"
-        android:title="Logout"
-        android:icon="@drawable/logout_icon"
+        android:id="@+id/group_driver"
+        android:title="Group"
+        android:icon="@drawable/ic_group"
         />
 </menu>

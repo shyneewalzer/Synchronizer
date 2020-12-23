@@ -14,17 +14,17 @@ public class IntroForm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro_form);
+        setContentView(R.layout.intro_form);
 
         handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent dsp = new Intent(IntroForm.this,MainForm.class);
+                Intent dsp = new Intent(IntroForm.this, Login.class);
                 startActivity(dsp);
                 finish();
             }
-        }, 3000);
+        }, 1000);//3000
 
 
     }

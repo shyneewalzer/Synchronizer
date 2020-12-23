@@ -3,7 +3,9 @@ package com.example.mobileapplicationproject.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 public class GetProfile {
-
+    @SerializedName("email")
+    @Expose
+    private String email;
     @SerializedName("user_id")
     @Expose
     private Integer userId;
@@ -39,6 +41,7 @@ public class GetProfile {
     private String barangay;
     @SerializedName("city")
     @Expose
+
     private String city;
 
     public Integer getUserId() {
@@ -67,6 +70,14 @@ public class GetProfile {
 
     public String getMiddlename() {
         return middlename;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setMiddlename(String middlename) {

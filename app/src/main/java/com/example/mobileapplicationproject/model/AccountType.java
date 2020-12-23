@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class AccountType {
+
     @SerializedName("account_id")
     @Expose
     private Integer accountId;
@@ -24,6 +25,7 @@ public class AccountType {
     private String createdAt;
     @SerializedName("updated_at")
     @Expose
+
     private String updatedAt;
 
     public Integer getAccountId() {
