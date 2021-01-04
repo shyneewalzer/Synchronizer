@@ -1,77 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserDriverDashboard">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    app:theme="@style/NavigationDrawerStyle"
+    android:id="@+id/drawer">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/nav_menu_driver"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".UserDriverDashboard">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="?android:attr/windowBackground"
-            app:backgroundTint="#FFFFFF"
-            app:itemIconTint="@color/navigation_selector"
-            app:itemTextColor="@color/dark_green"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/menu_navigation_driverr" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_dashboard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TableLayout
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+            <include
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/table_menu_driver"
-                android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toTopOf="@id/imageview"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="invisible">
+                layout="@layout/toolbar_main" />
 
-                <TableRow
+            <LinearLayout
+                android:id="@+id/dashboard_viewer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    >
-                    <TextView
-                        android:id="@+id/firstName"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="FirstName"
-                        android:textColor="@color/dark_green"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
-                        android:textAlignment="center"
-                        android:layout_gravity="center_horizontal" />
-                    <TextView
-                        android:layout_marginLeft="20dp"
-                        android:id="@+id/lastName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="LastName"
-                        android:textStyle="bold"
-                        android:textColor="@color/dark_green"
-                        android:textSize="25sp"
-                        android:textAlignment="center"
-                        android:layout_gravity="center_horizontal" />
-                </TableRow>
+                        android:orientation="horizontal">
 
-                <TableRow
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:gravity="center">
+                        <TextView
+                            android:layout_marginRight="10dp"
+                            android:id="@+id/firstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="FirstName"
+                            android:textColor="@color/dark_green"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            android:textAlignment="textEnd"
+                            android:layout_gravity="end"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/lastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="LastName"
+                            android:textStyle="bold"
+                            android:textColor="@color/dark_green"
+                            android:textSize="25sp"
+                            android:textAlignment="textStart"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/position_menu_driver"
                         android:layout_width="match_parent"
@@ -82,78 +75,68 @@
                         android:textSize="35sp"
                         android:textAlignment="center"
                         android:layout_gravity="center_horizontal" />
-                </TableRow>
-            </TableLayout>
+                </LinearLayout>
 
 
-            <androidx.constraintlayout.utils.widget.ImageFilterView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:id="@+id/imageview"
-                android:layout_marginTop="50dp"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toTopOf="@id/scanme_driver_text"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/table_menu_driver"
-                />
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:id="@+id/imageview"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/scanme_driver_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="SCAN ME"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_green"
+                    android:textSize="40sp"
+                    android:layout_marginBottom="50dp"/>
+
+
+
+                <Button
+                    android:id="@+id/camera_driver_menu"
+                    android:layout_width="240dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/main_button"
+                    android:text="Camera"
+                    android:textColor="#fff"
+                    android:textSize="30sp"
+                    app:backgroundTint="@color/dark_green"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/pbar"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
+                android:layout_marginTop="250dp"
                 android:indeterminate="true"
                 android:indeterminateDrawable="@drawable/circle"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.401" />
-
-            <TextView
-                android:id="@+id/scanme_driver_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="SCAN ME"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textColor="@color/dark_green"
-                android:textSize="40sp"
-                android:layout_marginBottom="50dp"
-                app:layout_constraintBottom_toTopOf="@id/camera_driver_menu"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageview" />
+                android:visibility="gone"/>
+        </LinearLayout>
 
 
 
-            <Button
-                android:id="@+id/camera_driver_menu"
-                android:layout_width="240dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:textAllCaps="false"
-                android:background="@drawable/main_button"
-                android:text="Camera"
-                android:textColor="#fff"
-                android:textSize="30sp"
-                app:backgroundTint="@color/dark_green"
-                app:layout_constraintBottom_toTopOf="@id/nav_menu_driver"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/scanme_driver_text" />
+    </ScrollView>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu"
+        android:layout_gravity="start">
 
-
-
-
-
-</ScrollView>
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

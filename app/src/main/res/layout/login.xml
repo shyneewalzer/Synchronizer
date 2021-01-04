@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Login">
+    android:background="@color/white"
+    tools:context=".Login"
+    android:layout_marginTop="60dp">
 
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
@@ -27,6 +29,7 @@
             app:hintTextColor="@color/black"
             android:textColor="@color/black"
             app:boxStrokeColor="@color/black"
+            android:theme="@style/Theme.MobileApplicationProject"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -52,6 +55,7 @@
             app:hintTextColor="@color/black"
             android:textColor="@color/black"
             app:boxStrokeColor="@color/black"
+            android:theme="@style/Theme.MobileApplicationProject"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

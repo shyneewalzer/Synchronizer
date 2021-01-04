@@ -11,19 +11,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
@@ -36,14 +43,20 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-public class UserDriverDashboard extends AppCompatActivity implements View.OnClickListener {
+public class UserDriverDashboard extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
+
     private static final String FILE_NAME = "example.txt";
     private TextView txtfirstname, txtlastname, txtposition;
     APIInterface apiInterface;
-    androidx.constraintlayout.utils.widget.ImageFilterView imageView;
+    ImageView imageView;
     Button camera;
-    TableLayout userdriver;
+    LinearLayout dashboardviewer;
     ProgressBar pbar;
+
+    Toolbar toolbar;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
+    NavigationView navigationView;
 
     String firstname, lastname;
     String qrcode, qrscan;
@@ -68,8 +81,27 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         camera = findViewById(R.id.camera_driver_menu);
         txtposition = findViewById(R.id.position_menu_driver);
 
-        userdriver = findViewById(R.id.table_menu_driver);
+        dashboardviewer = findViewById(R.id.dashboard_viewer);
         pbar = findViewById(R.id.pbar);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("User Panel");
+
+        drawerLayout = findViewById(R.id.drawer);
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);//hamburger icon
+        drawerToggle.syncState();
+
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+//        TextView draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+//        draw_name.setText("Dashboard");
+        ImageView personalqr = headerView.findViewById(R.id.personal_qr);
+        personalqr.setImageBitmap(dp.createQR("asdasd"));
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -81,44 +113,10 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
 
         camera.setOnClickListener(this);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_menu_driver);
-        bottomNavigationView.setSelectedItemId(R.id.home_driver);
-//        getName();
         Dbread dbread = new Dbread();
         dbread.execute();
 
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home_driver:
-                        return true;
-                    case R.id.profile_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                ,UserDriverProfile.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.location_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , SetLocation.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.history_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                ,TravelHistory.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.group_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                ,SetLocationGroup.class));
-                        overridePendingTransition(0,0);
-
-                        return true;
-                }
-                return false;
-            }
-        });
     }
 
     private class Dbread extends AsyncTask<String, String, String>
@@ -170,6 +168,7 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         protected void onPreExecute() {
 
             pbar.setVisibility(View.VISIBLE);
+            dashboardviewer.setVisibility(View.GONE);
         }
 
         @Override
@@ -187,11 +186,11 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
                 txtposition.setText("User");
             }
 
-            createQR(qrcode);
+            imageView.setImageBitmap(dp.createQR(qrcode));
 
 
-            pbar.setVisibility(View.INVISIBLE);
-            userdriver.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+            dashboardviewer.setVisibility(View.VISIBLE);
 
         }
     }
@@ -267,21 +266,8 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
     }
 
 
+    //TODO: make an external method of this createqr and put qr to sidenav
 
-    private void createQR(String modelName) {
-//        Toast.makeText(getApplicationContext(),  "a" +modelName, Toast.LENGTH_LONG).show();
-
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-
-        try {
-            BitMatrix bitMatrix = multiFormatWriter.encode( modelName, BarcodeFormat.QR_CODE,500,500);
-            BarcodeEncoder barcodeEncoder =  new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            imageView.setImageBitmap(bitmap);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -336,6 +322,19 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.prof)
+        {
+//            Intent startIntent=new Intent(UserPanel.this, Profile.class);
+//            startActivity(startIntent);
+            finish();
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
@@ -345,13 +344,16 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
     public boolean onOptionsItemSelected(MenuItem item) {
         int optid=item.getItemId();
 
-        if(optid==R.id.logout)
+        if(optid==R.id.about)
+        {
+            dp.toasterlong(getApplicationContext(), "about");
+        }
+        else if(optid==R.id.logout)
         {
             Intent startIntent=new Intent(UserDriverDashboard.this, Login.class);
             startActivity(startIntent);
             finish();
         }
-
         return true;
 
     }
