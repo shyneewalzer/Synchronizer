@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group >
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/house_icon"
+            android:title="Home"
+            app:actionViewClass="android.widget.TextView" />
+        <item
+            android:id="@+id/prof"
+            android:icon="@drawable/profile_icon"
+            android:title="Profile" />
+        <item
+            android:id="@+id/location"
+            android:icon="@drawable/location_icon"
+            android:title="Location"/>
+        <item
+            android:id="@+id/history"
+            android:title="History"
+            android:icon="@drawable/travel_history_icon" />
+        <item
+            android:id="@+id/group"
+            android:title="Group"
+            android:icon="@drawable/ic_group" />
+    </group>
+
+</menu>
