@@ -29,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
+import com.example.mobileapplicationproject.DataController.DebugMode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.BarcodeFormat;
@@ -42,6 +43,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.StringTokenizer;
 
 public class UserDriverDashboard extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener{
 
@@ -58,17 +62,21 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
     ActionBarDrawerToggle drawerToggle;
     NavigationView navigationView;
 
-    String firstname, lastname;
     String qrcode, qrscan;
-    int position;
+    ImageView personalqr;
+    StringTokenizer tokenizer;
+    ArrayList<String> travelinfo;
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
+    DebugMode dm = new DebugMode();
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
     Timestamp timestamp;
+
+    String tester;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +108,12 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         View headerView = navigationView.getHeaderView(0);
 //        TextView draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
 //        draw_name.setText("Dashboard");
-        ImageView personalqr = headerView.findViewById(R.id.personal_qr);
-        personalqr.setImageBitmap(dp.createQR("asdasd"));
+        personalqr = headerView.findViewById(R.id.personal_qr);
+
+        travelinfo = new ArrayList<>();
+
+        Dbread dbread = new Dbread();
+        dbread.execute();
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -112,9 +124,6 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         }
 
         camera.setOnClickListener(this);
-
-        Dbread dbread = new Dbread();
-        dbread.execute();
 
 
     }
@@ -136,14 +145,10 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
                 else
                 {
 
-                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where user_id = '"+ dh.getUserid() +"' ");
+                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where account_id = '"+ dh.getUserid() +"' ");
 
                     while(rs.next()) {
-
-                        firstname = rs.getString(2);
-                        lastname = rs.getString(3);
-                        position = rs.getInt(9);
-
+                        dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"),rs.getString("position"),rs.getInt("working_in"));
                     }
                     rs.close();
 
@@ -174,21 +179,14 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String a){
 
-            txtfirstname.setText(firstname);
-            txtlastname.setText(lastname);
-
-            if(position==1)
-            {
-                txtposition.setText("Driver");
-            }
-            else if(position==0)
-            {
-                txtposition.setText("User");
-            }
+            txtfirstname.setText(dh.getpFName());
+            txtlastname.setText(dh.getpLName());
+            txtposition.setText(dh.getType());
 
             imageView.setImageBitmap(dp.createQR(qrcode));
+            personalqr.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
 
-
+            dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab());
             pbar.setVisibility(View.GONE);
             dashboardviewer.setVisibility(View.VISIBLE);
 
@@ -213,7 +211,7 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
                 }
                 else
                 {
-                    ResultSet rs=con.createStatement().executeQuery("select * from travel_history where travel_id = '"+ qrscan +"' ");
+                    ResultSet rs=con.createStatement().executeQuery("select * from travel_history");
                     if(rs.isBeforeFirst())
                     {
                         isSuccess=true;
@@ -227,7 +225,7 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
 
                     rs.close();
 
-                    con.createStatement().executeUpdate("INSERT into passengers_table (driver_id, travel_id, users_id, time_boarded, date_boarded) VALUES('"+ dh.getUserid() +"', '"+ qrscan +"', '"+ passid +"', '"+ timee +"', '"+ datee +"')");
+                    con.createStatement().executeUpdate("INSERT into travel_history (destination, driver_id, companion_id, plate_number, parent_id, time_boarded, date_boarded) VALUES('N/A', '"+ travelinfo.get(0) +"', 'companion', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
 
                     con.close();
                 }
@@ -244,6 +242,11 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         protected void onPreExecute() {
 
             timestamp = new Timestamp(System.currentTimeMillis());
+            tokenizer = new StringTokenizer(qrscan, ",");
+            while (tokenizer.hasMoreTokens())
+            {
+                travelinfo.add(tokenizer.nextToken());
+            }
             pbar.setVisibility(View.VISIBLE);
         }
 
@@ -265,8 +268,6 @@ public class UserDriverDashboard extends AppCompatActivity implements View.OnCli
         }
     }
 
-
-    //TODO: make an external method of this createqr and put qr to sidenav
 
 
     @Override

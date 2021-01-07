@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.example.mobileapplicationproject.DataController.DebugMode;
+
 public class IntroForm extends AppCompatActivity {
 
     Handler handler;
     Runnable runnable;
+
+    DebugMode dm = new DebugMode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +29,6 @@ public class IntroForm extends AppCompatActivity {
                 finish();
             }
         }, 1000);//3000
-
 
     }
 }

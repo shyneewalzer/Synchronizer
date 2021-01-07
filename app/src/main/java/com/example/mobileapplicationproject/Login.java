@@ -58,8 +58,8 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 email = emailInput.getText()+"";
                 password = passwordInput.getText()+"";
-//                email = "kamusta@gmail.com";
-//                password = "Jaudian29";
+                email = "okaylangakoat@gmail.com";
+                password = "Jaudian29";
                 if(email.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Input Email", Toast.LENGTH_SHORT).show();
                     return;
@@ -105,7 +105,7 @@ public class Login extends AppCompatActivity {
 
                             if(brs.verified==true)
                             {
-                                dh.setAcct(rs.getInt(1), rs.getString(2), rs.getString(4));
+                                dh.setAcct(rs.getInt("account_id"), rs.getString("email"), rs.getString("account_type"));
                                 isSuccess = true;
                             }
                             else
@@ -145,7 +145,7 @@ public class Login extends AppCompatActivity {
             if(isSuccess==true)
             {
 
-                if(dh.getType().equals("User") || dh.getType().equals("Driver"))
+                if(dh.getType().equals("Individual") || dh.getType().equals("Driver"))
                 {
                     Intent myIntent = new Intent(Login.this, UserDriverDashboard.class);
                     startActivity(myIntent);

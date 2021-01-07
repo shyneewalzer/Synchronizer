@@ -72,7 +72,7 @@ public class SetLocationGroup extends AppCompatActivity {
         apiInterface = APIClient.getClient().create(APIInterface.class);
         setContentView(R.layout.set_location_group);
         lv = (ListView) findViewById(R.id.listview);
-        itemText = (TextInputEditText) findViewById(R.id.emailRegister);
+        itemText = (TextInputEditText) findViewById(R.id.emailInsert);
         qrbox = findViewById(R.id.scanbox);
         txtsign = findViewById(R.id.txtsign);
         addEmail = (Button) findViewById(R.id.addEmail);

@@ -16,7 +16,7 @@
         <item
             android:id="@+id/location"
             android:icon="@drawable/location_icon"
-            android:title="Location"/>
+            android:title="Destination"/>
         <item
             android:id="@+id/history"
             android:title="History"

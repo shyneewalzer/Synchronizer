@@ -44,4 +44,5 @@ dependencies {
     implementation 'com.basgeekball:awesome-validation:4.2'
     implementation files('libs/mysql-connector-java-5.1.48-bin.jar')
     implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
 }

@@ -64,7 +64,7 @@ public class SetLocation extends AppCompatActivity {
         apiInterface = APIClient.getClient().create(APIInterface.class);
         setContentView(R.layout.set_location);
         lv = (ListView) findViewById(R.id.listview);
-        itemText = (TextInputEditText) findViewById(R.id.emailRegister);
+        itemText = (TextInputEditText) findViewById(R.id.emailInsert);
         location = (TextInputEditText) findViewById(R.id.location);
         addEmail = (Button) findViewById(R.id.addEmail);
         setProfile = (Button) findViewById(R.id.setProfile);

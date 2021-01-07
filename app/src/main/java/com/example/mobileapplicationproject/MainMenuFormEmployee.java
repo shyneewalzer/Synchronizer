@@ -226,7 +226,7 @@ public class MainMenuFormEmployee extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            //TODO: APPLY TOKEN TO SCAN DRIVER
             timestamp = new Timestamp(System.currentTimeMillis());
             tokenizer = new StringTokenizer(qrscan, ",");
             while (tokenizer.hasMoreTokens())
