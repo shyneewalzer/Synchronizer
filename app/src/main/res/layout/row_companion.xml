@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_cFname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FirstName"
+            android:textSize="17sp"
+            android:layout_marginHorizontal="5dp"/>
+
+        <TextView
+            android:id="@+id/txt_cMname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MiddleName"
+            android:textSize="17sp"
+            android:layout_marginHorizontal="5dp"/>
+
+        <TextView
+            android:id="@+id/txt_cLname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LastName"
+            android:textSize="17sp"
+            android:layout_marginHorizontal="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_cContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact: "
+            android:textSize="14sp"
+            android:layout_marginHorizontal="5dp"/>
+
+        <TextView
+            android:id="@+id/txt_cAdr"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Address: "
+            android:textSize="14sp"
+            android:layout_marginHorizontal="5dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>

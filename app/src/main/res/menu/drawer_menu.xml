@@ -14,7 +14,7 @@
             android:icon="@drawable/profile_icon"
             android:title="Profile" />
         <item
-            android:id="@+id/location"
+            android:id="@+id/destination"
             android:icon="@drawable/location_icon"
             android:title="Destination"/>
         <item

@@ -1,22 +1,21 @@
 package com.example.mobileapplicationproject;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -24,37 +23,34 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.mobileapplicationproject.DataController.DebugMode;
 import com.google.android.material.navigation.NavigationView;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainMenuFormEmployee extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class DriverDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    APIInterface apiInterface;
+    String qrcode;
+    StringTokenizer tokenizer;
+    ArrayList<String> travelinfo;
+    ArrayList<String>vehiclelist;
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
-
-    StringTokenizer tokenizer;
-    ArrayList<String> gethoseid;
-    ArrayList<String> userid;
+    DebugMode dm = new DebugMode();
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
-    Timestamp timestamp;
 
-    String qrscan;
-
-    ////////////UI ELEMENTS////////////
+    ///////////UI ELEMENTS/////////
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
@@ -64,22 +60,31 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
     TextView draw_name;
     CircleImageView nav_img_user;
 
-    TextView txtFirstName, txtLastName, txtPosition;
-    Button btn_escan;
+    ImageView driverQR;
 
+    LinearLayout dashboardviewer;
     ProgressBar pbar;
 
+    TextView txtfirstname, txtlastname, txtposition, txt_qrsign;
+    Spinner spr_platenum;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
+        apiInterface = APIClient.getClient().create(APIInterface.class);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_menu_form_employee);
+        setContentView(R.layout.driver_dashboard);
 
-        txtFirstName = findViewById(R.id.txt_firstname);
-        txtLastName = findViewById(R.id.txt_lastname);
-        txtPosition = findViewById(R.id.txt_position);
-        btn_escan = findViewById(R.id.btn_escan);
+        txtfirstname = findViewById(R.id.txt_firstname);
+        txtlastname = findViewById(R.id.txt_lastname);
+        txtposition = findViewById(R.id.txt_position);
+        txt_qrsign = findViewById(R.id.txt_qrsign);
 
+        driverQR = findViewById(R.id.imageview);
+
+        dashboardviewer = findViewById(R.id.dashboard_viewer);
         pbar = findViewById(R.id.pbar);
+
+        spr_platenum = findViewById(R.id.spr_platenum);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,24 +111,50 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
         nav_img_QR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
         nav_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
 
-        gethoseid = new ArrayList<>();
-        userid = new ArrayList<>();
+        travelinfo = new ArrayList<>();
+        vehiclelist = new ArrayList<>();
+
+        vehiclelist.add(0,"Select Plate Number");
+
+        Dbread dbread = new Dbread();
+        dbread.execute();
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        txtFirstName.setText(dh.getpFName());
-        txtLastName.setText(dh.getpLName());
-        txtPosition.setText(dh.getpPosition());
+        spr_platenum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(!parent.getItemAtPosition(position).equals("Select Plate Number"))
+                {
+                    driverQR.setImageBitmap(dp.createQR(dh.getUserid() + "," + parent.getItemAtPosition(position)));
+                    txt_qrsign.setVisibility(View.GONE);
+                }
+                else
+                {
+                    dp.toasterlong(getApplicationContext(), "Please Select Vehicle");
+                    txt_qrsign.setVisibility(View.VISIBLE);
+                    driverQR.setImageBitmap(null);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                dp.toasterlong(getApplicationContext(), "Please Select Vehicle");
+
+            }
+        });
+
 
     }
-
-
-    private class Dbinsertest extends AsyncTask<String, String, String>
+    //TODO: Fix function
+    private class Dbread extends AsyncTask<String, String, String>
     {
 
         String msger;
-        Boolean isSuccess=false;
 
         @Override
         protected String doInBackground(String... strings) {
@@ -136,12 +167,13 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
                 }
                 else
                 {
-                    for(int x = 0; x<gethoseid.size();x++)
-                    {
-                        con.createStatement().executeUpdate("INSERT into employee_scanned (employee_id, companion_id, parent_id, time_created, date_created) VALUES('"+ dh.getUserid() +"', '"+ userid.get(x) +"', '"+ userid.get(0) +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
-                        isSuccess = true;
-                    }
 
+                    ResultSet rsqr=con.createStatement().executeQuery("select * from vehicles where account_id = '"+ dh.getUserid() +"' ");
+                    while (rsqr.next())
+                    {
+                        vehiclelist.add(rsqr.getString("plate_number"));
+                    }
+                    rsqr.close();
                     con.close();
                 }
             }
@@ -157,68 +189,25 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
         protected void onPreExecute() {
 
             pbar.setVisibility(View.VISIBLE);
+            dashboardviewer.setVisibility(View.GONE);
         }
 
         @Override
         protected void onPostExecute(String a){
-//            Intent myIntent = new Intent(SetLocation.this, UserDriverDashboard.class);
-//            startActivity(myIntent);
 
-            if(isSuccess==true)
-            {
-                dp.toasterlong(getApplicationContext(),userid+"");
-            }
-            else if(isSuccess==false)
-            {
-                dp.toasterlong(getApplicationContext(),userid+" fail");
-            }
+            txtfirstname.setText(dh.getpFName());
+            txtlastname.setText(dh.getpLName());
+            txtposition.setText(dh.getType());
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(DriverDashboard.this, R.layout.spinner_format, vehiclelist);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spr_platenum.setAdapter(dataAdapter);
+
+            driverQR.setImageBitmap(dp.createQR(qrcode));
             pbar.setVisibility(View.GONE);
+            dashboardviewer.setVisibility(View.VISIBLE);
+
         }
-    }
-
-    private void scanCode(){
-
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setCaptureActivity(CaptureAct.class);
-        integrator.setOrientationLocked(false);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt("Scanning Code");
-        integrator.initiateScan();
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null){
-            if(result.getContents() != null){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                sendData(Integer.parseInt(result.getContents()));
-                qrscan = result.getContents()+"";
-
-                builder.setMessage("Scanned Successfully");
-                builder.setTitle("Scanning Result");
-                builder.setPositiveButton("Scan Again", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        scanCode();
-                    }
-                }).setNegativeButton("Finish", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-            else {
-                Toast.makeText(this, "No Result", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-
     }
 
     @Override
@@ -250,7 +239,7 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
         }
         else if(optid==R.id.logout)
         {
-            Intent startIntent=new Intent(MainMenuFormEmployee.this, Login.class);
+            Intent startIntent=new Intent(DriverDashboard.this, Login.class);
             startActivity(startIntent);
             finish();
         }

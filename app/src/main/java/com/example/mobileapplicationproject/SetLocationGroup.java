@@ -1,6 +1,5 @@
 package com.example.mobileapplicationproject;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,14 +38,14 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class SetLocationGroup extends AppCompatActivity {
+public class SetLocationGroup extends AppCompatActivity implements View.OnClickListener{
     private static final String FILE_NAME = "example.txt";
     private TextInputEditText itemText;
-    ImageView qrbox;
+    ImageView img_scanbox;
     APIInterface apiInterface;
     ArrayList<String> itemList;
     ArrayAdapter<String> adapter;
-    Button addEmail, setProfile;
+    Button btn_eAddCompanion, btn_setQR;
     ListView lv;
     String temp="";
 
@@ -73,15 +72,14 @@ public class SetLocationGroup extends AppCompatActivity {
         setContentView(R.layout.set_location_group);
         lv = (ListView) findViewById(R.id.listview);
         itemText = (TextInputEditText) findViewById(R.id.emailInsert);
-        qrbox = findViewById(R.id.scanbox);
+        img_scanbox = findViewById(R.id.scanbox);
         txtsign = findViewById(R.id.txtsign);
-        addEmail = (Button) findViewById(R.id.addEmail);
-        setProfile = (Button) findViewById(R.id.setProfile);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_menu);
-        bottomNavigationView.setSelectedItemId(R.id.group_driver);
+        btn_eAddCompanion = (Button) findViewById(R.id.btn_eAddCompanion);
+        btn_setQR = (Button) findViewById(R.id.btn_setQR);
+
         itemList = new ArrayList<>();
         persons = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(SetLocationGroup.this , android.R.layout.simple_list_item_multiple_choice,itemList);
+        adapter = new ArrayAdapter<String>(SetLocationGroup.this , R.layout.row_companion,itemList);
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -89,58 +87,7 @@ public class SetLocationGroup extends AppCompatActivity {
         locationviewer = findViewById(R.id.locationviewer);
         pbar = findViewById(R.id.pbar);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.location_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , SetLocation.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.profile_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , UserDriverProfile.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.home_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , UserDriverDashboard.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.history_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , TravelHistory.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.group_driver:
-                        return true;
-                }
-                return false;
-            }
-        });
-
-
-
-
-
-
-
-        View.OnClickListener addlistner = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Dbread dbread = new Dbread();
-                dbread.execute();
-
-            }
-        };
-
-
-
-
-
-
+        btn_eAddCompanion.setOnClickListener(this);
 
 
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -166,31 +113,21 @@ public class SetLocationGroup extends AppCompatActivity {
         });
 
 
+    }
 
+    @Override
+    public void onClick(View v) {
 
-
-
-
-
-        addEmail.setOnClickListener(addlistner);
-        lv.setAdapter(adapter);
-
-        setProfile.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-//                addTravel();
-
-                for(int x = 0 ; x<persons.size();x++)
-                {
-                    temp = temp + persons.get(x) + ",";
-                }
-
-                txtsign.setVisibility(View.INVISIBLE);
-                createQR(temp);
-
+        if(v.getId()==R.id.btn_setQR)
+        {
+            for(int x = 0 ; x<persons.size();x++)
+            {
+                temp = temp + persons.get(x) + ",";
             }
-        });
+
+            txtsign.setVisibility(View.INVISIBLE);
+            createQR(temp);
+        }
     }
 
 
@@ -261,21 +198,6 @@ public class SetLocationGroup extends AppCompatActivity {
         }
     }
 
-
-    private void createQR(String modelName) {
-        Toast.makeText(getApplicationContext(),  "" +modelName, Toast.LENGTH_LONG).show();
-
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-
-        try {
-            BitMatrix bitMatrix = multiFormatWriter.encode( modelName, BarcodeFormat.QR_CODE,500,500);
-            BarcodeEncoder barcodeEncoder =  new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-            qrbox.setImageBitmap(bitmap);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

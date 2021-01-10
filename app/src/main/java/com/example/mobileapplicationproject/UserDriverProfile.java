@@ -2,24 +2,28 @@ package com.example.mobileapplicationproject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,279 +32,167 @@ import android.widget.Toast;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.mobileapplicationproject.DataController.DebugMode;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserDriverProfile extends AppCompatActivity {
+public class UserDriverProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
-    CircleImageView circleImageView;
-    Button imagebutton, updateProfileButton;
-    Uri imageuri,tempuri;
-    TextView accttab;
+    Uri imageuri;
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
+    DebugMode dm = new DebugMode();
 
-    Date birthdate;
     Calendar datenow = Calendar.getInstance();
     Calendar c = Calendar.getInstance();
     int age;
 
+    InputStream imageStream;
+
+    DatePickerDialog.OnDateSetListener dateSetListener;
+
+    ///////////UI ELEMENTS////////////
+
+    Toolbar toolbar;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
+    NavigationView navigationView;
+    ImageView nav_img_QR;
+    TextView draw_name;
+    CircleImageView nav_img_user;
+
     LinearLayout profileviewer;
     ProgressBar pbar;
 
-    InputStream imageStream;
-    String encodedImage;
-    byte[] decodedString;
-    Bitmap decodedByte;
+    TextInputEditText edt_firstname, edt_middlename, edt_lastname, edt_age, edt_contact, edt_house, edt_brgy, edt_city;
+    TextView accttab;
+    Button btn_image, btn_update;
+    CircleImageView img_profile;
 
-    BottomNavigationView bottomNavigationView;
-
-    private static final String FILE_NAME = "example.txt";
-    private TextInputEditText FirstName, Middle, LastName, Age, Contact, House, Barangay, City;
-    APIInterface apiInterface;
-    public static final int IMAGE_CODE = 1;
-    String firstName, middle, lastName, contact, house, barangay, city;
-    StringBuilder sb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_driver_profile);
-        sb = new StringBuilder();
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-        FirstName = findViewById(R.id.firstName);
-        LastName = findViewById(R.id.lastName);
-        Middle = findViewById(R.id.middle);
-        Age = findViewById(R.id.age);
-        Contact = findViewById(R.id.contact);
-        House = findViewById(R.id.house);
-        Barangay = findViewById(R.id.barangay);
-        City = findViewById(R.id.city);
-//        getInfo();
-        circleImageView = findViewById(R.id.user_image);
-        imagebutton = findViewById(R.id.user_image_button);
-        updateProfileButton = findViewById(R.id.updateProfileButton);
+
+        edt_firstname = findViewById(R.id.txt_firstname);
+        edt_lastname = findViewById(R.id.txt_lastname);
+        edt_middlename = findViewById(R.id.middle);
+        edt_age = findViewById(R.id.age);
+        edt_contact = findViewById(R.id.contact);
+        edt_house = findViewById(R.id.house);
+        edt_brgy = findViewById(R.id.barangay);
+        edt_city = findViewById(R.id.city);
+
+        img_profile = findViewById(R.id.user_image);
+
+        btn_image = findViewById(R.id.user_image_button);
+        btn_update = findViewById(R.id.updateProfileButton);
+
         profileviewer = findViewById(R.id.profileview);
         pbar = findViewById(R.id.pbar);
+
         accttab = findViewById(R.id.account_user_tab);
-        bottomNavigationView = findViewById(R.id.nav_menu_driver);
-        bottomNavigationView.setSelectedItemId(R.id.profile_driver);
 
-        Dbread dbread = new Dbread();
-        dbread.execute();
 
-        updateProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("User Panel");
 
-                if(updateProfileButton.getText().toString().equals("EDIT"))
-                {
-                    FirstName.setEnabled(true);
-                    LastName.setEnabled(true);
-                    Middle.setEnabled(true);
-                    Age.setEnabled(true);
-                    Contact.setEnabled(true);
-                    House.setEnabled(true);
-                    Barangay.setEnabled(true);
-                    City.setEnabled(true);
+        drawerLayout = findViewById(R.id.drawer);
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);//hamburger icon
+        drawerToggle.syncState();
 
-                    Age.setText(birthdate.toString());
-                    updateProfileButton.setText("SAVE");
-                }
-                else if(updateProfileButton.getText().toString().equals("SAVE"))
-                {
-                    Dbupdate dbupdate = new Dbupdate();
-                    dbupdate.execute();
-                }
-            }
-        });
-        imagebutton.setOnClickListener(new View.OnClickListener() {
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
 
-            @Override
-            public void onClick(View view) {
-                openimageform();
-            }
-        });
+        Menu drawer_menu = navigationView.getMenu();
+        drawer_menu.findItem(R.id.destination).setVisible(false);
 
-        accttab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        View headerView = navigationView.getHeaderView(0);
+        draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        nav_img_QR = headerView.findViewById(R.id.personal_qr);
+        nav_img_user = headerView.findViewById(R.id.cimg_user);
 
-//                Intent myIntent = new Intent(UserDriverProfile.this, AccountsForm.class);
-//                startActivity(myIntent);
-//                finish();
-            }
-        });
+        dataSet();
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                ,UserDriverDashboard.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.profile_driver:
-                        return true;
-                    case R.id.location_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , SetLocation.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.history_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                ,TravelHistory.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.group_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                ,SetLocationGroup.class));
-                        overridePendingTransition(0,0);
+        img_profile.setImageBitmap(dp.createImage(dh.getpImage()));
 
-                        return true;
-                }
-                return false;
-            }
-        });
+        btn_update.setOnClickListener(this);
+        btn_image.setOnClickListener(this);
+        accttab.setOnClickListener(this);
+        edt_age.setOnClickListener(this);
 
+        dataSet();
     }
 
+    @Override
+    public void onClick(View v) {
 
-    private class Dbread extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where profile_owner = '"+ dh.getUserid() +"' ");
-
-                    while(rs.next()) {
-
-                        firstName = rs.getString(2);
-                        lastName = rs.getString(3);
-                        middle = rs.getString(4);
-                        birthdate = rs.getDate(5);
-
-                        c.setTime(birthdate);
-                        age = datenow.get(Calendar.YEAR) - c.get(Calendar.YEAR);
-                        contact = rs.getString(6);
-                        encodedImage = rs.getString(7);
-                    }
-                    rs.close();
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            profileviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            Dbreadaddress dbreadaddress = new Dbreadaddress();
-            dbreadaddress.execute();
-        }
-    }
-    private class Dbreadaddress extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    ResultSet rsaddress=con.createStatement().executeQuery("select * from address_table where address_owner = '"+ dh.getUserid() +"' ");
-                    while(rsaddress.next())
-                    {
-                        house = rsaddress.getString(2);
-                        barangay = rsaddress.getString(3);
-                        city = rsaddress.getString(4);
-                    }
-
-                    rsaddress.close();
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            FirstName.setText(firstName);
-            LastName.setText(lastName);
-            Middle.setText(middle);
-            Age.setText(age+"");
-            Contact.setText(contact);
-            House.setText(house);
-            Barangay.setText(barangay);
-            City.setText(city);
-
-            if(encodedImage!=null && !encodedImage.isEmpty())
+        if(v.getId()==R.id.updateProfileButton)
+        {
+            if(btn_update.getText().toString().equals("EDIT"))
             {
-                dp.toasterlong(getApplicationContext(), "empty");
-                decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-                decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                circleImageView.setImageBitmap(decodedByte);
+                edt_firstname.setEnabled(true);
+                edt_lastname.setEnabled(true);
+                edt_middlename.setEnabled(true);
+                edt_age.setEnabled(true);
+                edt_contact.setEnabled(true);
+                edt_house.setEnabled(true);
+                edt_brgy.setEnabled(true);
+                edt_city.setEnabled(true);
+
+                edt_age.setText(dh.getpBday()+"");
+                btn_update.setText("SAVE");
             }
-
-
-            profileviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
+            else if(btn_update.getText().toString().equals("SAVE"))
+            {
+                Dbupdate dbupdate = new Dbupdate();
+                dbupdate.execute();
+            }
+        }
+        else if(v.getId()==R.id.user_image_button)
+        {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, 100);
+        }
+        else if(v.getId()==R.id.account_user_tab)
+        {
 
         }
+        else if(v.getId()==R.id.age)
+        {
+            int cal_yr = dh.getTempDate().get(Calendar.YEAR);
+            int cal_mo = dh.getTempDate().get(Calendar.MONTH);
+            int cal_dy = dh.getTempDate().get(Calendar.DAY_OF_MONTH);
+            dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
+            @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(UserDriverProfile.this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
+            datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            datepicker.show();
+
+            dateSetListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    month = month + 1;
+                    edt_age.setText(year + "-" + month + "-" + dayOfMonth);
+
+                    dm.displayMessage(getApplicationContext(),year + "-" + month + "-" + dayOfMonth );
+                }
+            };
+        }
     }
+
 
     private class Dbupdate extends AsyncTask<String, String, String>
     {
@@ -320,9 +212,9 @@ public class UserDriverProfile extends AppCompatActivity {
                 else
                 {
 
-                    con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + FirstName.getText() + "', lastname = '" + LastName.getText() + "', middlename = '" + Middle.getText() + "', birthday = '" + Age.getText() + "', contactnumber = '" + Contact.getText() + "', image='"+ encodedImage +"' where profile_owner='" + dh.getUserid() + "' ");
+                    con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_firstname.getText() + "', lastname = '" + edt_lastname.getText() + "', middlename = '" + edt_middlename.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_contact.getText() + "', image='"+ dh.getpImage() +"' where account_id='" + dh.getUserid() + "' ");
 
-                    con.createStatement().executeUpdate("UPDATE address_table SET house_lot_number = '" + House.getText() + "', barangay = '" + Barangay.getText() + "', city = '" + City.getText() + "'  where address_owner='" + dh.getUserid() + "' ");
+                    con.createStatement().executeUpdate("UPDATE address_table SET house_lot_number = '" + edt_house.getText() + "', barangay = '" + edt_brgy.getText() + "', city = '" + edt_city.getText() + "'  where account_id='" + dh.getUserid() + "' ");
 
                     isSuccess=true;
                     con.close();
@@ -349,24 +241,22 @@ public class UserDriverProfile extends AppCompatActivity {
 
             if(isSuccess==true)
             {
-                recreate();
+                dh.setProfile(edt_firstname.getText()+"", edt_lastname.getText()+"", edt_middlename.getText()+"", dp.stringToDate(edt_age.getText()+""), edt_contact.getText()+"", dh.getpImage());
+                dh.setAddress(edt_house.getText()+"", edt_brgy.getText()+"", edt_city.getText()+"");
+                dataSet();
                 Toast.makeText(getApplicationContext(), "Profile Updated", Toast.LENGTH_LONG);
+
+                dm.displayMessage(getApplicationContext(), ""+dp.stringToDate(dp.stringToDate(edt_age+"")+""));
             }
             else
             {
                 Toast.makeText(getApplicationContext(),msger,Toast.LENGTH_LONG);
+                dm.displayMessage(getApplicationContext(), dh.getpBday()+"");
             }
             profileviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
         }
-    }
-
-    private void openimageform() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, 100);
-
     }
 
     @Override
@@ -377,7 +267,7 @@ public class UserDriverProfile extends AppCompatActivity {
                 data != null && data.getData() != null) {
 
             imageuri=data.getData();
-            circleImageView.setImageURI(imageuri);
+            img_profile.setImageURI(imageuri);
 
             try {
                 imageStream = getContentResolver().openInputStream(imageuri);
@@ -385,19 +275,51 @@ public class UserDriverProfile extends AppCompatActivity {
                 e.printStackTrace();
             }
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            encodedImage = encodeImage(selectedImage);
+            dh.setpImage(dp.encodeImage(selectedImage));
 
         }
     }
 
-    private String encodeImage(Bitmap bm)
+    private void dataSet()
     {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
-        byte[] b = baos.toByteArray();
-        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+        btn_update.setText("EDIT");
+        edt_firstname.setEnabled(false);
+        edt_lastname.setEnabled(false);
+        edt_middlename.setEnabled(false);
+        edt_age.setEnabled(false);
+        edt_contact.setEnabled(false);
+        edt_house.setEnabled(false);
+        edt_brgy.setEnabled(false);
+        edt_city.setEnabled(false);
 
-        return encImage;
+        edt_firstname.setText(dh.getpFName());
+        edt_lastname.setText(dh.getpLName());
+        edt_middlename.setText(dh.getpMName());
+
+        age = datenow.get(Calendar.YEAR) - dh.getTempDate().get(Calendar.YEAR);
+        edt_age.setText(age+"");
+
+        edt_contact.setText(dh.getpContact());
+        edt_house.setText(dh.getHouse());
+        edt_brgy.setText(dh.getBrgy());
+        edt_city.setText(dh.getCity());
+
+        draw_name.setText(dh.getpFName() + " " + dh.getpLName());
+        nav_img_QR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
+        nav_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.prof)
+        {
+//            Intent startIntent=new Intent(UserPanel.this, Profile.class);
+//            startActivity(startIntent);
+            finish();
+        }
+
+        return false;
     }
 
     @Override
@@ -410,13 +332,16 @@ public class UserDriverProfile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int optid=item.getItemId();
 
-        if(optid==R.id.logout)
+        if(optid==R.id.about)
+        {
+            dp.toasterlong(getApplicationContext(), "about");
+        }
+        else if(optid==R.id.logout)
         {
             Intent startIntent=new Intent(UserDriverProfile.this, Login.class);
             startActivity(startIntent);
             finish();
         }
-
         return true;
 
     }

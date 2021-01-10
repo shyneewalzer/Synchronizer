@@ -8,6 +8,12 @@
     android:id="@+id/drawer"
     tools:context=".SetLocation">
 
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/lo_refresher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,6 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/toolbar_main" />
 
             <LinearLayout
                 android:id="@+id/locationviewer"
@@ -25,25 +35,27 @@
                 android:gravity="center">
 
                     <TextView
-                        android:id="@+id/txt_location"
+                        android:id="@+id/tv_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/set_location"
+                        android:text="SET A DESTINATION"
                         android:textColor="#005F40"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="90dp"
-                        android:textSize="40sp"
+                        android:textSize="30sp"
                         android:textStyle="bold" />
                 <LinearLayout
                     android:id="@+id/lo_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/location_user"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:theme="@style/Theme.MobileApplicationProject"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -57,7 +69,7 @@
                         app:hintTextColor="@color/black"
                         app:startIconDrawable="@drawable/location_icon">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/location"
+                            android:id="@+id/edt_destination"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:inputType="textPersonName"
@@ -67,14 +79,17 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <Button
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:text="Insert*"
-                        android:textSize="20sp"
-                        android:background="@drawable/circle_button"
+                        android:id="@+id/btn_destination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SET"
+                        android:textSize="25sp"
+                        android:background="@drawable/main_button"
                         android:textColor="@color/white"
-                        android:padding="40dp"
-                        android:layout_margin="20dp"/>
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:layout_margin="20dp"
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
 
@@ -84,50 +99,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/add_user_form"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:padding="16dp"
-                        android:hint="Add companion name"
-                        app:startIconDrawable="@drawable/email_icon"
-                        app:hintTextColor="@color/black"
-                        android:textColor="@color/black"
-                        app:boxStrokeColor="@color/black"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/emailInsert"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:inputType="textEmailAddress"
-                            android:padding="10dp"
-                            android:textSize="20sp">
-                        </com.google.android.material.textfield.TextInputEditText>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <Button
-                        android:id="@+id/addEmail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/main_button"
-                        android:text="Add"
-                        android:textAllCaps="false"
-                        android:textColor="#fff"
-                        android:textSize="20sp"
-                        app:backgroundTint="@color/dark_green"
-                        android:layout_margin="20dp"
-                        android:padding="20dp"/>
+                    android:gravity="center"
+                    android:visibility="invisible">
 
                     <TableLayout
                         android:id="@+id/table_location_user"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
+                        android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="10dp">
 
                         <TableRow
@@ -150,20 +130,69 @@
                             android:nestedScrollingEnabled="true"/>
 
                     </TableLayout>
-                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/add_user_form"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:padding="10dp"
+                            android:hint="Add companion name"
+                            app:startIconDrawable="@drawable/profile_icon"
+                            app:hintTextColor="@color/black"
+                            android:textColor="@color/black"
+                            app:boxStrokeColor="@color/black"
+                            android:theme="@style/Theme.MobileApplicationProject"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_weight="1">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edt_companion"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:inputType="textEmailAddress"
+                                android:padding="10dp"
+                                android:textSize="20sp">
+                            </com.google.android.material.textfield.TextInputEditText>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/btn_addCompanion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/main_button"
+                            android:text="ADD"
+                            android:textAllCaps="false"
+                            android:textColor="#fff"
+                            android:textSize="20sp"
+                            app:backgroundTint="@color/dark_green"
+                            android:padding="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="3.5"/>
+                    </LinearLayout>
+
 
                     <Button
-                        android:id="@+id/btn_scan"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
+                        android:id="@+id/btn_scanner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textAllCaps="false"
-                        android:background="@drawable/circle_button"
-                        android:text="Set"
+                        android:background="@drawable/main_button"
+                        android:text="SCAN"
                         android:textColor="#fff"
-                        android:textSize="30sp"
-                        app:backgroundTint="@color/dark_green"/>
+                        android:textSize="25sp"
+                        app:backgroundTint="@color/dark_green"
+                        android:paddingVertical="10dp"
+                        android:paddingHorizontal="50dp"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
@@ -187,6 +216,7 @@
 
 
     </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"

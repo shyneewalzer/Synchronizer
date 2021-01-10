@@ -1,6 +1,6 @@
 package com.example.mobileapplicationproject.DataController;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 
 public class DataHolder {
@@ -10,6 +10,8 @@ public class DataHolder {
     private static String pFName, pLName, pMName, pImage,pPosition, pBdayHolder, pContact;
     private static Calendar pBday = Calendar.getInstance();
     private static int pEstab;
+
+    private static String house, brgy, city;
 
 
 
@@ -41,11 +43,22 @@ public class DataHolder {
         pLName = iptLname;
         pMName = iptMname;
         pBday.setTime(iptBday);
-        pBdayHolder = pBday.get(Calendar.MONTH) + "-" + pBday.get(Calendar.DAY_OF_MONTH) + "-" + pBday.get(Calendar.YEAR);
+        pBdayHolder = pBday.get(Calendar.YEAR) + "-" + (pBday.get(Calendar.MONTH)+1) + "-" + pBday.get(Calendar.DAY_OF_MONTH);
         pContact = iptContact;
         pImage = iptImage;
         pPosition = iptPosition;
         pEstab = iptEstab;
+    }
+
+    public void setProfile(String iptFname, String iptLname, String iptMname, Date iptBday, String iptContact, String iptImage)
+    {
+        pFName = iptFname;
+        pLName = iptLname;
+        pMName = iptMname;
+        pBday.setTime(iptBday);
+        pBdayHolder = pBday.get(Calendar.YEAR) + "-" + (pBday.get(Calendar.MONTH)+1) + "-" + pBday.get(Calendar.DAY_OF_MONTH);
+        pContact = iptContact;
+        pImage = iptImage;
     }
 
     public String getpFName()
@@ -73,9 +86,14 @@ public class DataHolder {
         return pContact;
     }
 
-    public String getpQR()
+    public String getpImage()
     {
         return pImage;
+    }
+
+    public void setpImage(String iptImage)
+    {
+        pImage = iptImage;
     }
 
     public String getpPosition()
@@ -91,5 +109,27 @@ public class DataHolder {
     public Calendar getTempDate()
     {
         return pBday;
+    }
+
+    public void setAddress(String ipthouse, String iptbrgy, String iptcity)
+    {
+        house = ipthouse;
+        brgy = iptbrgy;
+        city = iptcity;
+    }
+
+    public String getHouse()
+    {
+        return house;
+    }
+
+    public String getBrgy()
+    {
+        return brgy;
+    }
+
+    public String getCity()
+    {
+        return city;
     }
 }

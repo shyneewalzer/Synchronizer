@@ -70,7 +70,7 @@ public class TravelHistory extends AppCompatActivity {
                         return true;
                     case R.id.home_driver:
                         startActivity(new Intent(getApplicationContext()
-                                , UserDriverDashboard.class));
+                                , DriverDashboard.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.history_driver:

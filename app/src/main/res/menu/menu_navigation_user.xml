@@ -12,7 +12,7 @@
         android:icon="@drawable/profile_icon"
         />
     <item
-        android:id="@+id/location"
+        android:id="@+id/destination"
         android:title="Location"
         android:icon="@drawable/location_icon"
         />

@@ -1,12 +1,16 @@
 package com.example.mobileapplicationproject;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -15,32 +19,42 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.mobileapplicationproject.DataController.DebugMode;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
-public class SetLocation extends AppCompatActivity {
-    private static final String FILE_NAME = "example.txt";
-    private TextInputEditText itemText, location;
+public class SetLocation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+
     APIInterface apiInterface;
     ArrayList<String> itemList;
     ArrayAdapter<String> adapter;
-    Button addEmail, setProfile;
-    ListView lv;
-    String temp;
+    ArrayList<Integer> persons;
+    ArrayList<String>travelinfo;
+
+    int getthoseid;
+    StringTokenizer tokenizer;
+    String qrscan;
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
@@ -49,12 +63,27 @@ public class SetLocation extends AppCompatActivity {
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
-    ArrayList<Integer> persons;
-    String emailchecker;
-    int getthoseid;
+    DebugMode dm = new DebugMode();
 
-    LinearLayout locationviewer;
+    ///////////UI ELEMENTS//////////
+    Toolbar toolbar;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
+    NavigationView navigationView;
+    ImageView personalQR;
+
+    LinearLayout lo_locationviewer;
+    LinearLayout lo_location, lo_companion;
+
+    ListView lv;
+
     ProgressBar pbar;
+    SwipeRefreshLayout refresher;
+
+    Button btn_scan, btn_destination, btn_addCompanion;
+
+    TextInputEditText edt_companion, edt_destination;
+    TextView tv_location;
 
 
     @Override
@@ -63,63 +92,62 @@ public class SetLocation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         apiInterface = APIClient.getClient().create(APIInterface.class);
         setContentView(R.layout.set_location);
+
         lv = (ListView) findViewById(R.id.listview);
-        itemText = (TextInputEditText) findViewById(R.id.emailInsert);
-        location = (TextInputEditText) findViewById(R.id.location);
-        addEmail = (Button) findViewById(R.id.addEmail);
-        setProfile = (Button) findViewById(R.id.setProfile);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_menu);
-        bottomNavigationView.setSelectedItemId(R.id.location);
+        refresher = findViewById(R.id.lo_refresher);
+        pbar = findViewById(R.id.pbar);
+
+        lo_locationviewer = findViewById(R.id.locationviewer);
+        lo_location = findViewById(R.id.lo_location);
+        lo_companion = findViewById(R.id.lo_companion);
+
+        btn_scan = findViewById(R.id.btn_scanner);
+        btn_destination = findViewById(R.id.btn_destination);
+        btn_addCompanion = findViewById(R.id.btn_addCompanion);
+
+        tv_location = findViewById(R.id.tv_location);
+
+        edt_destination = findViewById(R.id.edt_destination);
+        edt_companion = findViewById(R.id.edt_companion);
+
         itemList = new ArrayList<>();
         persons = new ArrayList<>();
+        travelinfo = new ArrayList<>();
         adapter = new ArrayAdapter<String>(SetLocation.this , android.R.layout.simple_list_item_multiple_choice,itemList);
-
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        locationviewer = findViewById(R.id.locationviewer);
-        pbar = findViewById(R.id.pbar);
+        btn_destination.setOnClickListener(this);
+        btn_addCompanion.setOnClickListener(this);
+        btn_scan.setOnClickListener(this);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Destination");
+
+        drawerLayout = findViewById(R.id.drawer);
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);//hamburger icon
+        drawerToggle.syncState();
+
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        draw_name.setText(dh.getpFName() + " " + dh.getpLName());
+        personalQR = headerView.findViewById(R.id.personal_qr);
+        personalQR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
+
+
+        refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.location_driver:
-                        return true;
-                    case R.id.profile_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , UserDriverProfile.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.home_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , UserDriverDashboard.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.history_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , TravelHistory.class));
-                        overridePendingTransition(0, 0);
-                        return true;
-                    case R.id.group_driver:
-                        startActivity(new Intent(getApplicationContext()
-                                , SetLocationGroup.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                }
-                return false;
+            public void onRefresh() {
+                recreate();
             }
         });
 
-        View.OnClickListener addlistner = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Dbread dbread = new Dbread();
-                dbread.execute();
-
-            }
-        };
 
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -143,26 +171,36 @@ public class SetLocation extends AppCompatActivity {
             }
         });
 
-
-        addEmail.setOnClickListener(addlistner);
         lv.setAdapter(adapter);
 
-        setProfile.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-//                addTravel();
+    }
 
-                Dbinsert dbinsert = new Dbinsert();
-                dbinsert.execute();
+    @Override
+    public void onClick(View v) {
 
-            }
-        });
+        if(v.getId()==R.id.btn_destination)
+        {
+            YoYo.with(Techniques.ZoomOut).duration(1000).repeat(0).playOn(lo_location);
+            lo_location.setVisibility(View.GONE);
+            YoYo.with(Techniques.ZoomIn).duration(1000).repeat(0).playOn(lo_companion);
+            lo_companion.setVisibility(View.VISIBLE);
+            dm.displayMessage(getApplicationContext(), edt_destination.getText()+"");
+        }
+        else if(v.getId()==R.id.btn_addCompanion)
+        {
+            Dbread dbread = new Dbread();
+            dbread.execute();
+        }
+        else if(v.getId()==R.id.btn_scanner)
+        {
+            scanCode();
+        }
+
     }
 
     private class Dbinsert extends AsyncTask<String, String, String>
     {
-
+        boolean isSuccess=false;
         String msger;
 
         @Override
@@ -176,13 +214,13 @@ public class SetLocation extends AppCompatActivity {
                 }
                 else
                 {
-                    con.createStatement().executeUpdate("INSERT into travel_history (destination, user_id, isCompanion, time_created, date_created) VALUES('"+ location.getText() +"', '"+ dh.getUserid() +"', '0', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                    con.createStatement().executeUpdate("INSERT into travel_history (destination, driver_id, companion_id, plate_number, parent_id, time_boarded, date_boarded) VALUES('"+ edt_destination.getText().toString() +"', '"+ travelinfo.get(0) +"', '"+ dh.getUserid() +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
 
                     if(!persons.isEmpty())
                     {
                         for(int x=0;x<persons.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into travel_history (destination, user_id, isCompanion, time_created, date_created) VALUES('"+ location.getText() +"', '"+ persons.get(x) +"', '0', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            con.createStatement().executeUpdate("INSERT into travel_history (destination, driver_id, companion_id, plate_number, parent_id, time_boarded, date_boarded) VALUES('"+ edt_destination.getText().toString() +"', '"+ travelinfo.get(0) +"', '"+ persons.get(x) +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                         }
                     }
                     con.close();
@@ -199,15 +237,30 @@ public class SetLocation extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             timestamp = new Timestamp(System.currentTimeMillis());
-            locationviewer.setVisibility(View.GONE);
+
+            tokenizer = new StringTokenizer(qrscan, ",");
+            while (tokenizer.hasMoreTokens())
+            {
+                travelinfo.add(tokenizer.nextToken());
+            }
+
+            lo_locationviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-            Intent myIntent = new Intent(SetLocation.this, UserDriverDashboard.class);
-            startActivity(myIntent);
 
+            if(isSuccess==true)
+            {
+                recreate();
+            }
+            else
+            {
+                dp.toasterlong(getApplicationContext(), msger+"");
+                lo_locationviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -228,14 +281,14 @@ public class SetLocation extends AppCompatActivity {
                 else
                 {
 
-                    ResultSet rs=con.createStatement().executeQuery("select * from accounts_table where email = '"+ emailchecker +"' ");
+                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where concat(firstname,' ',lastname) like '"+ edt_companion.getText().toString() +"' ");
 
                     if(rs.isBeforeFirst())
                     {
                         isSuccess=true;
                         while (rs.next())
                         {
-                            getthoseid = rs.getInt(1);
+                            getthoseid = rs.getInt("account_id");
                         }
                     }
                     rs.close();
@@ -252,8 +305,7 @@ public class SetLocation extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            emailchecker=itemText.getText().toString();
-            locationviewer.setVisibility(View.GONE);
+            lo_locationviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
 
@@ -263,19 +315,78 @@ public class SetLocation extends AppCompatActivity {
             if (isSuccess==true)
             {
                 persons.add(getthoseid);
-                itemList.add(itemText.getText().toString());
-                itemText.setText("");
+                itemList.add(edt_companion.getText()+"");
+                edt_companion.setText("");
                 adapter.notifyDataSetChanged();
             }
             else
             {
-                dp.toasterlong(getApplicationContext(), "Email not yet registered!");
+                dp.toasterlong(getApplicationContext(), "Name not found");
             }
 
-            dp.toasterlong(getApplicationContext(), emailchecker+"");
-            locationviewer.setVisibility(View.VISIBLE);
+            dm.displayMessage(getApplicationContext(), edt_companion.getText()+"");
+            lo_locationviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
         }
+    }
+
+    private void scanCode(){
+
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(CaptureAct.class);
+        integrator.setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scanning Code");
+        integrator.initiateScan();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null){
+            if(result.getContents() != null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+//                sendData(Integer.parseInt(result.getContents()));
+                qrscan = result.getContents()+"";
+
+                builder.setMessage("Scanned Successfully");
+                builder.setTitle("Scanning Result");
+                builder.setPositiveButton("Scan Again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        scanCode();
+                    }
+                }).setNegativeButton("Finish", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Dbinsert dbinsert = new Dbinsert();
+                        dbinsert.execute();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                Toast.makeText(this, "No Result", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.prof)
+        {
+            Intent startIntent=new Intent(SetLocation.this, UserDriverProfile.class);
+            startActivity(startIntent);
+            finish();
+        }
+
+        return false;
     }
 
     @Override
@@ -288,13 +399,16 @@ public class SetLocation extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int optid=item.getItemId();
 
-        if(optid==R.id.logout)
+        if(optid==R.id.about)
+        {
+            dp.toasterlong(getApplicationContext(), "about");
+        }
+        else if(optid==R.id.logout)
         {
             Intent startIntent=new Intent(SetLocation.this, Login.class);
             startActivity(startIntent);
             finish();
         }
-
         return true;
 
     }

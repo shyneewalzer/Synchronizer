@@ -16,7 +16,7 @@
         <activity android:name=".EmployeeeProfileForm" />
         <activity android:name=".AccountsForm" />
         <activity android:name=".MainMenuFormEmployee" />
-        <activity android:name=".UserDriverDashboard" />
+        <activity android:name=".DriverDashboard" />
         <activity android:name=".UserDriverPassword" />
         <activity android:name=".TravelHistory" />
         <activity android:name=".SetLocation" />

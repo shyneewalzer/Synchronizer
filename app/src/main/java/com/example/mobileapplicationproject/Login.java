@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
+import com.example.mobileapplicationproject.DataController.DebugMode;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.sql.Connection;
@@ -35,6 +36,7 @@ public class Login extends AppCompatActivity {
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
+    DebugMode dm = new DebugMode();
 
     ProgressBar pbar;
     LinearLayout btns;
@@ -144,10 +146,93 @@ public class Login extends AppCompatActivity {
 
             if(isSuccess==true)
             {
+                Dbreadprofile dbreadprofile = new Dbreadprofile();
+                dbreadprofile.execute();
+            }
+            else
+            {
+                dp.toastershort(getApplicationContext(), msger);
+                btns.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.INVISIBLE);
+            }
 
-                if(dh.getType().equals("Individual") || dh.getType().equals("Driver"))
+        }
+    }
+
+    private class Dbreadprofile extends AsyncTask<String, String, String>
+    {
+
+        boolean isSuccess;
+        String msger;
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
                 {
-                    Intent myIntent = new Intent(Login.this, UserDriverDashboard.class);
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+
+                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where account_id = '"+ dh.getUserid() +"' ");
+
+                    while(rs.next())
+                    {
+                        if(dh.getType().equals("Establishment"))
+                        {
+                            dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"),rs.getString("position"),rs.getInt("est_id"));
+
+                        }
+                        else
+                        {
+                            dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"));
+                        }
+                        isSuccess=true;
+                    }
+                    rs.close();
+
+                    ResultSet rsadr=con.createStatement().executeQuery("select * from address_table where account_id = '"+ dh.getUserid() +"' ");
+
+                    while(rsadr.next())
+                    {
+                        dh.setAddress(rsadr.getString("house_lot_number"), rsadr.getString("barangay"), rsadr.getString("city"));
+                    }
+                    rsadr.close();
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            if(isSuccess==true)
+            {
+
+                if(dh.getType().equals("Individual"))
+                {
+                    Intent myIntent = new Intent(Login.this, SetLocation.class);
+                    startActivity(myIntent);
+                    dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab());
+
+                }
+                else if(dh.getType().equals("Driver"))
+                {
+                    Intent myIntent = new Intent(Login.this, DriverDashboard.class);
                     startActivity(myIntent);
                 }
                 else if(dh.getType().equals("Employee"))
@@ -161,15 +246,13 @@ public class Login extends AppCompatActivity {
             }
             else
             {
+                dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpImage() + "," + dh.getpPosition() + "," + dh.getpEstab());
                 dp.toastershort(getApplicationContext(), msger);
                 btns.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.INVISIBLE);
             }
-
         }
     }
-
-
 
     public void signup_main_txt(View view) {
         Intent intent = new Intent(this,RegisterForm.class);

@@ -91,7 +91,7 @@
                 android:layout_height="60dp"
                 android:textAllCaps="false"
                 android:background="@drawable/main_button"
-                android:text="@string/login"
+                android:text="LOGIN"
                 android:textColor="#fff"
                 android:textSize="30sp"
                 app:backgroundTint="@color/dark_green"
