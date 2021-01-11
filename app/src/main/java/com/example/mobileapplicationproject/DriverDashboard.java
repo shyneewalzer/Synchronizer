@@ -150,7 +150,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
 
     }
-    //TODO: Fix function
+
     private class Dbread extends AsyncTask<String, String, String>
     {
 

@@ -3,18 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="5dp">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
 
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_weight="1">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/txt_cFname"
+            android:id="@+id/list_txt_cFname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="FirstName"
@@ -22,7 +31,7 @@
             android:layout_marginHorizontal="5dp"/>
 
         <TextView
-            android:id="@+id/txt_cMname"
+            android:id="@+id/list_txt_cMname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MiddleName"
@@ -30,7 +39,7 @@
             android:layout_marginHorizontal="5dp"/>
 
         <TextView
-            android:id="@+id/txt_cLname"
+            android:id="@+id/list_txt_cLname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LastName"
@@ -45,7 +54,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/txt_cContact"
+            android:id="@+id/list_txt_cContact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contact: "
@@ -53,13 +62,24 @@
             android:layout_marginHorizontal="5dp"/>
 
         <TextView
-            android:id="@+id/txt_cAdr"
+            android:id="@+id/list_txt_cAdr"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Address: "
             android:textSize="14sp"
             android:layout_marginHorizontal="5dp"/>
     </LinearLayout>
+</LinearLayout>
 
+    <CheckBox
+        android:id="@+id/list_cb"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:focusable="false"
+        android:clickable="false"
+        android:theme="@style/Theme.MobileApplicationProject"/>
+
+</LinearLayout>
 
 </LinearLayout>

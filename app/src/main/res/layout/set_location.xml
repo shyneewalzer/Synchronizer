@@ -93,108 +93,186 @@
 
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/lo_companion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center"
                     android:visibility="invisible">
 
-                    <TableLayout
-                        android:id="@+id/table_location_user"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:layout_marginHorizontal="10dp"
-                        android:layout_marginTop="10dp">
-
-                        <TableRow
-                            android:background="@color/dark_green">
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:text="Addtional User"
-                                android:textColor="@color/white"
-                                android:padding="10sp"
-                                android:textSize="14sp"
-                                android:layout_weight="4"/>
-                        </TableRow>
-
-                        <ListView
-                            android:id="@+id/listview"
-                            android:layout_width="358dp"
-                            android:layout_height="150dp"
-                            android:choiceMode="multipleChoice"
-                            android:nestedScrollingEnabled="true"/>
-
-                    </TableLayout>
-
                     <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@color/white"
+                    android:layout_marginTop="15dp">
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/add_user_form"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:padding="10dp"
-                            android:hint="Add companion name"
-                            app:startIconDrawable="@drawable/profile_icon"
-                            app:hintTextColor="@color/black"
-                            android:textColor="@color/black"
-                            app:boxStrokeColor="@color/black"
-                            android:theme="@style/Theme.MobileApplicationProject"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_weight="1">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/edt_companion"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:inputType="textEmailAddress"
-                                android:padding="10dp"
-                                android:textSize="20sp">
-                            </com.google.android.material.textfield.TextInputEditText>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <Button
-                            android:id="@+id/btn_addCompanion"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/main_button"
-                            android:text="ADD"
-                            android:textAllCaps="false"
-                            android:textColor="#fff"
-                            android:textSize="20sp"
-                            app:backgroundTint="@color/dark_green"
-                            android:padding="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="3.5"/>
-                    </LinearLayout>
-
-
-                    <Button
-                        android:id="@+id/btn_scanner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAllCaps="false"
-                        android:background="@drawable/main_button"
-                        android:text="SCAN"
-                        android:textColor="#fff"
-                        android:textSize="25sp"
-                        app:backgroundTint="@color/dark_green"
-                        android:paddingVertical="10dp"
-                        android:paddingHorizontal="50dp"
-                        android:layout_margin="10dp"/>
+                        android:text="Addtional User"
+                        android:textColor="@color/white"
+                        android:padding="10sp"
+                        android:textSize="14sp"
+                        android:layout_weight="4"
+                        android:background="@color/dark_green"/>
+                    <ListView
+                        android:id="@+id/listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:choiceMode="multipleChoice"
+                        android:nestedScrollingEnabled="true"/>
                 </LinearLayout>
 
+                //////////////////////////////////////////////////////////////
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="10dp">
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="First Name"
+                        app:startIconDrawable="@drawable/profile_icon"
+                        app:hintTextColor="@color/black"
+                        android:textColor="@color/black"
+                        app:boxStrokeColor="@color/black"
+                        android:theme="@style/Theme.MobileApplicationProject"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_cFname"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:inputType="textEmailAddress"
+                            android:padding="5dp"
+                            android:textSize="15sp">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="Middle Name"
+                        app:startIconDrawable="@drawable/profile_icon"
+                        app:hintTextColor="@color/black"
+                        android:textColor="@color/black"
+                        app:boxStrokeColor="@color/black"
+                        android:theme="@style/Theme.MobileApplicationProject"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_cMname"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:inputType="textEmailAddress"
+                            android:textSize="15sp">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="Last Name"
+                        app:startIconDrawable="@drawable/profile_icon"
+                        app:hintTextColor="@color/black"
+                        android:textColor="@color/black"
+                        app:boxStrokeColor="@color/black"
+                        android:theme="@style/Theme.MobileApplicationProject"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_cLname"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:inputType="textEmailAddress"
+                            android:padding="5dp"
+                            android:textSize="15sp">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Contact Number"
+                        app:startIconDrawable="@drawable/contact_icon"
+                        app:hintTextColor="@color/black"
+                        android:textColor="@color/black"
+                        app:boxStrokeColor="@color/black"
+                        android:theme="@style/Theme.MobileApplicationProject"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_cContact"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:inputType="textEmailAddress"
+                            android:padding="5dp"
+                            android:textSize="15sp">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:hint="Address"
+                        app:startIconDrawable="@drawable/location_icon"
+                        app:hintTextColor="@color/black"
+                        android:textColor="@color/black"
+                        app:boxStrokeColor="@color/black"
+                        android:theme="@style/Theme.MobileApplicationProject"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_cAdr"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:inputType="textEmailAddress"
+                            android:padding="5dp"
+                            android:textSize="15sp">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+/////////////////////////////////////////////////////////////////
+
+                <Button
+                    android:id="@+id/btn_addCompanion"
+                    android:layout_width="150dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/main_button"
+                    android:text="Add"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    app:backgroundTint="@color/dark_green"
+                    android:layout_gravity="center"/>
+
+                <Button
+                    android:id="@+id/btn_scanner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="false"
+                    android:background="@drawable/main_button"
+                    android:text="SCAN"
+                    android:textColor="#fff"
+                    android:textSize="25sp"
+                    app:backgroundTint="@color/dark_green"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="50dp"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
+            </LinearLayout>
+
+
+
+//////////////////////////////////////
 
             <LinearLayout
                 android:layout_width="match_parent"

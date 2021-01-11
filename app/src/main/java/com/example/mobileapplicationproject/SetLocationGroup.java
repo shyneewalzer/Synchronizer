@@ -1,20 +1,22 @@
 package com.example.mobileapplicationproject;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,29 +27,27 @@ import android.widget.Toast;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.mobileapplicationproject.DataController.DebugMode;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
-public class SetLocationGroup extends AppCompatActivity implements View.OnClickListener{
-    private static final String FILE_NAME = "example.txt";
-    private TextInputEditText itemText;
-    ImageView img_scanbox;
-    APIInterface apiInterface;
-    ArrayList<String> itemList;
-    ArrayAdapter<String> adapter;
-    Button btn_eAddCompanion, btn_setQR;
-    ListView lv;
-    String temp="";
+public class SetLocationGroup extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+
+    ArrayList<String> fname;
+    ArrayList<String> mname;
+    ArrayList<String> lname;
+    ArrayList<String> contact;
+    ArrayList<String> adr;
+
+    ArrayList<String>personinfo;
+    List<List<String>>personlists;
+
+    String qrcode ="";
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
@@ -56,9 +56,23 @@ public class SetLocationGroup extends AppCompatActivity implements View.OnClickL
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
-    ArrayList<Integer> persons;
-    String emailchecker;
-    int getthoseid;
+    DebugMode dm = new DebugMode();
+
+    CustomAdapter customAdapter;
+
+    ////////////UI ELEMENTS//////////////
+
+    Toolbar toolbar;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
+    NavigationView navigationView;
+    ImageView personalQR;
+
+    TextInputEditText edt_cFname, edt_cMname, edt_cLname, edt_cContact, edt_cAdr;
+
+    ImageView img_scanbox;
+    Button btn_eAddCompanion, btn_setQR;
+    ListView lv;
 
     LinearLayout locationviewer;
     ProgressBar pbar;
@@ -66,30 +80,61 @@ public class SetLocationGroup extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        apiInterface = APIClient.getClient().create(APIInterface.class);
         setContentView(R.layout.set_location_group);
-        lv = (ListView) findViewById(R.id.listview);
-        itemText = (TextInputEditText) findViewById(R.id.emailInsert);
+
+        lv = findViewById(R.id.listview);
         img_scanbox = findViewById(R.id.scanbox);
         txtsign = findViewById(R.id.txtsign);
-        btn_eAddCompanion = (Button) findViewById(R.id.btn_eAddCompanion);
-        btn_setQR = (Button) findViewById(R.id.btn_setQR);
+        btn_eAddCompanion = findViewById(R.id.btn_eAddCompanion);
+        btn_setQR = findViewById(R.id.btn_setQR);
 
-        itemList = new ArrayList<>();
-        persons = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(SetLocationGroup.this , R.layout.row_companion,itemList);
+        edt_cFname = findViewById(R.id.edt_cFname);
+        edt_cMname = findViewById(R.id.edt_cMname);
+        edt_cLname = findViewById(R.id.edt_cLname);
+        edt_cContact = findViewById(R.id.edt_cContact);
+        edt_cAdr = findViewById(R.id.edt_cAdr);
 
-        timeformatter = new SimpleDateFormat("HH:mm");
-        dateformatter = new SimpleDateFormat("yyyy-MM-dd");
-        temp=dh.getUserid()+",";
+        fname = new ArrayList<>();
+        mname = new ArrayList<>();
+        lname = new ArrayList<>();
+        contact = new ArrayList<>();
+        adr = new ArrayList<>();
+
+        personinfo = new ArrayList<>();
+        personlists = new ArrayList<List<String>>();
+
         locationviewer = findViewById(R.id.locationviewer);
         pbar = findViewById(R.id.pbar);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Destination");
+
+        drawerLayout = findViewById(R.id.drawer);
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.setDrawerIndicatorEnabled(true);//hamburger icon
+        drawerToggle.syncState();
+
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        draw_name.setText(dh.getpFName() + " " + dh.getpLName());
+        personalQR = headerView.findViewById(R.id.personal_qr);
+        personalQR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
+
+        timeformatter = new SimpleDateFormat("HH:mm");
+        dateformatter = new SimpleDateFormat("yyyy-MM-dd");
+
         btn_eAddCompanion.setOnClickListener(this);
+        btn_setQR.setOnClickListener(this);
 
-
+        customAdapter = new CustomAdapter();
+        lv.setAdapter(customAdapter);
+        //TODO: Fix check/uncheck behavior of listview
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -100,15 +145,39 @@ public class SetLocationGroup extends AppCompatActivity implements View.OnClickL
                 for(int item = count-1; item>=0; item--){
 
                     if(positionchecker.get(item)){
-                        adapter.remove(itemList.get(item));
-                        persons.remove(item);
+//                        adapter.remove(itemList.get(item));
+                        fname.remove(item);
+                        mname.remove(item);
+                        lname.remove(item);
+                        contact.remove(item);
+                        adr.remove(item);
+
+                        personlists.remove(item);
+
+                        customAdapter.notifyDataSetChanged();
                         Toast.makeText(SetLocationGroup.this,"Item Delete Successfully",Toast.LENGTH_LONG).show();
                     }
                 }
 
                 positionchecker.clear();
-                adapter.notifyDataSetChanged();
+                customAdapter.notifyDataSetChanged();
                 return false;
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
+
+                if(cb.isChecked()==false)
+                {
+                    cb.setChecked(true);
+                }
+                else
+                {
+                    cb.setChecked(false);
+                }
             }
         });
 
@@ -118,86 +187,105 @@ public class SetLocationGroup extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
 
-        if(v.getId()==R.id.btn_setQR)
+        if(v.getId()==R.id.btn_eAddCompanion)
         {
-            for(int x = 0 ; x<persons.size();x++)
+            fname.add(edt_cFname.getText()+"");
+            mname.add(edt_cMname.getText()+"");
+            lname.add(edt_cLname.getText()+"");
+            contact.add(edt_cContact.getText()+"");
+            adr.add(edt_cAdr.getText()+"");
+
+            personinfo.clear();
+            personinfo.add(edt_cFname.getText()+"_");
+            personinfo.add(edt_cMname.getText()+"_");
+            personinfo.add(edt_cLname.getText()+"_");
+            personinfo.add(edt_cContact.getText()+"_");
+            personinfo.add(edt_cAdr.getText()+",");
+            personlists.add(new ArrayList<>(personinfo));
+
+            customAdapter.notifyDataSetChanged();
+
+            edt_cFname.setText("");
+            edt_cMname.setText("");
+            edt_cLname.setText("");
+            edt_cContact.setText("");
+            edt_cAdr.setText("");
+
+        }
+        else if(v.getId()==R.id.btn_setQR)
+        {
+            qrcode =dh.getUserid() + "#";
+            for(int x = 0;x<personlists.size();x++)
             {
-                temp = temp + persons.get(x) + ",";
+                for(int y=0;y<personlists.get(x).size();y++)
+                {
+                    qrcode = qrcode + personlists.get(x).get(y);
+                }
             }
 
             txtsign.setVisibility(View.INVISIBLE);
-            createQR(temp);
+            dm.displayMessage(getApplicationContext(), qrcode);
+            img_scanbox.setImageBitmap(dp.createQR(qrcode));
+            qrcode="";
+
         }
     }
 
-
-    private class Dbread extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
+    class CustomAdapter extends BaseAdapter {
         @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    ResultSet rs=con.createStatement().executeQuery("select * from accounts_table where email = '"+ emailchecker +"' ");
-
-                    if(rs.isBeforeFirst())
-                    {
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            getthoseid = rs.getInt(1);
-                        }
-                    }
-                    rs.close();
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
+        public int getCount()
+        {
+            return fname.size();
         }
 
         @Override
-        protected void onPreExecute() {
-            emailchecker=itemText.getText().toString();
-            locationviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
+        public Object getItem(int i)
+        {
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String a){
+        public long getItemId(int i)
+        {
+            return 0;
+        }
 
-            if (isSuccess==true)
-            {
-                persons.add(getthoseid);
-                itemList.add(itemText.getText().toString());
-                itemText.setText("");
-                adapter.notifyDataSetChanged();
-            }
-            else
-            {
-                dp.toasterlong(getApplicationContext(), "Email not yet registered!");
-            }
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view= getLayoutInflater().inflate(R.layout.row_companion,null);
 
-            dp.toasterlong(getApplicationContext(), emailchecker+"");
-            locationviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
+            TextView tv_fname=(TextView)view.findViewById(R.id.list_txt_cFname);
+            TextView tv_mname=(TextView)view.findViewById(R.id.list_txt_cMname);
+            TextView tv_lname=(TextView)view.findViewById(R.id.list_txt_cLname);
+            TextView tv_contact=(TextView)view.findViewById(R.id.list_txt_cContact);
+            TextView tv_adr=(TextView)view.findViewById(R.id.list_txt_cAdr);
+            CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
+
+
+            tv_fname.setText(fname.get(i));
+            tv_mname.setText(mname.get(i));
+            tv_lname.setText(lname.get(i));
+            tv_contact.setText(tv_contact.getText() + contact.get(i));
+            tv_adr.setText(tv_adr.getText() + adr.get(i));
+
+
+            return view;
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId()==R.id.prof)
+        {
+            Intent startIntent=new Intent(SetLocationGroup.this, UserDriverProfile.class);
+            startActivity(startIntent);
+            finish();
+        }
+
+
+        return false;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,13 +297,16 @@ public class SetLocationGroup extends AppCompatActivity implements View.OnClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         int optid=item.getItemId();
 
-        if(optid==R.id.logout)
+        if(optid==R.id.about)
+        {
+            dp.toasterlong(getApplicationContext(), "about");
+        }
+        else if(optid==R.id.logout)
         {
             Intent startIntent=new Intent(SetLocationGroup.this, Login.class);
             startActivity(startIntent);
             finish();
         }
-
         return true;
 
     }

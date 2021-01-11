@@ -20,10 +20,12 @@ import org.threeten.bp.ZoneId;
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class DataProcessor {
 
@@ -34,8 +36,6 @@ public class DataProcessor {
     private static byte[] decodedString;
     private static Bitmap decodedByte;
 
-    private static String strdate;
-    private static DateFormat dateformatter;
     private static Date datee = new Date();
 
 
@@ -100,6 +100,17 @@ public class DataProcessor {
             e.printStackTrace();
         }
         return datee;
+    }
+
+    public ArrayList<String>splitter(String iptScanned, String iptdelimer)
+    {
+        ArrayList<String>tokenholder = new ArrayList<>();
+        StringTokenizer tokenizer = new StringTokenizer(iptScanned, iptdelimer);
+        while (tokenizer.hasMoreTokens())
+        {
+            tokenholder.add(tokenizer.nextToken());
+        }
+        return tokenholder;
     }
 
 }

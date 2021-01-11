@@ -16,9 +16,12 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,22 +45,30 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class SetLocation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     APIInterface apiInterface;
-    ArrayList<String> itemList;
-    ArrayAdapter<String> adapter;
-    ArrayList<Integer> persons;
+    ArrayList<String> fname;
+    ArrayList<String> mname;
+    ArrayList<String> lname;
+    ArrayList<String> contact;
+    ArrayList<String> adr;
+
+    ArrayList<String>personinfo;
+    List<List<String>>personlists;
+
     ArrayList<String>travelinfo;
 
-    int getthoseid;
-    StringTokenizer tokenizer;
-    String qrscan;
+    CustomAdapter customAdapter;
+
+    String qrscan, batch;
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
+    SimpleDateFormat batchformatter;
     Timestamp timestamp;
 
     ConnectionController cc = new ConnectionController();
@@ -82,8 +93,10 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
 
     Button btn_scan, btn_destination, btn_addCompanion;
 
-    TextInputEditText edt_companion, edt_destination;
+    TextInputEditText edt_destination;
     TextView tv_location;
+
+    TextInputEditText edt_cFname, edt_cMname, edt_cLname, edt_cContact, edt_cAdr;
 
 
     @Override
@@ -108,18 +121,12 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
         tv_location = findViewById(R.id.tv_location);
 
         edt_destination = findViewById(R.id.edt_destination);
-        edt_companion = findViewById(R.id.edt_companion);
 
-        itemList = new ArrayList<>();
-        persons = new ArrayList<>();
-        travelinfo = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(SetLocation.this , android.R.layout.simple_list_item_multiple_choice,itemList);
-        timeformatter = new SimpleDateFormat("HH:mm");
-        dateformatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        btn_destination.setOnClickListener(this);
-        btn_addCompanion.setOnClickListener(this);
-        btn_scan.setOnClickListener(this);
+        edt_cFname = findViewById(R.id.edt_cFname);
+        edt_cMname = findViewById(R.id.edt_cMname);
+        edt_cLname = findViewById(R.id.edt_cLname);
+        edt_cContact = findViewById(R.id.edt_cContact);
+        edt_cAdr = findViewById(R.id.edt_cAdr);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -140,6 +147,26 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
         personalQR = headerView.findViewById(R.id.personal_qr);
         personalQR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
 
+        fname = new ArrayList<>();
+        mname = new ArrayList<>();
+        lname = new ArrayList<>();
+        contact = new ArrayList<>();
+        adr = new ArrayList<>();
+
+        personinfo = new ArrayList<>();
+        personlists = new ArrayList<List<String>>();
+
+        timeformatter = new SimpleDateFormat("HH:mm");
+        dateformatter = new SimpleDateFormat("yyyy-MM-dd");
+        batchformatter = new SimpleDateFormat("yyyyMMddHHmmss");
+
+        btn_destination.setOnClickListener(this);
+        btn_addCompanion.setOnClickListener(this);
+        btn_scan.setOnClickListener(this);
+
+
+        customAdapter = new CustomAdapter();
+        lv.setAdapter(customAdapter);
 
         refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -159,19 +186,40 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
                 for(int item = count-1; item>=0; item--){
 
                     if(positionchecker.get(item)){
-                        adapter.remove(itemList.get(item));
-                        persons.remove(item);
-                        Toast.makeText(SetLocation.this,"Item Delete Successfully",Toast.LENGTH_LONG).show();
+                        fname.remove(item);
+                        mname.remove(item);
+                        lname.remove(item);
+                        contact.remove(item);
+                        adr.remove(item);
+
+                        personlists.remove(item);
+
+                        customAdapter.notifyDataSetChanged();
+                        dp.toasterlong(getApplicationContext(), "Item Delete Successfully");
                     }
                 }
 
                 positionchecker.clear();
-                adapter.notifyDataSetChanged();
+                customAdapter.notifyDataSetChanged();
                 return false;
             }
         });
 
-        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
+
+                if(cb.isChecked()==false)
+                {
+                    cb.setChecked(true);
+                }
+                else
+                {
+                    cb.setChecked(false);
+                }
+            }
+        });
 
     }
 
@@ -188,8 +236,27 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
         }
         else if(v.getId()==R.id.btn_addCompanion)
         {
-            Dbread dbread = new Dbread();
-            dbread.execute();
+            fname.add(edt_cFname.getText()+"");
+            mname.add(edt_cMname.getText()+"");
+            lname.add(edt_cLname.getText()+"");
+            contact.add(edt_cContact.getText()+"");
+            adr.add(edt_cAdr.getText()+"");
+
+            personinfo.clear();
+            personinfo.add(edt_cFname.getText()+"");
+            personinfo.add(edt_cMname.getText()+"");
+            personinfo.add(edt_cLname.getText()+"");
+            personinfo.add(edt_cContact.getText()+"");
+            personinfo.add(edt_cAdr.getText()+"");
+            personlists.add(new ArrayList<>(personinfo));
+
+            customAdapter.notifyDataSetChanged();
+
+            edt_cFname.setText("");
+            edt_cMname.setText("");
+            edt_cLname.setText("");
+            edt_cContact.setText("");
+            edt_cAdr.setText("");
         }
         else if(v.getId()==R.id.btn_scanner)
         {
@@ -214,14 +281,20 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
                 }
                 else
                 {
-                    con.createStatement().executeUpdate("INSERT into travel_history (destination, driver_id, companion_id, plate_number, parent_id, time_boarded, date_boarded) VALUES('"+ edt_destination.getText().toString() +"', '"+ travelinfo.get(0) +"', '"+ dh.getUserid() +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
-
-                    if(!persons.isEmpty())
+                    if(personlists.size()>0)
                     {
-                        for(int x=0;x<persons.size();x++)
+                        for(int x = 0; x<personlists.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into travel_history (destination, driver_id, companion_id, plate_number, parent_id, time_boarded, date_boarded) VALUES('"+ edt_destination.getText().toString() +"', '"+ travelinfo.get(0) +"', '"+ persons.get(x) +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, middlename, lastname, contact_number, address, destination, driver_id, plate_number, parent_id, time_boarded, date_boarded) " +
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ personlists.get(x).get(3) +"', '"+ personlists.get(x).get(4) +"', '"+ edt_destination.getText() +"', '"+  travelinfo.get(0) +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            isSuccess = true;
                         }
+                    }
+                    else
+                    {
+                        con.createStatement().executeUpdate("INSERT into travel_history (batch, destination, driver_id, plate_number, parent_id, time_boarded, date_boarded) " +
+                                "VALUES('"+ batch +"', '"+ edt_destination.getText() +"', '"+  travelinfo.get(0) +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                        isSuccess = true;
                     }
                     con.close();
                 }
@@ -236,13 +309,20 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
 
         @Override
         protected void onPreExecute() {
-            timestamp = new Timestamp(System.currentTimeMillis());
+            String temp = "";
 
-            tokenizer = new StringTokenizer(qrscan, ",");
-            while (tokenizer.hasMoreTokens())
-            {
-                travelinfo.add(tokenizer.nextToken());
+            timestamp = new Timestamp(System.currentTimeMillis());
+            travelinfo = new ArrayList<>(dp.splitter(qrscan, ","));
+            batch = dh.getUserid() + batchformatter.format(timestamp);
+
+            for (int a = 0; a < personlists.size(); a++) {
+                for (int b = 0; b < personlists.get(a).size(); b++) {
+                    temp = temp + personlists.get(a).get(b) + "+";
+                }
+                temp = temp + ".";
             }
+
+            dm.displayMessage(getApplicationContext(),  temp+"");
 
             lo_locationviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
@@ -261,72 +341,6 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
                 lo_locationviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
             }
-        }
-    }
-
-    private class Dbread extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where concat(firstname,' ',lastname) like '"+ edt_companion.getText().toString() +"' ");
-
-                    if(rs.isBeforeFirst())
-                    {
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            getthoseid = rs.getInt("account_id");
-                        }
-                    }
-                    rs.close();
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            lo_locationviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            if (isSuccess==true)
-            {
-                persons.add(getthoseid);
-                itemList.add(edt_companion.getText()+"");
-                edt_companion.setText("");
-                adapter.notifyDataSetChanged();
-            }
-            else
-            {
-                dp.toasterlong(getApplicationContext(), "Name not found");
-            }
-
-            dm.displayMessage(getApplicationContext(), edt_companion.getText()+"");
-            lo_locationviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
         }
     }
 
@@ -376,12 +390,60 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
 
     }
 
+    class CustomAdapter extends BaseAdapter {
+        @Override
+        public int getCount()
+        {
+            return fname.size();
+        }
+
+        @Override
+        public Object getItem(int i)
+        {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i)
+        {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view= getLayoutInflater().inflate(R.layout.row_companion,null);
+
+            TextView tv_fname=(TextView)view.findViewById(R.id.list_txt_cFname);
+            TextView tv_mname=(TextView)view.findViewById(R.id.list_txt_cMname);
+            TextView tv_lname=(TextView)view.findViewById(R.id.list_txt_cLname);
+            TextView tv_contact=(TextView)view.findViewById(R.id.list_txt_cContact);
+            TextView tv_adr=(TextView)view.findViewById(R.id.list_txt_cAdr);
+            CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
+
+
+            tv_fname.setText(fname.get(i));
+            tv_mname.setText(mname.get(i));
+            tv_lname.setText(lname.get(i));
+            tv_contact.setText(tv_contact.getText() + contact.get(i));
+            tv_adr.setText(tv_adr.getText() + adr.get(i));
+
+
+            return view;
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         if(item.getItemId()==R.id.prof)
         {
             Intent startIntent=new Intent(SetLocation.this, UserDriverProfile.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.group)
+        {
+            Intent startIntent=new Intent(SetLocation.this, SetLocationGroup.class);
             startActivity(startIntent);
             finish();
         }
