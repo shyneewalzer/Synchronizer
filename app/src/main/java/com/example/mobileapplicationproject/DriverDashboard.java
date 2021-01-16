@@ -50,7 +50,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
 
-    ///////////UI ELEMENTS/////////
+    ///////////UI ELEMENTS//////////
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
