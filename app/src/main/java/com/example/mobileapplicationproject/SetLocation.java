@@ -423,19 +423,19 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
         public View getView(int i, View view, ViewGroup viewGroup) {
             view= getLayoutInflater().inflate(R.layout.row_companion,null);
 
-            TextView tv_fname=(TextView)view.findViewById(R.id.list_txt_cFname);
-            TextView tv_mname=(TextView)view.findViewById(R.id.list_txt_cMname);
-            TextView tv_lname=(TextView)view.findViewById(R.id.list_txt_cLname);
-            TextView tv_contact=(TextView)view.findViewById(R.id.list_txt_cContact);
-            TextView tv_adr=(TextView)view.findViewById(R.id.list_txt_cAdr);
-            CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
-
-
-            tv_fname.setText(fname.get(i));
-            tv_mname.setText(mname.get(i));
-            tv_lname.setText(lname.get(i));
-            tv_contact.setText(tv_contact.getText() + contact.get(i));
-            tv_adr.setText(tv_adr.getText() + adr.get(i));
+//            TextView tv_fname=(TextView)view.findViewById(R.id.list_txt_cFname);
+//            TextView tv_mname=(TextView)view.findViewById(R.id.list_txt_cMname);
+//            TextView tv_lname=(TextView)view.findViewById(R.id.list_txt_cLname);
+//            TextView tv_contact=(TextView)view.findViewById(R.id.list_txt_cContact);
+//            TextView tv_adr=(TextView)view.findViewById(R.id.list_txt_cAdr);
+//            CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
+//
+//
+//            tv_fname.setText(fname.get(i));
+//            tv_mname.setText(mname.get(i));
+//            tv_lname.setText(lname.get(i));
+//            tv_contact.setText(tv_contact.getText() + contact.get(i));
+//            tv_adr.setText(tv_adr.getText() + adr.get(i));
 
 
             return view;

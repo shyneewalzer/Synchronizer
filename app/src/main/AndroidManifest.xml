@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".EmployeeDashboard"></activity>
         <activity android:name=".EmployeeeProfileForm" />
         <activity android:name=".AccountsForm" />
         <activity android:name=".MainMenuFormEmployee" />
@@ -37,7 +38,7 @@
             android:name=".CaptureAct"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

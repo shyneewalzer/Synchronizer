@@ -151,7 +151,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             }
         });
 
-
+    //TODO: Set up Employee Dashboard for QR
     }
 
     private class Dbread extends AsyncTask<String, String, String>

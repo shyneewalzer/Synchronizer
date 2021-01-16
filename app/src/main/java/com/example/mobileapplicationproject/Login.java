@@ -177,30 +177,35 @@ public class Login extends AppCompatActivity {
                 else
                 {
 
-                    ResultSet rs=con.createStatement().executeQuery("select * from user_profile where account_id = '"+ dh.getUserid() +"' ");
-
-                    while(rs.next())
+                    if(dh.getType().equals("Establishment"))
                     {
-                        if(dh.getType().equals("Establishment"))
+                        ResultSet rs=con.createStatement().executeQuery("select * from establishments where account_id = '"+ dh.getUserid() +"' ");
+                        while (rs.next())
                         {
-                            dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"),rs.getString("position"),rs.getInt("est_id"));
-
+                            dh.setProfile(rs.getString("name"), rs.getString("street"), rs.getString("telephone_number"), rs.getString("est_owner"), rs.getString("image"));
                         }
-                        else
+                        rs.close();
+                    }
+                    else
+                    {
+                        ResultSet rs=con.createStatement().executeQuery("select * from user_profile where account_id = '"+ dh.getUserid() +"' ");
+                        while (rs.next())
                         {
                             dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"));
                         }
-                        isSuccess=true;
-                    }
-                    rs.close();
+                        rs.close();
 
-                    ResultSet rsadr=con.createStatement().executeQuery("select * from address_table where account_id = '"+ dh.getUserid() +"' ");
+                        ResultSet rsadr=con.createStatement().executeQuery("select * from address_table where account_id = '"+ dh.getUserid() +"' ");
 
-                    while(rsadr.next())
-                    {
-                        dh.setAddress(rsadr.getString("house_lot_number"), rsadr.getString("barangay"), rsadr.getString("city"));
+                        while(rsadr.next())
+                        {
+                            dh.setAddress(rsadr.getString("house_lot_number"), rsadr.getString("barangay"), rsadr.getString("city"));
+                        }
+                        rsadr.close();
                     }
-                    rsadr.close();
+
+
+
                     con.close();
                 }
             }

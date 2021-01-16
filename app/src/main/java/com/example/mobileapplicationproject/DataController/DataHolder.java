@@ -13,6 +13,8 @@ public class DataHolder {
 
     private static String house, brgy, city;
 
+    private static String estName, estStreet, estContact, estOwner, estImage;
+
 
 
     public void setAcct(int iptuserid,String iptemail, String ipttype)
@@ -59,6 +61,40 @@ public class DataHolder {
         pBdayHolder = pBday.get(Calendar.YEAR) + "-" + (pBday.get(Calendar.MONTH)+1) + "-" + pBday.get(Calendar.DAY_OF_MONTH);
         pContact = iptContact;
         pImage = iptImage;
+    }
+
+    public void setProfile(String iptName, String iptStreet, String iptContact, String iptOwner, String iptImage)
+    {
+        estName = iptOwner;
+        estStreet = iptStreet;
+        estContact = iptContact;
+        estOwner = iptOwner;
+        estImage = iptImage;
+    }
+
+    public String getEstName()
+    {
+        return estName;
+    }
+
+    public String getEstStreet()
+    {
+        return estStreet;
+    }
+
+    public String getEstContact()
+    {
+        return estContact;
+    }
+
+    public String getEstOwner()
+    {
+        return estOwner;
+    }
+
+    public String getEstImage()
+    {
+        return estImage;
     }
 
     public String getpFName()
