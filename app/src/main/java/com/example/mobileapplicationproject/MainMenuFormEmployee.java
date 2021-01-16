@@ -64,9 +64,8 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     NavigationView navigationView;
-    ImageView nav_img_QR;
-    TextView draw_name;
-    CircleImageView nav_img_user;
+    TextView draw_name, draw_type;
+    CircleImageView draw_img_user;
 
     TextView txtFirstName, txtLastName, txtPosition;
     Button btn_escan;
@@ -103,12 +102,16 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
 
         View headerView = navigationView.getHeaderView(0);
         draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
-        nav_img_QR = headerView.findViewById(R.id.personal_qr);
-        nav_img_user = headerView.findViewById(R.id.cimg_user);
+        draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
+        draw_img_user = headerView.findViewById(R.id.cimg_user);
 
         draw_name.setText(dh.getpFName() + " " + dh.getpLName());
-        nav_img_QR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
-        nav_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        draw_type.setText(dh.getType());
+        draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        if(dh.getpImage()==null)
+        {
+            draw_img_user.setImageResource(R.drawable.ic_person);
+        }
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -276,10 +279,14 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.prof)
+        if(item.getItemId()==R.id.home)
         {
-//            Intent startIntent=new Intent(UserPanel.this, Profile.class);
-//            startActivity(startIntent);
+            dp.toastershort(getApplicationContext(), "Home");
+        }
+        else if(item.getItemId()==R.id.prof)
+        {
+            Intent startIntent=new Intent(MainMenuFormEmployee.this, EmployeeeProfileForm.class);
+            startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.group)
@@ -292,28 +299,5 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
         return false;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int optid=item.getItemId();
-
-        if(optid==R.id.about)
-        {
-            dp.toasterlong(getApplicationContext(), "about");
-        }
-        else if(optid==R.id.logout)
-        {
-            Intent startIntent=new Intent(MainMenuFormEmployee.this, Login.class);
-            startActivity(startIntent);
-            finish();
-        }
-        return true;
-
-    }
 
 }

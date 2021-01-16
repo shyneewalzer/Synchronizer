@@ -66,9 +66,8 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     NavigationView navigationView;
-    ImageView nav_img_QR;
-    TextView draw_name;
-    CircleImageView nav_img_user;
+    TextView draw_name, draw_type;
+    CircleImageView draw_img_user;
 
     LinearLayout profileviewer;
     ProgressBar pbar;
@@ -121,12 +120,20 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
 
         View headerView = navigationView.getHeaderView(0);
         draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
-        nav_img_QR = headerView.findViewById(R.id.personal_qr);
-        nav_img_user = headerView.findViewById(R.id.cimg_user);
+        draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
+        draw_img_user = headerView.findViewById(R.id.cimg_user);
+
+        draw_name.setText(dh.getpFName() + " " + dh.getpLName());
+        draw_type.setText(dh.getType());
+        draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        img_profile.setImageBitmap(dp.createImage(dh.getpImage()));
+        if(dh.getpImage()==null)
+        {
+            draw_img_user.setImageResource(R.drawable.ic_person);
+            img_profile.setImageResource(R.drawable.ic_person);
+        }
 
         dataSet();
-
-        img_profile.setImageBitmap(dp.createImage(dh.getpImage()));
 
         btn_update.setOnClickListener(this);
         btn_image.setOnClickListener(this);
@@ -305,8 +312,11 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
         edt_city.setText(dh.getCity());
 
         draw_name.setText(dh.getpFName() + " " + dh.getpLName());
-        nav_img_QR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
-        nav_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        if(dh.getpImage()==null)
+        {
+            draw_img_user.setImageResource(R.drawable.ic_person);
+        }
     }
 
     @Override

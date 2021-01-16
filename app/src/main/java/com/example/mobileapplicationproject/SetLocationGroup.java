@@ -36,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SetLocationGroup extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     ArrayList<String> fname;
@@ -66,7 +68,8 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     NavigationView navigationView;
-    ImageView personalQR;
+    TextView draw_name, draw_type;
+    CircleImageView draw_img_user;
 
     TextInputEditText edt_cFname, edt_cMname, edt_cLname, edt_cContact, edt_cAdr;
 
@@ -121,10 +124,17 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
+        draw_img_user = headerView.findViewById(R.id.cimg_user);
+
         draw_name.setText(dh.getpFName() + " " + dh.getpLName());
-        personalQR = headerView.findViewById(R.id.personal_qr);
-        personalQR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
+        draw_type.setText(dh.getType());
+        draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        if(dh.getpImage()==null)
+        {
+            draw_img_user.setImageResource(R.drawable.ic_person);
+        }
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");

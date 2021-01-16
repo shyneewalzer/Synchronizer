@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SetLocation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     APIInterface apiInterface;
@@ -81,7 +83,8 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
     NavigationView navigationView;
-    ImageView personalQR;
+    TextView draw_name, draw_type;
+    CircleImageView draw_img_user;
 
     LinearLayout lo_locationviewer;
     LinearLayout lo_location, lo_companion;
@@ -142,10 +145,17 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
+        draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
+        draw_img_user = headerView.findViewById(R.id.cimg_user);
+
         draw_name.setText(dh.getpFName() + " " + dh.getpLName());
-        personalQR = headerView.findViewById(R.id.personal_qr);
-        personalQR.setImageBitmap(dp.createQR(dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab()));
+        draw_type.setText(dh.getType());
+        draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+        if(dh.getpImage()==null)
+        {
+            draw_img_user.setImageResource(R.drawable.ic_person);
+        }
 
         fname = new ArrayList<>();
         mname = new ArrayList<>();
@@ -285,14 +295,14 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
                     {
                         for(int x = 0; x<personlists.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, middlename, lastname, contact_number, address, destination, driver_id, plate_number, parent_id, time_boarded, date_boarded) " +
+                            con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, middlename, lastname, contact_number, address, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) " +
                                     "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ personlists.get(x).get(3) +"', '"+ personlists.get(x).get(4) +"', '"+ edt_destination.getText() +"', '"+  travelinfo.get(0) +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into travel_history (batch, destination, driver_id, plate_number, parent_id, time_boarded, date_boarded) " +
+                        con.createStatement().executeUpdate("INSERT into travel_history (batch, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) " +
                                 "VALUES('"+ batch +"', '"+ edt_destination.getText() +"', '"+  travelinfo.get(0) +"', '"+ travelinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                         isSuccess = true;
                     }
@@ -441,9 +451,21 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
             startActivity(startIntent);
             finish();
         }
+        else if(item.getItemId()==R.id.history)
+        {
+            Intent startIntent=new Intent(SetLocation.this, TravelHistory.class);
+            startActivity(startIntent);
+            finish();
+        }
         else if(item.getItemId()==R.id.group)
         {
             Intent startIntent=new Intent(SetLocation.this, SetLocationGroup.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.nlogout)
+        {
+            Intent startIntent=new Intent(SetLocation.this, Login.class);
             startActivity(startIntent);
             finish();
         }
@@ -451,27 +473,5 @@ public class SetLocation extends AppCompatActivity implements NavigationView.OnN
         return false;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int optid=item.getItemId();
-
-        if(optid==R.id.about)
-        {
-            dp.toasterlong(getApplicationContext(), "about");
-        }
-        else if(optid==R.id.logout)
-        {
-            Intent startIntent=new Intent(SetLocation.this, Login.class);
-            startActivity(startIntent);
-            finish();
-        }
-        return true;
-
-    }
 }
