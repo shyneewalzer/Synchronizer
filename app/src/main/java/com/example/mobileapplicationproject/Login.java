@@ -60,8 +60,8 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 email = emailInput.getText()+"";
                 password = passwordInput.getText()+"";
-//                email = "okaylangakoat@gmail.com";
-//                password = "Jaudian29";
+                email = "okaylangakoat@gmail.com";
+                password = "Jaudian29";
                 if(email.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Input Email", Toast.LENGTH_SHORT).show();
                     return;
@@ -179,6 +179,7 @@ public class Login extends AppCompatActivity {
 
                     if(dh.getType().equals("Establishment"))
                     {
+                        isSuccess=true;
                         ResultSet rs=con.createStatement().executeQuery("select * from establishments where account_id = '"+ dh.getUserid() +"' ");
                         while (rs.next())
                         {
@@ -188,6 +189,7 @@ public class Login extends AppCompatActivity {
                     }
                     else
                     {
+                        isSuccess=true;
                         ResultSet rs=con.createStatement().executeQuery("select * from user_profile where account_id = '"+ dh.getUserid() +"' ");
                         while (rs.next())
                         {
@@ -230,7 +232,7 @@ public class Login extends AppCompatActivity {
 
                 if(dh.getType().equals("Individual"))
                 {
-                    Intent myIntent = new Intent(Login.this, SetLocation.class);
+                    Intent myIntent = new Intent(Login.this, AddCompanion.class);
                     startActivity(myIntent);
                     dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab());
 

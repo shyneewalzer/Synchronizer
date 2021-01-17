@@ -228,7 +228,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         }
         else if(item.getItemId()==R.id.group)
         {
-            Intent startIntent=new Intent(DriverDashboard.this, SetLocationGroup.class);
+            Intent startIntent=new Intent(DriverDashboard.this, AddCompanion.class);
             startActivity(startIntent);
             finish();
         }

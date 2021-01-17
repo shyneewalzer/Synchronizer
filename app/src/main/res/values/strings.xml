@@ -38,8 +38,15 @@
     <string name="barangay">Barangay</string>
     <string name="city">City</string>
     <string name="update">Update</string>
+
+
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
+
+
+    <string name="title_activity_history">History</string>
+    <string name="tab_text_1">Travel</string>
+    <string name="tab_text_2">Establishment</string>
 
 
 </resources>

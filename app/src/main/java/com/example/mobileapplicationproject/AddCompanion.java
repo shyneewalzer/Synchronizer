@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SetLocationGroup extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+public class AddCompanion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     ArrayList<String> fname;
     ArrayList<String> lname;
@@ -79,7 +78,7 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
 
-    TextInputEditText edt_cFname, edt_cMname, edt_cLname, edt_cContact, edt_cAdr;
+    TextInputEditText edt_cFname, edt_cLname;
 
     ImageView img_scanbox;
     Button btn_eAddCompanion, btn_scan, btn_eAddCompanionCancel;
@@ -92,7 +91,7 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.set_location_group);
+        setContentView(R.layout.add_companion);
 
         lv = findViewById(R.id.listview);
         img_scanbox = findViewById(R.id.scanbox);
@@ -104,10 +103,7 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
         lo_addcompanion = findViewById(R.id.lo_addcompanion);
 
         edt_cFname = findViewById(R.id.edt_cFname);
-        edt_cMname = findViewById(R.id.edt_cMname);
         edt_cLname = findViewById(R.id.edt_cLname);
-        edt_cContact = findViewById(R.id.edt_cContact);
-        edt_cAdr = findViewById(R.id.edt_cAdr);
 
         fname = new ArrayList<>();
         lname = new ArrayList<>();
@@ -187,7 +183,7 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
                         img_scanbox.setImageBitmap(dp.createQR(qrcode));
                         qrcode="";
 
-                        Toast.makeText(SetLocationGroup.this,"Item Delete Successfully",Toast.LENGTH_LONG).show();
+                        Toast.makeText(AddCompanion.this,"Item Delete Successfully",Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -433,7 +429,13 @@ public class SetLocationGroup extends AppCompatActivity implements NavigationVie
 
         if(item.getItemId()==R.id.prof)
         {
-            Intent startIntent=new Intent(SetLocationGroup.this, UserDriverProfile.class);
+            Intent startIntent=new Intent(AddCompanion.this, UserDriverProfile.class);
+            startActivity(startIntent);
+            finish();
+        }
+        if(item.getItemId()==R.id.history)
+        {
+            Intent startIntent=new Intent(AddCompanion.this, History.class);
             startActivity(startIntent);
             finish();
         }

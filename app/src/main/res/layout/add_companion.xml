@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:theme="@style/NavigationDrawerStyle"
     android:id="@+id/drawer"
-    tools:context=".SetLocationGroup">
+    tools:context=".AddCompanion">
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
