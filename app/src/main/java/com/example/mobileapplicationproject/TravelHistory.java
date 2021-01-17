@@ -288,7 +288,7 @@ public class TravelHistory extends AppCompatActivity implements NavigationView.O
                 }
                 else
                 {
-                    //TODO: Fix sql search
+
                     ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE "+ sqlsearch +" = '"+ edt_search.getText() +"' GROUP BY batch");
 
                     if(rs.isBeforeFirst())

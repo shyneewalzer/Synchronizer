@@ -10,7 +10,7 @@
         android:padding="5dp">
 
         <TextView
-            android:id="@+id/tdestination"
+            android:id="@+id/edestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Destination"
@@ -18,7 +18,7 @@
             android:textColor="@color/black"
             android:layout_weight="3"/>
         <TextView
-            android:id="@+id/ttime"
+            android:id="@+id/etime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time"
@@ -26,7 +26,7 @@
             android:textColor="@color/black"
             android:layout_weight="4"/>
         <TextView
-            android:id="@+id/tdate"
+            android:id="@+id/edate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date"
@@ -34,5 +34,16 @@
             android:textColor="@color/black"
             android:layout_weight="4"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/eadr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adress"
+        android:textStyle="italic"
+        android:textSize="17sp"
+        android:padding="5dp"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/location_icon"/>
 
 </LinearLayout>
