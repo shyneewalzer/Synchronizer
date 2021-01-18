@@ -14,7 +14,7 @@
         <item
             android:id="@+id/drivehistory"
             android:icon="@drawable/travel_history_icon"
-            android:title="Profiles" />
+            android:title="History" />
     </group>
 
     <group

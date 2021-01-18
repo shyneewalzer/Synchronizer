@@ -335,29 +335,6 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
         return false;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int optid=item.getItemId();
-
-        if(optid==R.id.about)
-        {
-            dp.toasterlong(getApplicationContext(), "about");
-        }
-        else if(optid==R.id.logout)
-        {
-            Intent startIntent=new Intent(UserDriverProfile.this, Login.class);
-            startActivity(startIntent);
-            finish();
-        }
-        return true;
-
-    }
 
 }
 

@@ -6,9 +6,7 @@ import android.os.Bundle;
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -27,7 +24,7 @@ import com.example.mobileapplicationproject.ui.main.SectionsPagerAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class History extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class UserHistory extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -45,8 +42,8 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.history);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        setContentView(R.layout.user_history);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), "TRAVEL1", "ESTABLISHMENT1");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,13 +83,19 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
 
         if(item.getItemId()==R.id.home)
         {
-            Intent startIntent=new Intent(History.this, AddCompanion.class);
+            Intent startIntent=new Intent(UserHistory.this, AddCompanion.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.prof)
         {
-            Intent startIntent=new Intent(History.this, UserDriverProfile.class);
+            Intent startIntent=new Intent(UserHistory.this, UserDriverProfile.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.logout)
+        {
+            Intent startIntent=new Intent(UserHistory.this, Login.class);
             startActivity(startIntent);
             finish();
         }

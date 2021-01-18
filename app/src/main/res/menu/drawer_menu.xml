@@ -32,7 +32,7 @@
         android:icon="@drawable/ic_info"
         android:title="About"/>
     <item
-        android:id="@+id/nlogout"
+        android:id="@+id/logout"
         android:icon="@drawable/ic_logout"
         android:title="Logout" />
     </group>

@@ -18,13 +18,14 @@ import com.example.mobileapplicationproject.R;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
+
+    public static String[] TAB_TITLES = new String[]{};
     private final Context mContext;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm, String ipttitle1, String ipttitle2) {
         super(fm);
         mContext = context;
+        TAB_TITLES = new String[]{ipttitle1, ipttitle2};
     }
 
     @Override
@@ -51,7 +52,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+//        return mContext.getResources().getString(TAB_TITLES[position]);
+        return TAB_TITLES[position];
     }
 
     @Override

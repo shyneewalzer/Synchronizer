@@ -50,6 +50,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
     ArrayList<String> searcher;
 
     String sqlsearch="";
+    String testers = "";
 
     DatePickerDialog.OnDateSetListener dateSetListener;
 
@@ -281,7 +282,16 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
                         isSuccess=true;
                         while (rs.next())
                         {
-                            listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                            String fnamechecker = rs.getString("firstname");
+                            String lnamechecker = rs.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                            }
+                            else
+                            {
+                                listPerson.add("No Companions");
+                            }
 
                         }
 
@@ -318,7 +328,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
 
             adapterTravelHistory = new AdapterTravelHistory(listGroup, listChild, destination, timee, datee);
             expandableListView.setAdapter(adapterTravelHistory);
-            dm.displayMessage(getContext(), listPerson+"");
+            dm.displayMessage(getContext(), testers+"");
         }
     }
 

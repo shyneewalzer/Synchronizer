@@ -13,10 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".DriverHistory"></activity>
         <activity
-            android:name=".History"
+            android:name=".UserHistory"
             android:label="@string/title_activity_history"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EmployeeDashboard" />
         <activity android:name=".EmployeeeProfileForm" />
         <activity android:name=".AccountsForm" />

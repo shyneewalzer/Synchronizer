@@ -382,7 +382,7 @@ public class TravelHistory extends AppCompatActivity implements NavigationView.O
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.nlogout)
+        else if(item.getItemId()==R.id.logout)
         {
             Intent startIntent=new Intent(TravelHistory.this, Login.class);
             startActivity(startIntent);

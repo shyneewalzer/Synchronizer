@@ -1,5 +1,6 @@
 package com.example.mobileapplicationproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,14 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,16 +29,20 @@ import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
 import com.example.mobileapplicationproject.DataController.DebugMode;
 import com.google.android.material.navigation.NavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DriverDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class DriverDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     ArrayList<String>vehiclelist;
     ArrayList<String>routelist;
@@ -46,6 +54,13 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
+    SimpleDateFormat batchformatter;
+
+    String qrscan="", batch;
+    Timestamp timestamp;
+    ArrayList<String>idextractor;
+    List<List<String>>personlists;
+    ArrayList<String>personinfo;
 
     ///////////UI ELEMENTS//////////
 
@@ -61,6 +76,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
     Spinner spr_platenum;
     TextView txt_route;
+    Button btn_driver_scan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +88,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
         spr_platenum = findViewById(R.id.spr_platenum);
         txt_route = findViewById(R.id.txt_route);
+        btn_driver_scan = findViewById(R.id.btn_driver_scan);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,6 +116,8 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             draw_img_user.setImageResource(R.drawable.ic_person);
         }
 
+        btn_driver_scan.setOnClickListener(this);
+
         vehiclelist = new ArrayList<>();
         routelist = new ArrayList<>();
 
@@ -109,6 +128,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
+        batchformatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
         spr_platenum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -135,6 +155,70 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         });
 
     //TODO: Set up Employee Dashboard for QR......
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId()==R.id.btn_driver_scan)
+        {
+            if(spr_platenum.getSelectedItem().equals("Select Plate Number"))
+            {
+                dp.toasterlong(getApplicationContext(), "Please Select Vehicle");
+            }
+            else
+            {
+                scanCode();
+            }
+        }
+    }
+
+    private void scanCode(){
+
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(CaptureAct.class);
+        integrator.setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scanning Code");
+        integrator.initiateScan();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null){
+            if(result.getContents() != null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
+//                sendData(Integer.parseInt(result.getContents()));
+                qrscan = result.getContents()+"";
+                dm.displayMessage(getApplicationContext(), qrscan+"");
+
+                builder.setMessage("Scanned Successfully");
+                builder.setTitle("Scanning Result");
+                builder.setPositiveButton("Scan Again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        scanCode();
+                    }
+                }).setNegativeButton("Finish", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Dbinsert dbinsert = new Dbinsert();
+                        dbinsert.execute();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                Toast.makeText(this, "No Result", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 
     private class Dbread extends AsyncTask<String, String, String>
@@ -192,6 +276,100 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         }
     }
 
+    private class Dbinsert extends AsyncTask<String, String, String>
+    {
+
+        String msger;
+        Boolean isSuccess=false;
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+                    if(personlists.size()>0)
+                    {
+                        for(int x = 0; x<personlists.size();x++)
+                        {
+                            con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, lastname, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) " +
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ txt_route.getText() +"', '"+ dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ idextractor.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            isSuccess = true;
+                        }
+                    }
+                    else
+                    {
+                        con.createStatement().executeUpdate("INSERT into travel_history (batch, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) VALUES('"+ batch +"', '"+ txt_route.getText() +"', '"+  dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ idextractor.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                        isSuccess = true;
+                    }
+
+
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            timestamp = new Timestamp(System.currentTimeMillis());
+            String temp="";
+
+            idextractor = new ArrayList<>();
+            personinfo = new ArrayList<>();
+            personlists = new ArrayList<List<String>>();
+
+            idextractor = new ArrayList<>(dp.splitter(qrscan, "#"));
+            batch = idextractor.get(0) + dh.getUserid() + batchformatter.format(timestamp);
+
+            if(idextractor.size()>1)
+            {
+                personinfo = dp.splitter(idextractor.get(1), ",");
+                for (int x = 0; x < personinfo.size(); x++) {
+                    personlists.add(new ArrayList<>(dp.splitter(personinfo.get(x), "_")));
+                }
+
+                for (int a = 0; a < personlists.size(); a++) {
+                    for (int b = 0; b < personlists.get(a).size(); b++) {
+                        temp = temp + personlists.get(a).get(b) + "+";
+                    }
+                    temp = temp + ".";
+                }
+            }
+
+            dm.displayMessage(getApplicationContext(), "id=" + idextractor.get(0) + " " + temp+"");
+
+            pbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+//            Intent myIntent = new Intent(SetLocation.this, UserDriverDashboard.class);
+//            startActivity(myIntent);
+
+            if(isSuccess==true)
+            {
+                dp.toastershort(getApplicationContext(), "Data Successfully Sent");
+            }
+            else if(isSuccess==false)
+            {
+                dp.toastershort(getApplicationContext(), msger);
+            }
+            pbar.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -207,7 +385,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         }
         else if(item.getItemId()==R.id.drivehistory)
         {
-            Intent startIntent=new Intent(DriverDashboard.this, AddCompanion.class);
+            Intent startIntent=new Intent(DriverDashboard.this, DriverHistory.class);
             startActivity(startIntent);
             finish();
         }
