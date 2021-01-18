@@ -84,7 +84,13 @@ public class History extends AppCompatActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.prof)
+        if(item.getItemId()==R.id.home)
+        {
+            Intent startIntent=new Intent(History.this, AddCompanion.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.prof)
         {
             Intent startIntent=new Intent(History.this, UserDriverProfile.class);
             startActivity(startIntent);

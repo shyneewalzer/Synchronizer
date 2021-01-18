@@ -113,10 +113,13 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
         drawerToggle.syncState();
 
         navigationView = findViewById(R.id.navigationView);
+        if(dh.getType().equals("Driver"))
+        {
+            navigationView.inflateMenu(R.menu.drawer_driver_menu);
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu drawer_menu = navigationView.getMenu();
-        drawer_menu.findItem(R.id.destination).setVisible(false);
 
         View headerView = navigationView.getHeaderView(0);
         draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);

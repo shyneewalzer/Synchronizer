@@ -97,9 +97,6 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
         navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Menu drawer_menu = navigationView.getMenu();
-        drawer_menu.findItem(R.id.destination).setVisible(false);
-
         View headerView = navigationView.getHeaderView(0);
         draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
         draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
@@ -289,12 +286,7 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.group)
-        {
-//            Intent startIntent=new Intent(MainMenuFormEmployee.this, Set.class);
-//            startActivity(startIntent);
-            finish();
-        }
+
 
         return false;
     }

@@ -433,7 +433,7 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
             startActivity(startIntent);
             finish();
         }
-        if(item.getItemId()==R.id.history)
+        else if(item.getItemId()==R.id.history)
         {
             Intent startIntent=new Intent(AddCompanion.this, History.class);
             startActivity(startIntent);

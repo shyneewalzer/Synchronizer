@@ -2,29 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/estmenu_grp1">
+        android:id="@+id/drivemenu_grp1">
         <item
-            android:id="@+id/esthome"
+            android:id="@+id/drivehome"
             android:icon="@drawable/house_icon"
             android:title="Home" />
         <item
-            android:id="@+id/estprof"
+            android:id="@+id/driveprof"
             android:icon="@drawable/profile_icon"
             android:title="Profiles" />
         <item
-            android:id="@+id/esthistory"
+            android:id="@+id/drivehistory"
             android:icon="@drawable/travel_history_icon"
             android:title="Profiles" />
     </group>
 
     <group
-        android:id="@+id/estmenu_grp2">
+        android:id="@+id/drivemenu_grp2">
         <item
-            android:id="@+id/estabout"
+            android:id="@+id/driveabout"
             android:icon="@drawable/ic_info"
             android:title="About"/>
         <item
-            android:id="@+id/estlogout"
+            android:id="@+id/drivelogout"
             android:icon="@drawable/ic_logout"
             android:title="Logout" />
     </group>

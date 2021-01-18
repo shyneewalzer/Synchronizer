@@ -382,12 +382,6 @@ public class TravelHistory extends AppCompatActivity implements NavigationView.O
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.group)
-        {
-            Intent startIntent=new Intent(TravelHistory.this, AddCompanion.class);
-            startActivity(startIntent);
-            finish();
-        }
         else if(item.getItemId()==R.id.nlogout)
         {
             Intent startIntent=new Intent(TravelHistory.this, Login.class);

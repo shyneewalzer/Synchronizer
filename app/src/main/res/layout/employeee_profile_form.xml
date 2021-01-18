@@ -20,9 +20,7 @@
             android:background="?android:attr/windowBackground"
             app:backgroundTint="#FFFFFF"
             app:itemIconTint="@color/navigation_selector"
-            app:itemTextColor="@color/dark_green"
-
-            app:menu="@menu/menu_navigation_employee" />
+            app:itemTextColor="@color/dark_green" />
 
         <LinearLayout
             android:id="@+id/profileviewer"

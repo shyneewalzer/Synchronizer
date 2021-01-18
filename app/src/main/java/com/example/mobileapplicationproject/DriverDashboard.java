@@ -36,11 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DriverDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    APIInterface apiInterface;
-    String qrcode;
-    StringTokenizer tokenizer;
-    ArrayList<String> travelinfo;
     ArrayList<String>vehiclelist;
+    ArrayList<String>routelist;
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -59,31 +56,22 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
 
-    ImageView driverQR;
-
     LinearLayout dashboardviewer;
     ProgressBar pbar;
 
-    TextView txtfirstname, txtlastname, txtposition, txt_qrsign;
     Spinner spr_platenum;
+    TextView txt_route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        apiInterface = APIClient.getClient().create(APIInterface.class);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.driver_dashboard);
-
-        txtfirstname = findViewById(R.id.txt_firstname);
-        txtlastname = findViewById(R.id.txt_lastname);
-        txtposition = findViewById(R.id.txt_position);
-        txt_qrsign = findViewById(R.id.txt_qrsign);
-
-        driverQR = findViewById(R.id.imageview);
 
         dashboardviewer = findViewById(R.id.dashboard_viewer);
         pbar = findViewById(R.id.pbar);
 
         spr_platenum = findViewById(R.id.spr_platenum);
+        txt_route = findViewById(R.id.txt_route);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -98,9 +86,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Menu drawer_menu = navigationView.getMenu();
-        drawer_menu.findItem(R.id.destination).setVisible(false);
-
         View headerView = navigationView.getHeaderView(0);
         draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
         draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
@@ -114,8 +99,8 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             draw_img_user.setImageResource(R.drawable.ic_person);
         }
 
-        travelinfo = new ArrayList<>();
         vehiclelist = new ArrayList<>();
+        routelist = new ArrayList<>();
 
         vehiclelist.add(0,"Select Plate Number");
 
@@ -131,14 +116,12 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
                 if(!parent.getItemAtPosition(position).equals("Select Plate Number"))
                 {
-                    driverQR.setImageBitmap(dp.createQR(dh.getUserid() + "," + parent.getItemAtPosition(position)));
-                    txt_qrsign.setVisibility(View.GONE);
+                    txt_route.setText(routelist.get(position-1));
                 }
                 else
                 {
                     dp.toasterlong(getApplicationContext(), "Please Select Vehicle");
-                    txt_qrsign.setVisibility(View.VISIBLE);
-                    driverQR.setImageBitmap(null);
+                    txt_route.setText("");
                 }
 
             }
@@ -147,7 +130,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             public void onNothingSelected(AdapterView<?> parent) {
 
                 dp.toasterlong(getApplicationContext(), "Please Select Vehicle");
-
+                txt_route.setText("");
             }
         });
 
@@ -175,6 +158,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                     while (rsqr.next())
                     {
                         vehiclelist.add(rsqr.getString("plate_number"));
+                        routelist.add(rsqr.getString("vehicle_route"));
                     }
                     rsqr.close();
                     con.close();
@@ -198,15 +182,10 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         @Override
         protected void onPostExecute(String a){
 
-            txtfirstname.setText(dh.getpFName());
-            txtlastname.setText(dh.getpLName());
-            txtposition.setText(dh.getType());
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(DriverDashboard.this, R.layout.spinner_format, vehiclelist);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spr_platenum.setAdapter(dataAdapter);
 
-            driverQR.setImageBitmap(dp.createQR(qrcode));
             pbar.setVisibility(View.GONE);
             dashboardviewer.setVisibility(View.VISIBLE);
 
@@ -216,23 +195,23 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.home)
+        if(item.getItemId()==R.id.drivehome)
         {
             dp.toastershort(getApplicationContext(), "Home");
         }
-        else if(item.getItemId()==R.id.prof)
+        else if(item.getItemId()==R.id.driveprof)
         {
             Intent startIntent=new Intent(DriverDashboard.this, UserDriverProfile.class);
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.group)
+        else if(item.getItemId()==R.id.drivehistory)
         {
             Intent startIntent=new Intent(DriverDashboard.this, AddCompanion.class);
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.nlogout)
+        else if(item.getItemId()==R.id.drivelogout)
         {
             Intent startIntent=new Intent(DriverDashboard.this, Login.class);
             startActivity(startIntent);

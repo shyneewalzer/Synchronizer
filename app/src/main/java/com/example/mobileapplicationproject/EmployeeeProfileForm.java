@@ -99,24 +99,6 @@ public class EmployeeeProfileForm extends AppCompatActivity {
         Eposition = findViewById(R.id.eposition);
         bottomNavigationView = findViewById(R.id.nav_menu_emplo);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home_emplo:
-                        startActivity(new Intent(getApplicationContext()
-                                ,MainMenuFormEmployee.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.profile_emplo:
-
-                        return true;
-                }
-                return false;
-            }
-        });
-
-
 
         imagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
