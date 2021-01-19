@@ -411,7 +411,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
                     if(spr_search.getSelectedItem().equals("Plate Number"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE plate_number = '"+ edt_search.getText() +"' AND driver_id='"+ dh.getUserid() +"' ");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE plate_number = '"+ edt_search.getText() +"' AND driver_id='"+ dh.getUserid() +"' GROUP BY batch ORDER BY date_boarded ASC, time_boarded ASC");
 
                         if(rs.isBeforeFirst())
                         {
