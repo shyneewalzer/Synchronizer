@@ -350,8 +350,12 @@ public class FragmentEstabHistory extends Fragment implements View.OnClickListen
                         isSuccess=true;
                         while (rs.next())
                         {
-                            listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
-
+                            String fnamechecker = rs.getString("firstname");
+                            String lnamechecker = rs.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                            }
                         }
 
                         listChild.put(listGroup.get(x), listPerson);

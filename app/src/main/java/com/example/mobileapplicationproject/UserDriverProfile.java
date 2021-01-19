@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -325,10 +324,34 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.prof)
+        if(item.getItemId()==R.id.home)
         {
-//            Intent startIntent=new Intent(UserPanel.this, Profile.class);
-//            startActivity(startIntent);
+            Intent startIntent=new Intent(UserDriverProfile.this, UserDashboard.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.history)
+        {
+            Intent startIntent=new Intent(UserDriverProfile.this, UserHistory.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.drivehome)
+        {
+            Intent startIntent=new Intent(UserDriverProfile.this, UserHistory.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.drivehistory)
+        {
+            Intent startIntent=new Intent(UserDriverProfile.this, DriverHistory.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.logout || item.getItemId()==R.id.drivelogout)
+        {
+            Intent startIntent=new Intent(UserDriverProfile.this, Login.class);
+            startActivity(startIntent);
             finish();
         }
 

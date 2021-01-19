@@ -43,7 +43,7 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_history);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), "TRAVEL1", "ESTABLISHMENT1");
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), "TRAVEL", "ESTABLISHMENT");
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,7 +83,7 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
 
         if(item.getItemId()==R.id.home)
         {
-            Intent startIntent=new Intent(UserHistory.this, AddCompanion.class);
+            Intent startIntent=new Intent(UserHistory.this, UserDashboard.class);
             startActivity(startIntent);
             finish();
         }

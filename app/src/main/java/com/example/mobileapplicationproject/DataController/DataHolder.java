@@ -7,9 +7,8 @@ public class DataHolder {
 
     private static int userid;
     private static String email, type;
-    private static String pFName, pLName, pMName, pImage,pPosition, pBdayHolder, pContact;
+    private static String pFName, pLName, pMName, pImage, pBdayHolder, pContact;
     private static Calendar pBday = Calendar.getInstance();
-    private static int pEstab;
 
     private static String house, brgy, city;
 
@@ -37,19 +36,6 @@ public class DataHolder {
     public String getType()
     {
         return type;
-    }
-
-    public void setProfile(String iptFname, String iptLname, String iptMname, Date iptBday, String iptContact, String iptImage, String iptPosition, int iptEstab)
-    {
-        pFName = iptFname;
-        pLName = iptLname;
-        pMName = iptMname;
-        pBday.setTime(iptBday);
-        pBdayHolder = pBday.get(Calendar.YEAR) + "-" + (pBday.get(Calendar.MONTH)+1) + "-" + pBday.get(Calendar.DAY_OF_MONTH);
-        pContact = iptContact;
-        pImage = iptImage;
-        pPosition = iptPosition;
-        pEstab = iptEstab;
     }
 
     public void setProfile(String iptFname, String iptLname, String iptMname, Date iptBday, String iptContact, String iptImage)
@@ -130,16 +116,6 @@ public class DataHolder {
     public void setpImage(String iptImage)
     {
         pImage = iptImage;
-    }
-
-    public String getpPosition()
-    {
-        return pPosition;
-    }
-
-    public String getpEstab()
-    {
-        return pEstab+"";
     }
 
     public Calendar getTempDate()

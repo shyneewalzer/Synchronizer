@@ -49,6 +49,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
     DebugMode dm = new DebugMode();
 
     ArrayList<String> parentid;
+    ArrayList<String> parentdest;
     ArrayList<String> plate;
     ArrayList<String> timee;
     ArrayList<String> datee;
@@ -60,7 +61,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
     ArrayList<String>listGroup;
     ArrayList<String>listPerson;
     HashMap<String,ArrayList<String>> listChild = new HashMap<>();
-    AdapterEstabHistory expandAdapter;
+    AdapterDriverHistory expandAdapter;
 
     ///////////////UI ELEMENTS/////////////////
 
@@ -128,7 +129,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         searcher = new ArrayList<>();
 
         searcher.add("Search by");
-        searcher.add("Route");
+        searcher.add("Destination");
         searcher.add("Plate Number");
         searcher.add("Date");
 
@@ -196,6 +197,8 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                         while (rs.next())
                         {
                             parentid.add(rs.getString("account_id"));
+                            parentdest.add(rs.getString("destination"));
+
                             plate.add(rs.getString("plate_number"));
                             timee.add(rs.getString("time_boarded"));
                             datee.add(rs.getString("date_boarded"));
@@ -214,7 +217,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
                             while (rsparent.next())
                             {
-                                parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname"));
+                                parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber") + "_" + parentdest.get(x));
                             }
                             rsparent.close();
                         }
@@ -236,6 +239,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
             listGroup = new ArrayList<>();
             parentid = new ArrayList<>();
+            parentdest = new ArrayList<>();
             plate = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
@@ -253,7 +257,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             Dbvehiclereader dbvehiclereader = new Dbvehiclereader();
             dbvehiclereader.execute();
 
-            dm.displayMessage(getApplicationContext(), listGroup+"rawr");
+            dm.displayMessage(getApplicationContext(), parentid+"rawr");
         }
     }
 
@@ -350,8 +354,12 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                         isSuccess=true;
                         while (rs.next())
                         {
-                            listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
-
+                            String fnamechecker = rs.getString("firstname");
+                            String lnamechecker = rs.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + rs.getString("contact_number") + "_" + rs.getString("destination"));
+                            }
                         }
 
                         listChild.put(listGroup.get(x), listPerson);
@@ -387,7 +395,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             lo_routeviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
 
-            expandAdapter = new AdapterEstabHistory(listGroup, listChild, plate, timee, datee, route);
+            expandAdapter = new AdapterDriverHistory(listGroup, listChild, plate, timee, datee, route);
             expandableListView.setAdapter(expandAdapter);
             dm.displayMessage(getApplicationContext(), listPerson+"");
         }
@@ -419,6 +427,8 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                             while (rs.next())
                             {
                                 parentid.add(rs.getString("account_id"));
+                                parentdest.add(rs.getString("destination"));
+
                                 plate.add(rs.getString("plate_number"));
                                 timee.add(rs.getString("time_boarded"));
                                 datee.add(rs.getString("date_boarded"));
@@ -437,21 +447,50 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
                                 while (rsparent.next())
                                 {
-                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname"));
+                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber") + "_" + parentdest.get(x));
                                 }
                                 rsparent.close();
                             }
                         }
 
                     }
-                    else if(spr_search.getSelectedItem().equals("Route"))
+                    else if(spr_search.getSelectedItem().equals("Destination"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM vehicles WHERE vehicle_route = '"+ edt_search.getText() +"' AND driver_id='"+ dh.getUserid() +"' ");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE destination = '"+ edt_search.getText() +"' AND driver_id='"+ dh.getUserid() +"' ");
 
+                        if(rs.isBeforeFirst())
+                        {
+                            isSuccess=true;
+                            while (rs.next())
+                            {
+                                parentid.add(rs.getString("account_id"));
+                                parentdest.add(rs.getString("destination"));
+                                plate.add(rs.getString("plate_number"));
+                                timee.add(rs.getString("time_boarded"));
+                                datee.add(rs.getString("date_boarded"));
+
+                                listGroup.add(rs.getString("batch"));
+
+                            }
+                        }
+                        rs.close();
+
+                        if(isSuccess==true)
+                        {
+                            for (int x=0;x<listGroup.size();x++)
+                            {
+                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ parentid.get(x) +"' ");
+
+                                while (rsparent.next())
+                                {
+                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber") + "_" + parentdest.get(x));
+                                }
+                                rsparent.close();
+                            }
+                        }
                     }
                     else if(spr_search.getSelectedItem().equals("Date"))
                     {
-                        //TODO: fix the duplication of data
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE date_boarded = '"+ edt_search.getText() +"' AND driver_id = '"+ dh.getUserid() +"' GROUP BY batch");
 
                         if(rs.isBeforeFirst())
@@ -460,6 +499,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                             while (rs.next())
                             {
                                 parentid.add(rs.getString("account_id"));
+                                parentdest.add(rs.getString("destination"));
                                 plate.add(rs.getString("plate_number"));
                                 timee.add(rs.getString("time_boarded"));
                                 datee.add(rs.getString("date_boarded"));
@@ -478,12 +518,12 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
                                 while (rsparent.next())
                                 {
-                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname"));
+                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber") + "_" + parentdest.get(x));
                                 }
                                 rsparent.close();
                             }
                         }
-                        rs.close();
+
                     }
 
 
@@ -503,6 +543,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
             listGroup = new ArrayList<>();
             parentid = new ArrayList<>();
+            parentdest = new ArrayList<>();
             plate = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
@@ -548,7 +589,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                 int cal_mo = cal.get(Calendar.MONTH);
                 int cal_dy = cal.get(Calendar.DAY_OF_MONTH);
                 dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
-                @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(getApplicationContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
+                @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(DriverHistory.this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
                 datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 datepicker.show();
 

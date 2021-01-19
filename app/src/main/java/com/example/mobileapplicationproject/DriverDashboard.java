@@ -4,13 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -38,7 +36,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,7 +55,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
     String qrscan="", batch;
     Timestamp timestamp;
-    ArrayList<String>idextractor;
+    ArrayList<String> iddest;
     List<List<String>>personlists;
     ArrayList<String>personinfo;
 
@@ -154,7 +151,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             }
         });
 
-    //TODO: Set up Employee Dashboard for QR......
+
     }
 
     @Override
@@ -297,14 +294,14 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                     {
                         for(int x = 0; x<personlists.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, lastname, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) " +
-                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ txt_route.getText() +"', '"+ dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ idextractor.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, lastname, contact_number, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) " +
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ iddest.get(1) +"', '"+ dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ iddest.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into travel_history (batch, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) VALUES('"+ batch +"', '"+ txt_route.getText() +"', '"+  dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ idextractor.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                        con.createStatement().executeUpdate("INSERT into travel_history (batch, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) VALUES('"+ batch +"', '"+ iddest.get(1) +"', '"+  dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ iddest.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                         isSuccess = true;
                     }
 
@@ -326,16 +323,16 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             timestamp = new Timestamp(System.currentTimeMillis());
             String temp="";
 
-            idextractor = new ArrayList<>();
+            iddest = new ArrayList<>();
             personinfo = new ArrayList<>();
             personlists = new ArrayList<List<String>>();
 
-            idextractor = new ArrayList<>(dp.splitter(qrscan, "#"));
-            batch = idextractor.get(0) + dh.getUserid() + batchformatter.format(timestamp);
+            iddest = new ArrayList<>(dp.splitter(qrscan, "#"));
+            batch = iddest.get(0) + dh.getUserid() + batchformatter.format(timestamp);
 
-            if(idextractor.size()>1)
+            if(iddest.size()>2)
             {
-                personinfo = dp.splitter(idextractor.get(1), ",");
+                personinfo = dp.splitter(iddest.get(1), ",");
                 for (int x = 0; x < personinfo.size(); x++) {
                     personlists.add(new ArrayList<>(dp.splitter(personinfo.get(x), "_")));
                 }
@@ -348,7 +345,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                 }
             }
 
-            dm.displayMessage(getApplicationContext(), "id=" + idextractor.get(0) + " " + temp+"");
+            dm.displayMessage(getApplicationContext(), "id=" + iddest.get(0) + " " + temp+"");
 
             pbar.setVisibility(View.VISIBLE);
         }

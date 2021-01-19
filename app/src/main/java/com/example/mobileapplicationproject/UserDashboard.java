@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,19 +45,20 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AddCompanion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+public class UserDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     ArrayList<String> fname;
     ArrayList<String> lname;
+    ArrayList<String> contact;
 
     ArrayList<String>personinfo;
     List<List<String>>personlists;
+    ArrayList<String> setdest;
 
     ArrayList<String>estinfo;
 
-    String qrcode ="";
-    String qrscan;
-    String idholder, batch;
+    String qrcode ="", qrscan, batch;
+
 
     SimpleDateFormat timeformatter;
     SimpleDateFormat dateformatter;
@@ -78,20 +81,21 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
 
-    TextInputEditText edt_cFname, edt_cLname;
+    TextInputEditText edt_cFname, edt_cLname, edt_cContact;
 
     ImageView img_scanbox;
-    Button btn_eAddCompanion, btn_scan, btn_eAddCompanionCancel;
-    TextView txt_companionExpander;
+    Button btn_eAddCompanion, btn_scan, btn_scancancel, btn_eAddCompanionCancel, btn_destination;
+    TextView txt_companionExpander, txt_destination;
     ListView lv;
 
-    LinearLayout locationviewer, lo_companionlist, lo_addcompanion;
+    LinearLayout locationviewer, lo_companionlist, lo_addcompanion, lo_qr, lo_destination;
     ProgressBar pbar;
+    Spinner spr_destnation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_companion);
+        setContentView(R.layout.user_dashboard);
 
         lv = findViewById(R.id.listview);
         img_scanbox = findViewById(R.id.scanbox);
@@ -101,12 +105,22 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
         txt_companionExpander = findViewById(R.id.txt_companionExpander);
         lo_companionlist = findViewById(R.id.lo_companionlist);
         lo_addcompanion = findViewById(R.id.lo_addcompanion);
+        lo_destination = findViewById(R.id.lo_destination);
+        lo_qr = findViewById(R.id.lo_qr);
+        btn_destination = findViewById(R.id.btn_destination);
+        spr_destnation = findViewById(R.id.spr_destination);
+        btn_scancancel = findViewById(R.id.btn_scancancel);
+        txt_destination = findViewById(R.id.txt_destination);
 
         edt_cFname = findViewById(R.id.edt_cFname);
         edt_cLname = findViewById(R.id.edt_cLname);
+        edt_cContact = findViewById(R.id.edt_cContact);
 
         fname = new ArrayList<>();
         lname = new ArrayList<>();
+        contact = new ArrayList<>();
+
+        setdest = new ArrayList<>();
 
         personinfo = new ArrayList<>();
         personlists = new ArrayList<List<String>>();
@@ -148,6 +162,13 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
         btn_eAddCompanionCancel.setOnClickListener(this);
         txt_companionExpander.setOnClickListener(this);
         btn_scan.setOnClickListener(this);
+        btn_scancancel.setOnClickListener(this);
+        btn_destination.setOnClickListener(this);
+
+        setdest.add("Select Destination");
+        setdest.add("Sample 1");
+        setdest.add("Sample 2");
+        setdest.add("Sample 3");
 
         customAdapter = new CustomAdapter();
         lv.setAdapter(customAdapter);
@@ -165,12 +186,13 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
 //                        adapter.remove(itemList.get(item));
                         fname.remove(item);
                         lname.remove(item);
+                        contact.remove(item);
 
                         personlists.remove(item);
 
                         customAdapter.notifyDataSetChanged();
 
-                        qrcode =dh.getUserid() + "#";
+                        qrcode =dh.getUserid() + "#" + txt_destination.getText() + "#";//needed to refresh qr value
                         for(int x = 0;x<personlists.size();x++)
                         {
                             for(int y=0;y<personlists.get(x).size();y++)
@@ -183,7 +205,7 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
                         img_scanbox.setImageBitmap(dp.createQR(qrcode));
                         qrcode="";
 
-                        Toast.makeText(AddCompanion.this,"Item Delete Successfully",Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserDashboard.this,"Item Delete Successfully",Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -209,6 +231,9 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(UserDashboard.this, R.layout.spinner_format, setdest);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spr_destnation.setAdapter(dataAdapter);
 
     }
 
@@ -219,18 +244,22 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
         {
             fname.add(edt_cFname.getText()+"");
             lname.add(edt_cLname.getText()+"");
+            contact.add(edt_cContact.getText()+"");
 
             personinfo.clear();
             personinfo.add(edt_cFname.getText()+"");
             personinfo.add(edt_cLname.getText()+"");
+            personinfo.add(edt_cContact.getText()+"");
+            personinfo.add(txt_destination.getText()+"");
             personlists.add(new ArrayList<>(personinfo));
 
             customAdapter.notifyDataSetChanged();
 
             edt_cFname.setText("");
             edt_cLname.setText("");
+            edt_cContact.setText("");
 
-            qrcode =dh.getUserid() + "#";
+            qrcode =dh.getUserid() + "#" + txt_destination.getText() + "#";//needed to refresh qr value
             for(int x = 0;x<personlists.size();x++)
             {
                 for(int y=0;y<personlists.get(x).size();y++)
@@ -261,6 +290,26 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
         else if(v.getId()==R.id.btn_scan)
         {
             scanCode();
+        }
+        else if(v.getId()==R.id.btn_destination)
+        {
+            if(spr_destnation.getSelectedItem().equals("Select Destination"))
+            {
+                dp.toasterlong(getApplicationContext(), "Please Select Destination");
+            }
+            else
+            {
+                lo_destination.setVisibility(View.GONE);
+                lo_qr.setVisibility(View.VISIBLE);
+                txt_destination.setText(spr_destnation.getSelectedItem()+"");
+                img_scanbox.setImageBitmap(dp.createQR(dh.getUserid() + "#" + txt_destination.getText() + "#"));//generate qr code for solo
+            }
+
+        }
+        else if(v.getId()==R.id.btn_scancancel)
+        {
+            lo_destination.setVisibility(View.VISIBLE);
+            lo_qr.setVisibility(View.GONE);
         }
 
     }
@@ -429,13 +478,13 @@ public class AddCompanion extends AppCompatActivity implements NavigationView.On
 
         if(item.getItemId()==R.id.prof)
         {
-            Intent startIntent=new Intent(AddCompanion.this, UserDriverProfile.class);
+            Intent startIntent=new Intent(UserDashboard.this, UserDriverProfile.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.history)
         {
-            Intent startIntent=new Intent(AddCompanion.this, UserHistory.class);
+            Intent startIntent=new Intent(UserDashboard.this, UserHistory.class);
             startActivity(startIntent);
             finish();
         }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/txt_traceNames"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FirstName LastName"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:layout_marginLeft="50dp"
+        android:drawableLeft="@drawable/profile_icon"
+        android:layout_marginVertical="3dp"/>
+
+    <TextView
+        android:id="@+id/txt_traceContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="00000000000"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:layout_marginLeft="50dp"
+        android:drawableLeft="@drawable/contact_icon"
+        android:layout_marginVertical="3dp"/>
+
+    <TextView
+        android:id="@+id/txt_traceDestination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="X XXXX XXXXXXXX"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:layout_marginLeft="50dp"
+        android:drawableLeft="@drawable/location_icon"
+        android:layout_marginVertical="3dp"/>
+
+</LinearLayout>

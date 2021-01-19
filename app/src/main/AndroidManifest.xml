@@ -25,7 +25,7 @@
         <activity android:name=".DriverDashboard" />
         <activity android:name=".UserDriverPassword" />
         <activity android:name=".TravelHistory" />
-        <activity android:name=".AddCompanion" />
+        <activity android:name=".UserDashboard" />
         <activity android:name=".UserDriverProfile" />
         <activity android:name=".Login" />
         <activity android:name=".RegisterForm" />

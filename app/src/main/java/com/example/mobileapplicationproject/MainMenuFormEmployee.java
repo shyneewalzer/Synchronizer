@@ -118,7 +118,6 @@ public class MainMenuFormEmployee extends AppCompatActivity implements Navigatio
 
         txtFirstName.setText(dh.getpFName());
         txtLastName.setText(dh.getpLName());
-        txtPosition.setText(dh.getpPosition());
 
     }
 

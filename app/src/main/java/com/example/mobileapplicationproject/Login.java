@@ -60,7 +60,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 email = emailInput.getText()+"";
                 password = passwordInput.getText()+"";
-                email = "josemanalo@gmail.com";
+//                email = "josemanalo@gmail.com";
                 password = "Jaudian29";
                 if(email.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Input Email", Toast.LENGTH_SHORT).show();
@@ -232,9 +232,9 @@ public class Login extends AppCompatActivity {
 
                 if(dh.getType().equals("Individual"))
                 {
-                    Intent myIntent = new Intent(Login.this, AddCompanion.class);
+                    Intent myIntent = new Intent(Login.this, UserDashboard.class);
                     startActivity(myIntent);
-                    dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpPosition() + "," + dh.getpEstab());
+                    dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," );
 
                 }
                 else if(dh.getType().equals("Driver"))
@@ -253,7 +253,7 @@ public class Login extends AppCompatActivity {
             }
             else
             {
-                dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpImage() + "," + dh.getpPosition() + "," + dh.getpEstab());
+                dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpImage() + ", ");
                 dp.toastershort(getApplicationContext(), msger);
                 btns.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.INVISIBLE);
