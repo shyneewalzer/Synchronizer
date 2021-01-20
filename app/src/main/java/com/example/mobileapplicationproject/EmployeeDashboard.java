@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,6 +43,9 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
     ArrayList<String>sFullName;
     ArrayList<String>sStatus;
 
+    CustomAdapter customAdapter;
+
+    String selectedEmp;
 
     ///////////////UI ELEMENTS////////////////
     Toolbar toolbar;
@@ -51,7 +55,7 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
 
-    LinearLayout staffviewer;
+    LinearLayout lo_staffviewer;
     ProgressBar pbar;
     ListView listView;
 
@@ -60,7 +64,7 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.employee_dashboard);
 
-        staffviewer = findViewById(R.id.travelviewer);
+        lo_staffviewer = findViewById(R.id.lo_staffviewer);
         pbar = findViewById(R.id.pbar);
         listView = findViewById(R.id.listView);
 
@@ -90,107 +94,195 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
             draw_img_user.setImageResource(R.drawable.ic_person);
         }
 
+        Dbread dbread = new Dbread();
+        dbread.execute();
 
     }
 
-//    private class Dbread extends AsyncTask<String, String, String>
-//    {
-//        int tempp;
-//        String msger;
-//        Boolean isSuccess=false;
-//        @Override
-//        protected String doInBackground(String... strings) {
+    private class Dbread extends AsyncTask<String, String, String>
+    {
+
+        String msger;
+        Boolean isSuccess=false;
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+
+                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstID() +"' ");
+
+                    if(rs.isBeforeFirst())
+                    {
+                        isSuccess=true;
+                        while (rs.next())
+                        {
+                            sImage.add(rs.getString("image"));
+                            sID.add(rs.getString("user_id"));
+                            sFullName.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                        }
+                    }
+                    rs.close();
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            sID = new ArrayList<>();
+            sFullName = new ArrayList<>();
+            sStatus = new ArrayList<>();
+            sImage = new ArrayList<>();
+
+            lo_staffviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            lo_staffviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+
+            customAdapter = new CustomAdapter();
+            listView.setAdapter(customAdapter);
+
+        }
+    }
+
+    private class Dbreadprofile extends AsyncTask<String, String, String>
+    {
+
+        String msger;
+        Boolean isSuccess=false;
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+
+                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ selectedEmp +"' ");
+
+                        isSuccess=true;
+                        while (rs.next())
+                        {
+                            dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"));
+                            dh.setUserid(rs.getInt("user_id"));
+                        }
+
+
+//                        ResultSet rsadr=con.createStatement().executeQuery("select * from address_table where user_id = '"+ dh.getEstID() +"' ");
 //
-//            try{
-//                Connection con=cc.CONN();
-//                if(con==null)
-//                {
-//                    msger="Please Check your Internet Connection";
-//                }
-//                else
-//                {
-//
-//                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getUserid() +"' ");
-//
-//                    if(rs.isBeforeFirst())
-//                    {
-//                        isSuccess=true;
-//                        while (rs.next())
+//                        while(rsadr.next())
 //                        {
-//                            tempp=rs.getRow();
-//                            destination.add(rs.getString("destination"));
-//                            timee.add(rs.getString("time_boarded"));
-//                            datee.add(rs.getString("date_boarded"));
+//                            dh.setAddress(rsadr.getString("house_lot_number"), rsadr.getString("barangay"), rsadr.getString("city"));
 //                        }
-//                    }
-//                    rs.close();
-//                    con.close();
-//                }
-//            }
-//            catch (Exception ex){
-//                msger="Exception" + ex;
-//            }
-//            return msger;
-//
-//
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//
-//            destination.clear();
-//            timee.clear();
-//            datee.clear();
-//
-//            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String a){
-//
-//            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
-//
-//            customAdapter.notifyDataSetChanged();
-//            dm.displayMessage(getApplicationContext(), tempp+"");
-//        }
-//    }
-//
-//    class CustomAdapter extends BaseAdapter {
-//        @Override
-//        public int getCount()
-//        {
-//            return destination.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int i)
-//        {
-//            return null;
-//        }
-//
-//        @Override
-//        public long getItemId(int i)
-//        {
-//            return 0;
-//        }
-//
-//        @Override
-//        public View getView(int i, View view, ViewGroup viewGroup) {
-//            view= getLayoutInflater().inflate(R.layout.travelrow,null);
-//
-//            final TextView tvdestination=(TextView)view.findViewById(R.id.tdestination);
-//            final TextView tvtime=(TextView)view.findViewById(R.id.ttime);
-//            final TextView tvdate=(TextView)view.findViewById(R.id.tdate);
-//
-//            tvdestination.setText(destination.get(i));
-//            tvtime.setText(timee.get(i));
-//            tvdate.setText(datee.get(i));
-//
-//            return view;
-//        }
-//    }
+//                        rsadr.close();
+
+                    rs.close();
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            lo_staffviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            lo_staffviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+
+            Intent startIntent=new Intent(EmployeeDashboard.this, EmployeeMain.class);
+            startActivity(startIntent);
+            finish();
+
+        }
+    }
+
+    class CustomAdapter extends BaseAdapter {
+        @Override
+        public int getCount()
+        {
+            return sID.size();
+        }
+
+        @Override
+        public Object getItem(int i)
+        {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i)
+        {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view= getLayoutInflater().inflate(R.layout.row_employee,null);
+
+            TextView tvID=view.findViewById(R.id.list_txt_id);
+            CircleImageView tvImg= view.findViewById(R.id.list_img_prof);
+            TextView tvFullName=view.findViewById(R.id.list_txt_fullname);
+
+            tvID.setText(sID.get(i));
+            if(sImage.get(i)==null)
+            {
+                tvImg.setImageResource(R.drawable.ic_person);
+            }
+            else
+            {
+                tvImg.setImageBitmap(dp.createImage(sImage.get(i)));
+            }
+            tvFullName.setText(sFullName.get(i));
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    selectedEmp = tvID.getText()+"";
+
+                    Dbreadprofile dbreadprofile = new Dbreadprofile();
+                    dbreadprofile.execute();
+                    dm.displayMessage(getApplicationContext(), selectedEmp);
+                }
+            });
+
+            return view;
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -9,10 +9,8 @@ public class DataHolder {
     private static String email, type;
     private static String pFName, pLName, pMName, pImage, pBdayHolder, pContact;
     private static Calendar pBday = Calendar.getInstance();
-
     private static String house, brgy, city;
-
-    private static String estName, estStreet, estContact, estOwner, estImage;
+    private static String estID, estName, estStreet, estContact, estOwner, estImage;
 
 
 
@@ -38,6 +36,11 @@ public class DataHolder {
         return type;
     }
 
+    public void setUserid(int iptuserid)
+    {
+        userid = iptuserid;
+    }
+
     public void setProfile(String iptFname, String iptLname, String iptMname, Date iptBday, String iptContact, String iptImage)
     {
         pFName = iptFname;
@@ -49,13 +52,19 @@ public class DataHolder {
         pImage = iptImage;
     }
 
-    public void setProfile(String iptName, String iptStreet, String iptContact, String iptOwner, String iptImage)
+    public void setEstProfile(String iptID, String iptName, String iptStreet, String iptContact, String iptOwner, String iptImage)
     {
-        estName = iptOwner;
+        estID = iptID;
+        estName = iptName;
         estStreet = iptStreet;
         estContact = iptContact;
         estOwner = iptOwner;
         estImage = iptImage;
+    }
+
+    public String getEstID()
+    {
+        return estID;
     }
 
     public String getEstName()
@@ -144,4 +153,5 @@ public class DataHolder {
     {
         return city;
     }
+
 }

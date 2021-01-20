@@ -335,14 +335,14 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                     {
                         for(int x = 0; x<personlists.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, lastname, employee_id, est_id, account_id, time_entered, date_entered) " +
-                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"','"+ estinfo.get(0) +"','"+ estinfo.get(1) +"' '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, lastname, contact_number, edt_id, employee_id, account_id, time_entered, date_entered) " +
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"','"+ estinfo.get(1) +"','"+ estinfo.get(2) +"' '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into employee_scanned (batch, employee_id, est_id, account_id, time_entered, date_entered) VALUES('"+ batch +"', '"+ estinfo.get(0) +"', '"+  estinfo.get(1) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                        con.createStatement().executeUpdate("INSERT into employee_scanned (batch, est_id, employee_id, account_id, time_entered, date_entered) VALUES('"+ batch +"', '"+ estinfo.get(1) +"', '"+  estinfo.get(0) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                         isSuccess = true;
                     }
 
@@ -378,8 +378,6 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
         @Override
         protected void onPostExecute(String a){
-//            Intent myIntent = new Intent(SetLocation.this, UserDriverDashboard.class);
-//            startActivity(myIntent);
 
             if(isSuccess==true)
             {
@@ -446,6 +444,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
 //                sendData(Integer.parseInt(result.getContents()));
                 qrscan = result.getContents()+"";
+                dm.displayMessage(getApplicationContext(), qrscan);
 
                 builder.setMessage("Scanned Successfully");
                 builder.setTitle("Scanning Result");

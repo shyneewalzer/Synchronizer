@@ -183,7 +183,7 @@ public class Login extends AppCompatActivity {
                         ResultSet rs=con.createStatement().executeQuery("select * from establishments where account_id = '"+ dh.getUserid() +"' ");
                         while (rs.next())
                         {
-                            dh.setProfile(rs.getString("name"), rs.getString("street"), rs.getString("telephone_number"), rs.getString("est_owner"), rs.getString("image"));
+                            dh.setEstProfile(rs.getString("account_id"), rs.getString("name"), rs.getString("street"), rs.getString("telephone_number"), rs.getString("est_owner"), rs.getString("image"));
                         }
                         rs.close();
                     }
@@ -244,8 +244,9 @@ public class Login extends AppCompatActivity {
                 }
                 else if(dh.getType().equals("Establishment"))
                 {
-                    Intent myIntent = new Intent(Login.this, MainMenuFormEmployee.class);
+                    Intent myIntent = new Intent(Login.this, EmployeeDashboard.class);
                     startActivity(myIntent);
+                    //dm.displayMessage(getApplicationContext(), dh.getEstID() + " " + dh.getEstName() + " " + dh.getEstStreet() + " " + dh.getEstContact() + " " + dh.getEstOwner());
                 }
 
                 finish();
