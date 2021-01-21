@@ -1,7 +1,9 @@
 package com.example.mobileapplicationproject.DataController;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -32,11 +34,10 @@ public class DataProcessor {
     private static Calendar birthdate = Calendar.getInstance();
     private static Calendar datenow = Calendar.getInstance();
     private static int age;
-
     private static byte[] decodedString;
     private static Bitmap decodedByte;
-
     private static Date datee = new Date();
+    private static boolean dlgresult = false;
 
 
     public void toastershort(Context context, String iptmsg)

@@ -24,6 +24,7 @@ import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
 import com.example.mobileapplicationproject.DataController.DebugMode;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EmployeeDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class EstabDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -59,14 +60,19 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
     ProgressBar pbar;
     ListView listView;
 
+    TextView txt_addstaff, txt_deactivate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.employee_dashboard);
+        setContentView(R.layout.estab_dashboard);
 
         lo_staffviewer = findViewById(R.id.lo_staffviewer);
         pbar = findViewById(R.id.pbar);
         listView = findViewById(R.id.listView);
+
+        txt_addstaff = findViewById(R.id.txt_addstaff);
+        txt_deactivate = findViewById(R.id.txt_deactivate);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,14 +100,31 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
             draw_img_user.setImageResource(R.drawable.ic_person);
         }
 
-        Dbread dbread = new Dbread();
-        dbread.execute();
+        txt_addstaff.setOnClickListener(this);
+        txt_deactivate.setOnClickListener(this);
 
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId()==R.id.txt_addstaff)
+        {
+            Dbcheck dbcheck = new Dbcheck();
+            dbcheck.execute();
+        }
+        else if(v.getId()==R.id.txt_deactivate)
+        {
+            Intent startIntent = new Intent(EstabDashboard.this, EmployeeActivation.class);
+            startActivity(startIntent);
+        }
     }
 
     private class Dbread extends AsyncTask<String, String, String>
     {
 
+        int tempppp;
         String msger;
         Boolean isSuccess=false;
         @Override
@@ -116,13 +139,14 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
                 else
                 {
 
-                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstID() +"' ");
+                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstAcctID() +"' AND isActive = '1' ");
 
                     if(rs.isBeforeFirst())
                     {
                         isSuccess=true;
                         while (rs.next())
                         {
+                            tempppp = rs.getRow();
                             sImage.add(rs.getString("image"));
                             sID.add(rs.getString("user_id"));
                             sFullName.add(rs.getString("firstname") + " " + rs.getString("lastname"));
@@ -160,6 +184,7 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
 
             customAdapter = new CustomAdapter();
             listView.setAdapter(customAdapter);
+            dm.displayMessage(getApplicationContext(), dh.getEstAcctID()+"");
 
         }
     }
@@ -189,16 +214,72 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
                             dh.setProfile(rs.getString("firstname"), rs.getString("lastname"), rs.getString("middlename"), rs.getDate("birthday"),rs.getString("contactnumber"),rs.getString("image"));
                             dh.setUserid(rs.getInt("user_id"));
                         }
+                    rs.close();
 
 
-//                        ResultSet rsadr=con.createStatement().executeQuery("select * from address_table where user_id = '"+ dh.getEstID() +"' ");
-//
-//                        while(rsadr.next())
-//                        {
-//                            dh.setAddress(rsadr.getString("house_lot_number"), rsadr.getString("barangay"), rsadr.getString("city"));
-//                        }
-//                        rsadr.close();
+                    ResultSet rsadr=con.createStatement().executeQuery("select * from address_table where user_id = '"+ dh.getEstAcctID() +"' ");
 
+                    while(rsadr.next())
+                    {
+                        dh.setAddress(rsadr.getString("house_lot_number"), rsadr.getString("barangay"), rsadr.getString("city"));
+                    }
+                    rsadr.close();
+
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            lo_staffviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            lo_staffviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+
+            Intent startIntent=new Intent(EstabDashboard.this, EmployeeMain.class);
+            startActivity(startIntent);
+            finish();
+
+        }
+    }
+
+    private class Dbcheck extends AsyncTask<String, String, String>
+    {
+
+        int activecount=0;
+        String msger;
+        Boolean isSuccess=false;
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+
+                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstAcctID() +"' AND isActive = '1' ");
+                    isSuccess=true;
+                    while (rs.next())
+                    {
+                        activecount = rs.getRow();
+                    }
                     rs.close();
                     con.close();
                 }
@@ -224,9 +305,22 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
             lo_staffviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
-            Intent startIntent=new Intent(EmployeeDashboard.this, EmployeeMain.class);
-            startActivity(startIntent);
-            finish();
+            if(isSuccess==true)
+            {
+                if(activecount<2)
+                {
+                    Intent startIntent = new Intent(EstabDashboard.this, EstabAddEmployee.class);
+                    startActivity(startIntent);
+                }
+                else
+                {
+                    dp.toasterlong(getApplicationContext(), msger + "Only (" + 2 + ") employees can be activated at a time");
+                }
+            }
+            else
+            {
+                dp.toasterlong(getApplicationContext(), msger+"");
+            }
 
         }
     }
@@ -289,12 +383,19 @@ public class EmployeeDashboard extends AppCompatActivity implements NavigationVi
 
         if(item.getItemId()==R.id.prof)
         {
-            Intent startIntent=new Intent(EmployeeDashboard.this, EmployeeeProfileForm.class);
+            Intent startIntent=new Intent(EstabDashboard.this, EstabProfile.class);
             startActivity(startIntent);
             finish();
         }
 
 
         return false;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Dbread dbread = new Dbread();
+        dbread.execute();
     }
 }

@@ -52,7 +52,6 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
     DebugMode dm = new DebugMode();
 
     Calendar datenow = Calendar.getInstance();
-    Calendar c = Calendar.getInstance();
     int age;
 
     InputStream imageStream;
@@ -134,8 +133,6 @@ public class UserDriverProfile extends AppCompatActivity implements NavigationVi
             draw_img_user.setImageResource(R.drawable.ic_person);
             img_profile.setImageResource(R.drawable.ic_person);
         }
-
-        dataSet();
 
         btn_update.setOnClickListener(this);
         btn_image.setOnClickListener(this);

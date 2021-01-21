@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     app:theme="@style/NavigationDrawerStyle"
     android:id="@+id/drawer"
-    tools:context=".UserDriverProfile">
-
+    tools:context=".EmployeeeProfile">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,74 +23,46 @@
                 layout="@layout/toolbar_main" />
 
             <LinearLayout
-                android:id="@+id/profileview"
+                android:id="@+id/lo_addempviewer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="visible">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp">
 
                     <TextView
-                        android:id="@+id/profile_user_tab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="Profile"
                         android:textAlignment="center"
-                        android:textColor="@color/dark_green"
+                        android:textColor="@color/gray"
                         android:textSize="25sp"
-                        android:layout_marginHorizontal="10dp"/>
-                    <TextView
-                        android:id="@+id/account_user_tab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Account"
-                        android:textAlignment="center"
-                        android:textColor="@color/dark_green"
-                        android:textSize="25sp"
-                        android:layout_marginHorizontal="10dp"/>
+                        android:layout_marginTop="20dp"/>
 
-                </LinearLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_addempprof"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/profile_icon"
+                    android:layout_gravity="center"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/btn_addempupload"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/user_image"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="15dp"
-                        android:src="@drawable/profile_icon"
-                        android:layout_gravity="center" />
-
-                    <Button
-                        android:id="@+id/user_image_button"
-                        android:layout_width="80dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Upload"
-                        android:textSize="10sp"
-                        android:layout_gravity="center"/>
-
-                </LinearLayout>
+                    android:layout_marginTop="10dp"
+                    android:text="UPLOAD IMAGE"
+                    android:textSize="15sp"
+                    android:layout_gravity="center"/>
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/firstname_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:hint="@string/firstname"
                     android:paddingVertical="5dp"
                     android:paddingHorizontal="15dp"
@@ -98,12 +70,10 @@
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/name_icon">
-
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txt_firstname"
+                        android:id="@+id/edt_addempfname"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:enabled="false"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="20sp">
@@ -112,23 +82,21 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/middle_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/middlename"
-                    android:paddingHorizontal="15dp"
                     android:paddingVertical="5dp"
+                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/name_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/middle"
+                        android:id="@+id/edt_addempmname"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:enabled="false"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="20sp">
@@ -137,7 +105,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/lastname_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -150,10 +117,9 @@
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/name_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/txt_lastname"
+                        android:id="@+id/edt_addemplname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="20sp">
@@ -162,7 +128,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/age_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -175,21 +140,18 @@
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/age_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/age"
+                        android:id="@+id/edt_addempage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:editable="false"
-                        android:clickable="true"
                         android:inputType="number"
                         android:padding="10dp"
-                        android:textSize="20sp">
+                        android:textSize="20sp"
+                        android:focusableInTouchMode="false">
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/contact_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -202,19 +164,16 @@
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/contact_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/contact"
+                        android:id="@+id/edt_addempcontact"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:inputType="number"
                         android:padding="10dp"
                         android:textSize="20sp">
                     </com.google.android.material.textfield.TextInputEditText>
                 </com.google.android.material.textfield.TextInputLayout>
 
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/house_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -227,10 +186,9 @@
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/home_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/house"
+                        android:id="@+id/edt_addemphouse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:inputType="textPostalAddress"
                         android:padding="10dp"
                         android:textSize="20sp">
@@ -239,7 +197,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/barangay_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -252,10 +209,9 @@
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/home_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/barangay"
+                        android:id="@+id/edt_addempbrgy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:inputType="textPostalAddress"
                         android:padding="10dp"
                         android:textSize="20sp">
@@ -264,7 +220,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/city_profile_form"
                     android:theme="@style/Theme.MobileApplicationProject"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -277,10 +232,9 @@
                     app:hintTextColor="@color/black"
                     app:startIconDrawable="@drawable/home_icon">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/city"
+                        android:id="@+id/edt_addempcity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:inputType="textPostalAddress"
                         android:padding="10dp"
                         android:textSize="20sp">
@@ -289,20 +243,18 @@
 
 
                 <Button
-                    android:id="@+id/updateProfileButton"
+                    android:id="@+id/btn_addemp"
                     android:layout_width="120dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/main_button"
-                    android:text="EDIT"
+                    android:text="ADD"
                     android:textColor="#fff"
-                    android:textSize="15sp"
-                    android:layout_gravity="center"/>
-
+                    android:textSize="20sp"/>
 
             </LinearLayout>
-
 
             <ProgressBar
                 android:id="@+id/pbar"
@@ -317,14 +269,12 @@
         </LinearLayout>
 
     </ScrollView>
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu"
+        app:menu="@menu/drawer_estmenu"
         android:layout_gravity="start">
-
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -13,15 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DriverHistory"></activity>
+        <activity android:name=".EstabAddEmployee"></activity>
+        <activity android:name=".EmployeeActivation" />
+        <activity android:name=".DriverHistory" />
         <activity
             android:name=".UserHistory"
             android:label="@string/title_activity_history"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EmployeeDashboard" />
-        <activity android:name=".EmployeeeProfileForm" />
+        <activity android:name=".EstabDashboard" />
+        <activity android:name=".EmployeeeProfile" />
         <activity android:name=".AccountsForm" />
-        <activity android:name=".MainMenuFormEmployee" />
+        <activity android:name=".EstabProfile" />
         <activity android:name=".DriverDashboard" />
         <activity android:name=".UserDriverPassword" />
         <activity android:name=".EmployeeMain" />
