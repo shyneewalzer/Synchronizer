@@ -35,33 +35,32 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class FragmentTravelHistory extends Fragment implements View.OnClickListener{
-
-
+public class FragmentUserEstabHistory extends Fragment implements View.OnClickListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
     DebugMode dm = new DebugMode();
 
+    ArrayList<String> destid;
     ArrayList<String> destination;
     ArrayList<String> timee;
     ArrayList<String> datee;
+    ArrayList<String> adr;
     ArrayList<String> searcher;
 
     String sqlsearch="";
-    String testers = "";
 
     DatePickerDialog.OnDateSetListener dateSetListener;
 
     ExpandableListView expandableListView;
     ArrayList<String>listGroup;
     ArrayList<String>listPerson;
-    HashMap<String,ArrayList<String>>listChild = new HashMap<>();
-    AdapterTravelHistory adapterTravelHistory;
+    HashMap<String,ArrayList<String>> listChild = new HashMap<>();
+    AdapterEstabHistory expandAdapter;
 
     ///////////////////UI ELEMENTS////////////////
-    View fragtrav;
+    View fragestab;
     LinearLayout travelviewer;
     ProgressBar pbar;
     ListView listView;
@@ -71,7 +70,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
     Button btn_search;
 
 
-    public FragmentTravelHistory() {
+    public FragmentUserEstabHistory() {
 
     }
 
@@ -79,17 +78,17 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        fragtrav = inflater.inflate(R.layout.fragment_travel_history, container, false);
+        fragestab = inflater.inflate(R.layout.fragment_user_estab_history, container, false);
 
-        travelviewer = fragtrav.findViewById(R.id.travelviewer);
+        travelviewer = fragestab.findViewById(R.id.travelviewer);
 //        pbar = findViewById(R.id.pbar);
-        listView = fragtrav.findViewById(R.id.listView);
+        listView = fragestab.findViewById(R.id.listView);
 
-        spr_search = fragtrav.findViewById(R.id.spr_search);
-        edt_search = fragtrav.findViewById(R.id.edt_search);
-        btn_search = fragtrav.findViewById(R.id.btn_search);
+        spr_search = fragestab.findViewById(R.id.spr_search);
+        edt_search = fragestab.findViewById(R.id.edt_search);
+        btn_search = fragestab.findViewById(R.id.btn_search);
 
-        expandableListView = fragtrav.findViewById(R.id.expandableListView);
+        expandableListView = fragestab.findViewById(R.id.expandableListView);
 
         btn_search.setOnClickListener(this);
         edt_search.setOnClickListener(this);
@@ -97,7 +96,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
         searcher = new ArrayList<>();
 
         searcher.add("Search by");
-        searcher.add("Destination");
+        searcher.add("Establishments");
         searcher.add("Date");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_format, searcher);
@@ -108,15 +107,15 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if(parent.getItemAtPosition(position).equals("Destination"))
+                if(parent.getItemAtPosition(position).equals("Establishments"))
                 {
-                    sqlsearch="destination";
+                    sqlsearch="est";
                     edt_search.setEnabled(true);
                     edt_search.setFocusableInTouchMode(true);
                 }
                 else if(parent.getItemAtPosition(position).equals("Date"))
                 {
-                    sqlsearch="date_boarded";
+                    sqlsearch="date";
                     edt_search.setEnabled(true);
                     edt_search.setFocusableInTouchMode(false);
                 }
@@ -139,9 +138,9 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
         Dbread dbread = new Dbread();
         dbread.execute();
 
-
-        return fragtrav;
+        return fragestab;
     }
+
 
     @Override
     public void onClick(View v) {
@@ -204,16 +203,16 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
                 else
                 {
 
-                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE account_id = '"+ dh.getUserid() +"' GROUP BY batch ORDER BY date_boarded ASC, time_boarded ASC");
+                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE account_id = '"+ dh.getUserid() +"' GROUP BY batch ORDER BY date_entered ASC, time_entered ASC");
 
                     if(rs.isBeforeFirst())
                     {
                         isSuccess=true;
                         while (rs.next())
                         {
-                            destination.add(rs.getString("destination"));
-                            timee.add(rs.getString("time_boarded"));
-                            datee.add(rs.getString("date_boarded"));
+                            destid.add(rs.getString("est_id"));
+                            timee.add(rs.getString("time_entered"));
+                            datee.add(rs.getString("date_entered"));
 
                             listGroup.add(rs.getString("batch"));
 
@@ -235,7 +234,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
         protected void onPreExecute() {
 
             listGroup = new ArrayList<>();
-            destination = new ArrayList<>();
+            destid = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
@@ -249,10 +248,78 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
             travelviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
 
+            Dbestabreader dbestabreader = new Dbestabreader();
+            dbestabreader.execute();
+
+            dm.displayMessage(getContext(), listGroup+"");
+        }
+    }
+
+    private class Dbestabreader extends AsyncTask<String, String, String>
+    {
+
+        String msger;
+        Boolean isSuccess=false;
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+
+                    for(int x=0;x<destid.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE est_id = '"+ destid.get(x) +"' ");
+
+                        isSuccess=true;
+                        while (rs.next())
+                        {
+                            destination.add(rs.getString("name"));
+                            adr.add(rs.getString("street"));
+
+                        }
+
+                        rs.close();
+                    }
+
+
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            travelviewer.setVisibility(View.GONE);
+//            pbar.setVisibility(View.VISIBLE);
+            destination = new ArrayList<>();
+            adr = new ArrayList<>();
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            travelviewer.setVisibility(View.VISIBLE);
+//            pbar.setVisibility(View.GONE);
+
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
 
-            dm.displayMessage(getContext(), listGroup+"");
+            dm.displayMessage(getContext(), listPerson+"");
         }
     }
 
@@ -277,7 +344,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
                     for(int x=0;x<listGroup.size();x++)
                     {
                         listPerson = new ArrayList<>();
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_boarded ASC, time_boarded ASC");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
 
                         isSuccess=true;
                         while (rs.next())
@@ -288,11 +355,6 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
                             {
                                 listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
                             }
-                            else
-                            {
-                                listPerson.add("No Companions");
-                            }
-
                         }
 
                         listChild.put(listGroup.get(x), listPerson);
@@ -326,15 +388,15 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
             travelviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
 
-            adapterTravelHistory = new AdapterTravelHistory(listGroup, listChild, destination, timee, datee);
-            expandableListView.setAdapter(adapterTravelHistory);
-            dm.displayMessage(getContext(), testers+"");
+            expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
+            expandableListView.setAdapter(expandAdapter);
+            dm.displayMessage(getContext(), listPerson+"");
         }
     }
 
     private class Dbsearch extends AsyncTask<String, String, String>
     {
-        int tempp;
+        String idholder;
         String msger;
         Boolean isSuccess=false;
         @Override
@@ -349,22 +411,51 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
                 else
                 {
 
-                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE "+ sqlsearch +" = '"+ edt_search.getText() +"' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch");
-
-                    if(rs.isBeforeFirst())
+                    if(sqlsearch.equals("est"))
                     {
-                        isSuccess=true;
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE name = '"+ edt_search.getText() +"' ");
+
+                        if(rs.isBeforeFirst())
+                        {
+                            isSuccess=true;
+                            while (rs.next())
+                            {
+                                idholder = rs.getString("est_id");
+
+                            }
+                        }
+                        rs.close();
+
+                        ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE est_id = '"+ idholder +"' GROUP BY batch");
+
+                        while (rsid.next())
+                        {
+                            destid.add(rsid.getString("est_id"));
+                            timee.add(rsid.getString("time_entered"));
+                            datee.add(rsid.getString("date_entered"));
+
+                            listGroup.add(rsid.getString("batch"));
+
+                        }
+                        rsid.close();
+                    }
+                    else if(sqlsearch.equals("date"))
+                    {
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE date_entered = '"+ edt_search.getText() +"' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch");
+
                         while (rs.next())
                         {
-                            tempp=rs.getRow();
-                            destination.add(rs.getString("destination"));
-                            timee.add(rs.getString("time_boarded"));
-                            datee.add(rs.getString("date_boarded"));
+                            destid.add(rs.getString("est_id"));
+                            timee.add(rs.getString("time_entered"));
+                            datee.add(rs.getString("date_entered"));
 
                             listGroup.add(rs.getString("batch"));
+
                         }
+                        rs.close();
                     }
-                    rs.close();
+
+
                     con.close();
                 }
             }
@@ -380,7 +471,7 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
         protected void onPreExecute() {
 
             listGroup = new ArrayList<>();
-            destination = new ArrayList<>();
+            destid = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
@@ -395,11 +486,9 @@ public class FragmentTravelHistory extends Fragment implements View.OnClickListe
             travelviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
 
-            Dbreadsecond dbreadsecond = new Dbreadsecond();
-            dbreadsecond.execute();
+            Dbestabreader dbestabreader = new Dbestabreader();
+            dbestabreader.execute();
 
-            dm.displayMessage(getContext(), tempp+"");
         }
     }
-
 }

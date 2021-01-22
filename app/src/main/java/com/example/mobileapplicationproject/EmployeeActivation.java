@@ -76,7 +76,7 @@ public class EmployeeActivation extends AppCompatActivity implements NavigationV
         Dbread dbread = new Dbread();
         dbread.execute();
     }
-    //TODO: check if emp active or not
+
     private class Dbread extends AsyncTask<String, String, String>
     {
 

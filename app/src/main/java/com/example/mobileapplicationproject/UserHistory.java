@@ -30,6 +30,8 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
 
+    SectionsPagerAdapter sectionsPagerAdapter;
+
     ///////////////UI ELEMENTS/////////////////
 
     Toolbar toolbar;
@@ -43,7 +45,14 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_history);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), "TRAVEL", "ESTABLISHMENT");
+        if(dh.getType().equals("Establishment"))
+        {
+            sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), "DETAILS", "COUNTS");
+        }
+        else
+        {
+            sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), "TRAVEL", "ESTABLISHMENT");
+        }
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,14 +72,26 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
         draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
         draw_img_user = headerView.findViewById(R.id.cimg_user);
 
-        draw_name.setText(dh.getpFName() + " " + dh.getpLName());
-        draw_type.setText(dh.getType());
-        draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
-        if(dh.getpImage()==null)
+        if(dh.getType().equals("Establishment"))
         {
-            draw_img_user.setImageResource(R.drawable.ic_person);
+            navigationView.inflateMenu(R.menu.drawer_estmenu);
+            draw_name.setText(dh.getEstName());
+            draw_img_user.setImageBitmap(dp.createImage(dh.getEstImage()));
+            if(dh.getEstImage()==null)
+            {
+                draw_img_user.setImageResource(R.drawable.ic_person);
+            }
         }
-
+        else
+        {
+            draw_name.setText(dh.getpFName() + " " + dh.getpLName());
+            draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
+            if(dh.getpImage()==null)
+            {
+                draw_img_user.setImageResource(R.drawable.ic_person);
+            }
+        }
+        draw_type.setText(dh.getType());
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);

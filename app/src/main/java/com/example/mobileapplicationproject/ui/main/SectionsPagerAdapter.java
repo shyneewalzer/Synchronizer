@@ -3,14 +3,15 @@ package com.example.mobileapplicationproject.ui.main;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.mobileapplicationproject.FragmentEstabHistory;
-import com.example.mobileapplicationproject.FragmentTravelHistory;
-import com.example.mobileapplicationproject.R;
+import com.example.mobileapplicationproject.DataController.DataHolder;
+import com.example.mobileapplicationproject.FragmentEstabCountHistory;
+import com.example.mobileapplicationproject.FragmentEstabDetailsHistory;
+import com.example.mobileapplicationproject.FragmentUserEstabHistory;
+import com.example.mobileapplicationproject.FragmentUserTravelHistory;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -18,6 +19,7 @@ import com.example.mobileapplicationproject.R;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    DataHolder dh = new DataHolder();
 
     public static String[] TAB_TITLES = new String[]{};
     private final Context mContext;
@@ -35,13 +37,31 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         if(position==0)
         {
-            FragmentTravelHistory fragtrav = new FragmentTravelHistory();
-            return fragtrav;
+            if(dh.getType().equals("Establishment"))
+            {
+                FragmentEstabDetailsHistory fragtrav = new FragmentEstabDetailsHistory();
+                return fragtrav;
+            }
+            else
+            {
+                FragmentUserTravelHistory fragdetails = new FragmentUserTravelHistory();
+                return fragdetails;
+            }
+
+
         }
         else if(position==1)
         {
-            FragmentEstabHistory fragestab = new FragmentEstabHistory();
-            return fragestab;
+            if(dh.getType().equals("Establishment"))
+            {
+                FragmentEstabCountHistory fragcount = new FragmentEstabCountHistory();
+                return fragcount;
+            }
+            else
+            {
+                FragmentUserEstabHistory fragestab = new FragmentUserEstabHistory();
+                return fragestab;
+            }
         }
         else
         {

@@ -11,6 +11,7 @@ public class DataHolder {
     private static Calendar pBday = Calendar.getInstance();
     private static String house, brgy, city;
     private static String estAcctID, estName, estStreet, estContact, estOwner, estImage, estID;
+    private static String prevAct;
 
 
 
@@ -171,6 +172,16 @@ public class DataHolder {
     public String getCity()
     {
         return city;
+    }
+
+    public void setPrevAct(String iptprvact)
+    {
+        prevAct = iptprvact;
+    }
+
+    public String getPrevAct()
+    {
+        return prevAct;
     }
 
 }

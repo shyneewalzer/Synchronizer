@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EstabAddEmployee"></activity>
+        <activity android:name=".DriverAddVehicle"></activity>
+        <activity android:name=".EstabAddEmployee" />
         <activity android:name=".EmployeeActivation" />
         <activity android:name=".DriverHistory" />
         <activity

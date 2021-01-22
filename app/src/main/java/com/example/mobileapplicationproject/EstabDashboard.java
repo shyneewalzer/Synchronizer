@@ -76,7 +76,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Destination");
+        toolbar.setTitle("Home");
 
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
@@ -150,6 +150,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
                             sImage.add(rs.getString("image"));
                             sID.add(rs.getString("user_id"));
                             sFullName.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                            sStatus.add(rs.getString("contactnumber"));
                         }
                     }
                     rs.close();
@@ -348,9 +349,10 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
         public View getView(int i, View view, ViewGroup viewGroup) {
             view= getLayoutInflater().inflate(R.layout.row_employee,null);
 
-            TextView tvID=view.findViewById(R.id.list_txt_id);
-            CircleImageView tvImg= view.findViewById(R.id.list_img_prof);
-            TextView tvFullName=view.findViewById(R.id.list_txt_fullname);
+            TextView tvID = view.findViewById(R.id.list_txt_id);
+            CircleImageView tvImg = view.findViewById(R.id.list_img_prof);
+            TextView tvFullName = view.findViewById(R.id.list_txt_fullname);
+            TextView tvstatus = view.findViewById(R.id.list_txt_status);
 
             tvID.setText(sID.get(i));
             if(sImage.get(i)==null)
@@ -362,6 +364,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
                 tvImg.setImageBitmap(dp.createImage(sImage.get(i)));
             }
             tvFullName.setText(sFullName.get(i));
+            tvstatus.setText(sStatus.get(i));
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -381,9 +384,15 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.prof)
+        if(item.getItemId()==R.id.estprof)
         {
             Intent startIntent=new Intent(EstabDashboard.this, EstabProfile.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.esthistory)
+        {
+            Intent startIntent=new Intent(EstabDashboard.this, UserHistory.class);
             startActivity(startIntent);
             finish();
         }

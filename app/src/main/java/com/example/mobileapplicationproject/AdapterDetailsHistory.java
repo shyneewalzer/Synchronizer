@@ -1,6 +1,5 @@
 package com.example.mobileapplicationproject;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import com.example.mobileapplicationproject.DataController.DataProcessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AdapterDriverHistory extends BaseExpandableListAdapter {
+public class AdapterDetailsHistory extends BaseExpandableListAdapter {
 
     ArrayList<String>listGroup;
     HashMap<String,ArrayList<String>>listChild;
@@ -20,19 +19,17 @@ public class AdapterDriverHistory extends BaseExpandableListAdapter {
     ArrayList<String>destination;
     ArrayList<String>timee;
     ArrayList<String>datee;
-    ArrayList<String> route;
     ArrayList<String>personinfo;
 
     DataProcessor dp = new DataProcessor();
 
-    public AdapterDriverHistory(ArrayList<String>listGroup, HashMap<String,ArrayList<String>>listChild, ArrayList<String>destination, ArrayList<String>timee, ArrayList<String>datee, ArrayList<String>route)
+    public AdapterDetailsHistory(ArrayList<String>listGroup, HashMap<String,ArrayList<String>>listChild, ArrayList<String>destination, ArrayList<String>timee, ArrayList<String>datee)
     {
         this.listGroup = listGroup;
         this.listChild = listChild;
         this.destination = destination;
         this.timee = timee;
         this.datee = datee;
-        this.route = route;
     }
 
     @Override
@@ -77,12 +74,12 @@ public class AdapterDriverHistory extends BaseExpandableListAdapter {
         TextView tvdestination = convertView.findViewById(R.id.edestination);
         TextView tvtime = convertView.findViewById(R.id.etime);
         TextView tvdate = convertView.findViewById(R.id.edate);
-        TextView tvroute = convertView.findViewById(R.id.eadr);
+        TextView tvadr = convertView.findViewById(R.id.eadr);
 
         tvdestination.setText(destination.get(groupPosition));
         tvtime.setText(timee.get(groupPosition));
         tvdate.setText(datee.get(groupPosition));
-        tvroute.setText(route.get(groupPosition));
+        tvadr.setVisibility(View.GONE);
 
         return convertView;
     }
@@ -103,7 +100,7 @@ public class AdapterDriverHistory extends BaseExpandableListAdapter {
 
         tvname.setText("   " + personinfo.get(0));
         tvcontact.setText("   " + personinfo.get(1));
-        tvdestination.setText("   " + personinfo.get(2));
+        tvdestination.setVisibility(View.GONE);
 
         return convertView;
     }

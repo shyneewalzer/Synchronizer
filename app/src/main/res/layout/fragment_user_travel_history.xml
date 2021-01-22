@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FragmentTravelHistory">
+    tools:context=".FragmentUserTravelHistory">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:id="@+id/text_location_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Travel History"
+            android:text="Travel Reports"
             android:textColor="@color/gray"
             android:layout_marginVertical="20dp"
             android:textSize="20sp"
