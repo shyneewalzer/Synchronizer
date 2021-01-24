@@ -162,8 +162,6 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-                dp.toasterlong(getApplicationContext(), "Please Select Search Criteria");
-
             }
         });
 
@@ -606,19 +604,19 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.home)
+        if(item.getItemId()==R.id.drivehome)
         {
             Intent startIntent=new Intent(DriverHistory.this, DriverDashboard.class);
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.prof)
+        else if(item.getItemId()==R.id.driveprof)
         {
             Intent startIntent=new Intent(DriverHistory.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.logout)
+        else if(item.getItemId()==R.id.drivelogout)
         {
             Intent startIntent=new Intent(DriverHistory.this, Login.class);
             startActivity(startIntent);

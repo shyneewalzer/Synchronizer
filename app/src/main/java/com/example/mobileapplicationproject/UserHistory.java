@@ -74,6 +74,7 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
 
         if(dh.getType().equals("Establishment"))
         {
+            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_estmenu);
             draw_name.setText(dh.getEstName());
             draw_img_user.setImageBitmap(dp.createImage(dh.getEstImage()));
@@ -84,6 +85,15 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
         }
         else
         {
+            navigationView.getMenu().clear();
+            if(dh.getType().equals("Individual"))
+            {
+                navigationView.inflateMenu(R.menu.drawer_menu);
+            }
+            else if(dh.getType().equals("Driver"))
+            {
+                navigationView.inflateMenu(R.menu.drawer_driver_menu);
+            }
             draw_name.setText(dh.getpFName() + " " + dh.getpLName());
             draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
             if(dh.getpImage()==null)
@@ -116,20 +126,20 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.prof || item.getItemId()==R.id.driveprof)
+        else if(item.getItemId()==R.id.prof || item.getItemId()==R.id.estprof)
         {
             Intent startIntent=new Intent(UserHistory.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
-        else if(item.getItemId()==R.id.drivehome)
+        else if(item.getItemId()==R.id.esthome)
         {
-            Intent startIntent=new Intent(UserHistory.this, DriverDashboard.class);
+            Intent startIntent=new Intent(UserHistory.this, EstabDashboard.class);
             startActivity(startIntent);
             finish();
         }
 
-        else if(item.getItemId()==R.id.logout || item.getItemId()==R.id.drivelogout)
+        else if(item.getItemId()==R.id.logout || item.getItemId()==R.id.estlogout)
         {
             Intent startIntent=new Intent(UserHistory.this, Login.class);
             startActivity(startIntent);

@@ -122,13 +122,13 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
         else if(item.getItemId()==R.id.estab)
         {
             dh.setVisitmode("estab");
-            Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
+            Intent startIntent=new Intent(ProfileTabbed.this, UserDashboard.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.drivehome)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
+            Intent startIntent=new Intent(ProfileTabbed.this, DriverDashboard.class);
             startActivity(startIntent);
             finish();
         }
@@ -140,13 +140,13 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
         }
         else if(item.getItemId()==R.id.esthome)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
+            Intent startIntent=new Intent(ProfileTabbed.this, EstabDashboard.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.esthistory)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, DriverHistory.class);
+            Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
             startActivity(startIntent);
             finish();
         }

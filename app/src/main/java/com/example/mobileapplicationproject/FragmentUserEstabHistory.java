@@ -121,7 +121,6 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                 }
                 else
                 {
-                    dp.toasterlong(getContext(), "Please Select Search Criteria");
                     edt_search.setEnabled(false);
                 }
 

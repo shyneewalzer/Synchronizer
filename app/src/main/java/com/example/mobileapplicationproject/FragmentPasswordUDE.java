@@ -147,7 +147,7 @@ public class FragmentPasswordUDE extends Fragment implements View.OnClickListene
 
             if(isSuccess==true)
             {
-                dp.toasterlong(getContext(), "Password Successfully Changed");
+                dp.toasterlong(getContext(), "Account Password Updated");
                 edt_oldpassword.setText("");
                 edt_newpassword.setText("");
                 edt_confirmpassword.setText("");

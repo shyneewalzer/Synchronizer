@@ -50,7 +50,7 @@
                 android:id="@+id/txt_deactivate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  Deactivate Staffs"
+                android:text="  Deactivate/Activate Staffs"
                 android:textColor="@color/gray"
                 android:textSize="18sp"
                 android:drawableLeft="@drawable/ic_group"
