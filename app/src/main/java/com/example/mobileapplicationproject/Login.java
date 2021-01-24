@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
                 email = emailInput.getText()+"";
                 password = passwordInput.getText()+"";
 //                email = "kamusta@gmail.com";
-                password = "Jaudian29";
+//                password = "Jaudian29";
                 if(email.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Input Email", Toast.LENGTH_SHORT).show();
                     return;

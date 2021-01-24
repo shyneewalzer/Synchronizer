@@ -332,19 +332,15 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             int cal_mo = cal.get(Calendar.MONTH);
             int cal_dy = cal.get(Calendar.DAY_OF_MONTH);
             dm.displayMessage(getContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
-            @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
-            datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            datepicker.show();
 
-            dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datepicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     month = month + 1;
                     edt_start.setText(year + "-" + month + "-" + dayOfMonth);
-
-                    dm.displayMessage(getContext(),year + "-" + month + "-" + dayOfMonth );
                 }
-            };
+            },cal_yr,cal_mo,cal_dy);
+            datepicker.show();
 
         }
         else if(v.getId()==R.id.edt_end)
@@ -354,19 +350,15 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             int cal_mo = cal.get(Calendar.MONTH);
             int cal_dy = cal.get(Calendar.DAY_OF_MONTH);
             dm.displayMessage(getContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
-            @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(getContext(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener2,cal_yr, cal_mo, cal_dy);
-            datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            datepicker.show();
 
-            dateSetListener2 = new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datepicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     month = month + 1;
                     edt_end.setText(year + "-" + month + "-" + dayOfMonth);
-
-                    dm.displayMessage(getContext(),year + "-" + month + "-" + dayOfMonth );
                 }
-            };
+            },cal_yr,cal_mo,cal_dy);
+            datepicker.show();
         }
 
     }

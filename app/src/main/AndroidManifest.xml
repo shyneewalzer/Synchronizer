@@ -21,15 +21,17 @@
             android:name=".UserHistory"
             android:label="@string/title_activity_history"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ProfileTabbed"
+            android:label="Profile"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EstabDashboard" />
         <activity android:name=".EmployeeeProfile" />
-        <activity android:name=".AccountsForm" />
         <activity android:name=".EstabProfile" />
         <activity android:name=".DriverDashboard" />
         <activity android:name=".UserDriverPassword" />
         <activity android:name=".EmployeeMain" />
         <activity android:name=".UserDashboard" />
-        <activity android:name=".UserDriverProfile" />
         <activity android:name=".Login" />
         <activity android:name=".RegisterForm" />
         <activity

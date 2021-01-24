@@ -247,12 +247,12 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
         @Override
         protected void onPostExecute(String a){
 
-            lo_staffviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
-
             Intent startIntent=new Intent(EstabDashboard.this, EmployeeMain.class);
             startActivity(startIntent);
             finish();
+
+            lo_staffviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
 
         }
     }
@@ -386,13 +386,19 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
 
         if(item.getItemId()==R.id.estprof)
         {
-            Intent startIntent=new Intent(EstabDashboard.this, EstabProfile.class);
+            Intent startIntent=new Intent(EstabDashboard.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.esthistory)
         {
             Intent startIntent=new Intent(EstabDashboard.this, UserHistory.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.estlogout)
+        {
+            Intent startIntent=new Intent(EstabDashboard.this, Login.class);
             startActivity(startIntent);
             finish();
         }

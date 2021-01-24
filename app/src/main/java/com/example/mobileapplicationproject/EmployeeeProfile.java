@@ -19,6 +19,9 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
@@ -51,13 +54,14 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
     DebugMode dm = new DebugMode();
 
     Uri imageuri;
-
     int age;
 
     Calendar datenow = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener dateSetListener;
 
     InputStream imageStream;
+
+    ArrayAdapter<String> adapter;
 
     ////////////////UI ELEMENTS/////////////////
 
@@ -68,7 +72,8 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
 
     CircleImageView img_eprof;
 
-    TextInputEditText edt_Fname, edt_Lname, edt_Mname, edt_Contact, edt_age, edt_house, edt_brgy, edt_city;
+    TextInputEditText edt_Fname, edt_Lname, edt_Mname, edt_Contact, edt_age, edt_house, edt_city;
+    AutoCompleteTextView edt_brgy;
     Button btn_eUpload, btn_eUpdate;
 
     @Override
@@ -105,6 +110,17 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
         btn_eUpload.setOnClickListener(this);
         edt_age.setOnClickListener(this);
 
+        adapter = new ArrayAdapter<String>(EmployeeeProfile.this, android.R.layout.simple_list_item_1, dh.getListBrgy());
+        edt_brgy.setAdapter(adapter);
+
+        edt_brgy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                edt_brgy.setText(adapter.getItem(position));
+            }
+        });
+
         dataSet();
 
     }
@@ -127,6 +143,7 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
 
                 edt_age.setText(dh.getpBday()+"");
                 btn_eUpdate.setText("SAVE");
+                btn_eUpload.setVisibility(View.VISIBLE);
             }
             else if(btn_eUpdate.getText().toString().equals("SAVE"))
             {
@@ -134,6 +151,7 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
                 dbupdate.execute();
 
                 btn_eUpdate.setText("EDIT");
+                btn_eUpload.setVisibility(View.INVISIBLE);
             }
         }
         else if(v.getId()==R.id.btn_eUpload)
@@ -148,19 +166,15 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
             int cal_mo = dh.getTempDate().get(Calendar.MONTH);
             int cal_dy = dh.getTempDate().get(Calendar.DAY_OF_MONTH);
             dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
-            @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(EmployeeeProfile.this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
-            datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            datepicker.show();
 
-            dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datepicker = new DatePickerDialog(EmployeeeProfile.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     month = month + 1;
                     edt_age.setText(year + "-" + month + "-" + dayOfMonth);
-
-                    dm.displayMessage(getApplicationContext(),year + "-" + month + "-" + dayOfMonth );
                 }
-            };
+            },cal_yr,cal_mo,cal_dy);
+            datepicker.show();
         }
     }
 

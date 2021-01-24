@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,12 +50,11 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
     ArrayList<String> fname;
     ArrayList<String> lname;
     ArrayList<String> contact;
-
     ArrayList<String>personinfo;
     List<List<String>>personlists;
-    ArrayList<String> setdest;
-
     ArrayList<String>estinfo;
+
+    ArrayAdapter<String> adapter;
 
     String qrcode ="", qrscan, batch;
 
@@ -82,15 +81,15 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
     CircleImageView draw_img_user;
 
     TextInputEditText edt_cFname, edt_cLname, edt_cContact;
+    AutoCompleteTextView edt_destinaiton;
 
     ImageView img_scanbox;
-    Button btn_eAddCompanion, btn_scan, btn_scancancel, btn_eAddCompanionCancel, btn_destination;
+    Button btn_eAddCompanion, btn_scan, btn_backdestination, btn_eAddCompanionCancel, btn_destination;
     TextView txt_companionExpander, txt_destination;
     ListView lv;
 
     LinearLayout locationviewer, lo_companionlist, lo_addcompanion, lo_qr, lo_destination;
     ProgressBar pbar;
-    Spinner spr_destnation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,19 +107,18 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         lo_destination = findViewById(R.id.lo_destination);
         lo_qr = findViewById(R.id.lo_qr);
         btn_destination = findViewById(R.id.btn_destination);
-        spr_destnation = findViewById(R.id.spr_destination);
-        btn_scancancel = findViewById(R.id.btn_scancancel);
+        btn_backdestination = findViewById(R.id.btn_backdestination);
         txt_destination = findViewById(R.id.txt_destination);
 
         edt_cFname = findViewById(R.id.edt_cFname);
         edt_cLname = findViewById(R.id.edt_cLname);
         edt_cContact = findViewById(R.id.edt_cContact);
 
+        edt_destinaiton = findViewById(R.id.edt_destination);
+
         fname = new ArrayList<>();
         lname = new ArrayList<>();
         contact = new ArrayList<>();
-
-        setdest = new ArrayList<>();
 
         personinfo = new ArrayList<>();
         personlists = new ArrayList<List<String>>();
@@ -162,16 +160,24 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         btn_eAddCompanionCancel.setOnClickListener(this);
         txt_companionExpander.setOnClickListener(this);
         btn_scan.setOnClickListener(this);
-        btn_scancancel.setOnClickListener(this);
+        btn_backdestination.setOnClickListener(this);
         btn_destination.setOnClickListener(this);
-
-        setdest.add("Select Destination");
-        setdest.add("Sample 1");
-        setdest.add("Sample 2");
-        setdest.add("Sample 3");
 
         customAdapter = new CustomAdapter();
         lv.setAdapter(customAdapter);
+
+        adapter = new ArrayAdapter<String>(UserDashboard.this, android.R.layout.simple_list_item_1, dh.getListDestination());
+        edt_destinaiton.setAdapter(adapter);
+
+        edt_destinaiton.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                edt_destinaiton.setText(adapter.getItem(position));
+            }
+        });
+
+        dm.displayMessage(getApplicationContext(), dh.getListDestination().size()+"");
 
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -231,9 +237,16 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             }
         });
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(UserDashboard.this, R.layout.spinner_format, setdest);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spr_destnation.setAdapter(dataAdapter);
+        img_scanbox.setImageBitmap(dp.createQR(dh.getUserid() + "#" + txt_destination.getText() + "#"));//generate qr code for solo
+        dm.displayMessage(getApplicationContext(), "visit mode: "+dh.getVisitmode());
+
+        if(dh.getVisitmode().equals("estab"))
+        {
+            lo_destination.setVisibility(View.GONE);
+            lo_qr.setVisibility(View.VISIBLE);
+            btn_backdestination.setVisibility(View.GONE);
+            btn_scan.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -293,20 +306,19 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         }
         else if(v.getId()==R.id.btn_destination)
         {
-            if(spr_destnation.getSelectedItem().equals("Select Destination"))
+            if(edt_destinaiton.getText().toString().trim().isEmpty())
             {
-                dp.toasterlong(getApplicationContext(), "Please Select Destination");
+                dp.toasterlong(getApplicationContext(), "Please Set Destination");
             }
             else
             {
                 lo_destination.setVisibility(View.GONE);
                 lo_qr.setVisibility(View.VISIBLE);
-                txt_destination.setText(spr_destnation.getSelectedItem()+"");
-                img_scanbox.setImageBitmap(dp.createQR(dh.getUserid() + "#" + txt_destination.getText() + "#"));//generate qr code for solo
+                txt_destination.setText(edt_destinaiton.getText()+"");
             }
 
         }
-        else if(v.getId()==R.id.btn_scancancel)
+        else if(v.getId()==R.id.btn_backdestination)
         {
             lo_destination.setVisibility(View.VISIBLE);
             lo_qr.setVisibility(View.GONE);
@@ -475,15 +487,35 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.prof)
+        if(item.getItemId()==R.id.estab)
         {
-            Intent startIntent=new Intent(UserDashboard.this, UserDriverProfile.class);
+            dh.setVisitmode("travel");
+            Intent startIntent=new Intent(UserDashboard.this, UserDashboard.class);
+            finish();
+            startActivity(startIntent);
+        }
+        else if(item.getItemId()==R.id.prof)
+        {
+            Intent startIntent=new Intent(UserDashboard.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.history)
         {
             Intent startIntent=new Intent(UserDashboard.this, UserHistory.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.estab)
+        {
+            dh.setVisitmode("estab");
+            Intent startIntent=new Intent(UserDashboard.this, UserDashboard.class);
+            finish();
+            startActivity(startIntent);
+        }
+        else if(item.getItemId()==R.id.logout)
+        {
+            Intent startIntent=new Intent(UserDashboard.this, Login.class);
             startActivity(startIntent);
             finish();
         }

@@ -94,14 +94,14 @@
                 app:boxStrokeColor="@color/black"
                 app:hintTextColor="@color/black"
                 app:startIconDrawable="@drawable/name_icon">
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/edt_route"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:inputType="text"
                     android:padding="10dp"
-                    android:textSize="20sp">
-                </com.google.android.material.textfield.TextInputEditText>
+                    android:textSize="20sp"
+                    android:completionThreshold="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

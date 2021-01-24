@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".IntroForm">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/logo_intro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/scangapo"
-            android:layout_marginTop="120dp"
-            app:layout_constraintBottom_toTopOf="@id/text_intro_form"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginTop="60dp">
         </androidx.constraintlayout.utils.widget.ImageFilterView>
 
         <TextView
@@ -27,13 +21,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/scangapo"
-            android:textColor="#005F40"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logo_intro" />
+            android:textColor="@color/light_green"
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    <ProgressBar
+        android:id="@+id/pbar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateDrawable="@drawable/circle"/>
+
+    <TextView
+        android:id="@+id/txt_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loader"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/btn_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:background="@drawable/main_button"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"/>
+
+</LinearLayout>

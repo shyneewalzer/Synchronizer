@@ -589,19 +589,15 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                 int cal_mo = cal.get(Calendar.MONTH);
                 int cal_dy = cal.get(Calendar.DAY_OF_MONTH);
                 dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
-                @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(DriverHistory.this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
-                datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-                datepicker.show();
 
-                dateSetListener = new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datepicker = new DatePickerDialog(DriverHistory.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
                         edt_search.setText(year + "-" + month + "-" + dayOfMonth);
-
-                        dm.displayMessage(getApplicationContext(),year + "-" + month + "-" + dayOfMonth );
                     }
-                };
+                },cal_yr,cal_mo,cal_dy);
+                datepicker.show();
             }
 
         }
@@ -618,7 +614,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         }
         else if(item.getItemId()==R.id.prof)
         {
-            Intent startIntent=new Intent(DriverHistory.this, UserDriverProfile.class);
+            Intent startIntent=new Intent(DriverHistory.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }

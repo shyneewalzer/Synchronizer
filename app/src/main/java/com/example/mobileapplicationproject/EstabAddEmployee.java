@@ -194,19 +194,15 @@ public class EstabAddEmployee extends AppCompatActivity implements NavigationVie
             int cal_mo = dh.getTempDate().get(Calendar.MONTH);
             int cal_dy = dh.getTempDate().get(Calendar.DAY_OF_MONTH);
             dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
-            @SuppressLint({"NewApi", "LocalSuppress"}) DatePickerDialog datepicker = new DatePickerDialog(EstabAddEmployee.this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth, dateSetListener,cal_yr, cal_mo, cal_dy);
-            datepicker.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            datepicker.show();
 
-            dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datepicker = new DatePickerDialog(EstabAddEmployee.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     month = month + 1;
                     edt_addempage.setText(year + "-" + month + "-" + dayOfMonth);
-
-                    dm.displayMessage(getApplicationContext(),year + "-" + month + "-" + dayOfMonth );
                 }
-            };
+            },cal_yr,cal_mo,cal_dy);
+            datepicker.show();
         }
 
     }

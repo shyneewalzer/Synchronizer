@@ -1,25 +1,26 @@
 package com.example.mobileapplicationproject;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
@@ -31,24 +32,25 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EstabProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+import static android.app.Activity.RESULT_OK;
 
+public class FragmentProfileEstab extends Fragment implements View.OnClickListener{
+
+    View fragprof;
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
     DebugMode dm = new DebugMode();
 
     Uri imageuri;
+
     InputStream imageStream;
 
-    ////////////UI ELEMENTS////////////
-
-    Toolbar toolbar;
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
+    ///////////////////UI ELEMENTS////////////////
     NavigationView navigationView;
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
@@ -60,54 +62,40 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
     ProgressBar pbar;
     LinearLayout lo_estabprofileviewer;
 
+
+    public FragmentProfileEstab() {
+
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_profile_estab);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        edt_name = findViewById(R.id.edt_estname);
-        edt_owner = findViewById(R.id.edt_estowner);
-        edt_contact = findViewById(R.id.edt_estcontact);
-        edt_street = findViewById(R.id.edt_eststreet);
-        btn_estUpdate = findViewById(R.id.btn_estUpdate);
-        btn_estUpload = findViewById(R.id.btn_estUpload);
-        img_estprof = findViewById(R.id.img_estprof);
+        fragprof = inflater.inflate(R.layout.fragment_profile_estab, container, false);
 
-        pbar = findViewById(R.id.pbar);
-        lo_estabprofileviewer = findViewById(R.id.lo_estabprofileviewer);
+        edt_name = fragprof.findViewById(R.id.edt_estname);
+        edt_owner = fragprof.findViewById(R.id.edt_estowner);
+        edt_contact = fragprof.findViewById(R.id.edt_estcontact);
+        edt_street = fragprof.findViewById(R.id.edt_eststreet);
+        btn_estUpdate = fragprof.findViewById(R.id.btn_estUpdate);
+        btn_estUpload = fragprof.findViewById(R.id.btn_estUpload);
+        img_estprof = fragprof.findViewById(R.id.img_estprof);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("User Panel");
+        lo_estabprofileviewer = fragprof.findViewById(R.id.lo_estabprofileviewer);
+        pbar = fragprof.findViewById(R.id.pbar);
 
-        drawerLayout = findViewById(R.id.drawer);
-        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.setDrawerIndicatorEnabled(true);//hamburger icon
-        drawerToggle.syncState();
-
-        navigationView = findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        navigationView = getActivity().findViewById(R.id.navigationView);
         View headerView = navigationView.getHeaderView(0);
         draw_name = (TextView) headerView.findViewById(R.id.lbl_draw_name);
         draw_type = (TextView) headerView.findViewById(R.id.lbl_draw_type);
         draw_img_user = headerView.findViewById(R.id.cimg_user);
 
-        draw_name.setText(dh.getEstName());
-        draw_type.setText(dh.getType());
-        draw_img_user.setImageBitmap(dp.createImage(dh.getEstImage()));
-        img_estprof.setImageBitmap(dp.createImage(dh.getEstImage()));
-        if(dh.getEstImage()==null)
-        {
-            draw_img_user.setImageResource(R.drawable.ic_person);
-            img_estprof.setImageResource(R.drawable.ic_person);
-        }
-
         btn_estUpload.setOnClickListener(this);
         btn_estUpdate.setOnClickListener(this);
 
         dataSet();
+
+        return fragprof;
     }
 
     @Override
@@ -129,6 +117,7 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
                 edt_street.setEnabled(true);
 
                 btn_estUpdate.setText("SAVE");
+                btn_estUpload.setVisibility(View.VISIBLE);
             }
             else if(btn_estUpdate.getText().toString().equals("SAVE"))
             {
@@ -136,6 +125,7 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
                 dbupdate.execute();
 
                 btn_estUpdate.setText("EDIT");
+                btn_estUpload.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -188,15 +178,36 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
             {
                 dh.setEstProfile(edt_name.getText()+"", edt_street.getText()+"", edt_contact.getText()+"", edt_owner.getText()+"");
                 dataSet();
-                dp.toasterlong(getApplicationContext(), "Profile Successfully Updated");
+                dp.toasterlong(getContext(), "Profile Successfully Updated");
             }
             else
             {
-                dp.toasterlong(getApplicationContext(), msger+"");
+                dp.toasterlong(getContext(), msger+"");
 
             }
             lo_estabprofileviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK &&
+                data != null && data.getData() != null) {
+
+            imageuri=data.getData();
+            img_estprof.setImageURI(imageuri);
+
+            try {
+                imageStream = getActivity().getContentResolver().openInputStream(imageuri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            dh.setEstImage(dp.encodeImage(selectedImage));
 
         }
     }
@@ -213,53 +224,15 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
         edt_owner.setText(dh.getEstOwner());
         edt_contact.setText(dh.getEstContact());
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 100 && resultCode == RESULT_OK &&
-                data != null && data.getData() != null) {
-
-            imageuri=data.getData();
-            img_estprof.setImageURI(imageuri);
-
-            try {
-                imageStream = getContentResolver().openInputStream(imageuri);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            dh.setEstImage(dp.encodeImage(selectedImage));
-
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        if(item.getItemId()==R.id.esthome)
+        draw_name.setText(dh.getEstName());
+        draw_img_user.setImageBitmap(dp.createImage(dh.getEstImage()));
+        img_estprof.setImageBitmap(dp.createImage(dh.getEstImage()));
+        if(dh.getEstImage()==null)
         {
-            Intent startIntent=new Intent(EstabProfile.this, EstabDashboard.class);
-            startActivity(startIntent);
-            finish();
-        }
-        else if(item.getItemId()==R.id.esthistory)
-        {
-            Intent startIntent=new Intent(EstabProfile.this, UserHistory.class);
-            startActivity(startIntent);
-            finish();
-        }
-        else if(item.getItemId()==R.id.estlogout)
-        {
-            Intent startIntent=new Intent(EstabProfile.this, Login.class);
-            startActivity(startIntent);
-            finish();
+            draw_img_user.setImageResource(R.drawable.ic_person);
+            img_estprof.setImageResource(R.drawable.ic_person);
         }
 
-        return false;
     }
-
 
 }

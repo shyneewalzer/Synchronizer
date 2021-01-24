@@ -1,5 +1,6 @@
 package com.example.mobileapplicationproject.DataController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
 
@@ -12,6 +13,11 @@ public class DataHolder {
     private static String house, brgy, city;
     private static String estAcctID, estName, estStreet, estContact, estOwner, estImage, estID;
     private static String prevAct;
+    private static ArrayList<String> listRoutes;
+    private static ArrayList<String> listDestination;
+    private static ArrayList<String> listBrgy;
+    private static String visitmode = "travel";
+
 
 
 
@@ -174,14 +180,36 @@ public class DataHolder {
         return city;
     }
 
-    public void setPrevAct(String iptprvact)
+    public void setLocations(ArrayList<String>iptroutes, ArrayList<String>iptdestination, ArrayList<String>iptbrgy)
     {
-        prevAct = iptprvact;
+        listRoutes = iptroutes;
+        listDestination = iptdestination;
+        listBrgy = iptbrgy;
     }
 
-    public String getPrevAct()
+    public ArrayList<String>getListRoutes()
     {
-        return prevAct;
+        return listRoutes;
+    }
+
+    public ArrayList<String>getListDestination()
+    {
+        return listDestination;
+    }
+
+    public ArrayList<String>getListBrgy()
+    {
+        return listBrgy;
+    }
+
+    public void setVisitmode(String iptvisit)
+    {
+        visitmode = iptvisit;
+    }
+
+    public String getVisitmode()
+    {
+        return visitmode;
     }
 
 }

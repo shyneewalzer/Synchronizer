@@ -4,15 +4,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -23,6 +26,8 @@ import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
 import com.example.mobileapplicationproject.DataController.DebugMode;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -34,7 +39,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EmployeeMain extends AppCompatActivity implements View.OnClickListener{
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
+public class EmployeeMain extends AppCompatActivity implements View.OnClickListener, PasswordDialog.PasswordDialogListener {
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -51,6 +58,8 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
     SimpleDateFormat dateformatter;
     SimpleDateFormat batchformatter;
     Timestamp timestamp;
+
+    String testPassword;
 
     //////////////UI ELEMENTS////////////////
     Toolbar toolbar;
@@ -92,15 +101,77 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private class Dbread extends AsyncTask<String, String, String>
+    {
+        BCrypt.Result brs;
+        String msger;
+        Boolean isSuccess=false;
 
-    @Override
-    public void onClick(View v) {
+        @Override
+        protected String doInBackground(String... strings) {
 
-        if(v.getId()==R.id.btn_escanner)
-        {
-            scanCode();
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+                    ResultSet rs=con.createStatement().executeQuery("select * from accounts_table where account_id = '"+ dh.getEstAcctID() +"' ");
+
+                    while (rs.next())
+                    {
+                        brs = BCrypt.verifyer().verify(testPassword.toCharArray(), rs.getString("password"));
+
+                        if(brs.verified==true)
+                        {
+                            isSuccess=true;
+                        }
+                        else
+                        {
+                            isSuccess=false;
+                            msger = "Invalid Password!";
+                        }
+                    }
+                    rs.close();
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
         }
 
+        @SuppressLint("WrongThread")
+        @Override
+        protected void onPreExecute() {
+            lo_employeeviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            if(isSuccess==true)
+            {
+                testPassword="";
+                Intent startIntent = new Intent(EmployeeMain.this, EstabDashboard.class);
+                startActivity(startIntent);
+                finish();
+            }
+            else
+            {
+                dp.toasterlong(getApplicationContext(), "Invalid Password");
+            }
+            lo_employeeviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+
+        }
     }
 
     private class Dbinsert extends AsyncTask<String, String, String>
@@ -194,6 +265,30 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
             }
             pbar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId()==R.id.btn_escanner)
+        {
+            scanCode();
+        }
+        else if(v.getId()==R.id.btn_timeout)
+        {
+            PasswordDialog passwordDialog = new PasswordDialog();
+            passwordDialog.show(getSupportFragmentManager(), "password dialog");
+
+        }
+
+    }
+
+    @Override
+    public void getpassword(String password) {
+        dm.displayMessage(getApplicationContext(), password+"");
+        testPassword = password;
+        Dbread dbread = new Dbread();
+        dbread.execute();
     }
 
     private void scanCode(){

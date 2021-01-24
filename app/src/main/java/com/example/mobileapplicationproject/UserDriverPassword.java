@@ -53,7 +53,7 @@ public class UserDriverPassword extends AppCompatActivity {
     }
 
     public void profile_text(View view) {
-        Intent intent = new Intent(this, UserDriverProfile.class);
+        Intent intent = new Intent(this, ProfileTabbed.class);
         startActivity(intent);
     }
 

@@ -395,7 +395,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         }
         else if(item.getItemId()==R.id.driveprof)
         {
-            Intent startIntent=new Intent(DriverDashboard.this, UserDriverProfile.class);
+            Intent startIntent=new Intent(DriverDashboard.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
