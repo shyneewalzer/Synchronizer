@@ -17,6 +17,7 @@ public class DataHolder {
     private static ArrayList<String> listDestination;
     private static ArrayList<String> listBrgy;
     private static String visitmode = "travel";
+    public static String viewestname, viewestadr, viewestcontact, viewestemp, viewestimg;
 
 
 
@@ -210,6 +211,44 @@ public class DataHolder {
     public String getVisitmode()
     {
         return visitmode;
+    }
+
+    public void setViewEstInfo(String iptestname, String iptestadr, String iptestcontact, String iptestimg)
+    {
+        viewestname = iptestname;
+        viewestadr = iptestadr;
+        viewestcontact = iptestcontact;
+        viewestimg = iptestimg;
+    }
+
+    public void setViewEstEmp(String iptestemp)
+    {
+        viewestemp = iptestemp;
+    }
+
+    public String getViewEstName()
+    {
+        return viewestname;
+    }
+
+    public String getViewEstAdr()
+    {
+        return viewestadr;
+    }
+
+    public String getViewEstContact()
+    {
+        return viewestcontact;
+    }
+
+    public String getViewEstEmp()
+    {
+        return viewestemp;
+    }
+
+    public String getViewEstImg()
+    {
+        return viewestimg;
     }
 
 }

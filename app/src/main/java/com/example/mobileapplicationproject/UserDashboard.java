@@ -38,6 +38,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -246,6 +247,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             lo_qr.setVisibility(View.VISIBLE);
             btn_backdestination.setVisibility(View.GONE);
             btn_scan.setVisibility(View.VISIBLE);
+            txt_destination.setVisibility(View.GONE);
         }
 
     }
@@ -358,7 +360,6 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                         isSuccess = true;
                     }
 
-
                     con.close();
                 }
             }
@@ -385,6 +386,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             batch = dh.getUserid() + estinfo.get(0) + batchformatter.format(timestamp);
             dm.displayMessage(getApplicationContext(), qrcode+"");
 
+            locationviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
 
@@ -394,11 +396,83 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             if(isSuccess==true)
             {
                 dp.toastershort(getApplicationContext(), "Data Successfully Sent");
+                Dbreadest dbreadest = new Dbreadest();
+                dbreadest.execute();
             }
             else if(isSuccess==false)
             {
                 dp.toastershort(getApplicationContext(), msger);
             }
+            locationviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+        }
+    }
+
+    private class Dbreadest extends AsyncTask<String, String, String>
+    {
+
+        boolean isSuccess;
+        String msger;
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+                    ResultSet rs=con.createStatement().executeQuery("select * from establishments where est_id = '"+ estinfo.get(1) +"' ");
+                    while (rs.next())
+                    {
+                        dh.setViewEstInfo(rs.getString("name"), rs.getString("street"), rs.getString("telephone_number"), rs.getString("image"));
+                    }
+                    rs.close();
+
+                    ResultSet rsemp=con.createStatement().executeQuery("select * from user_profile where user_id = '"+ estinfo.get(0) +"' ");
+                    while (rsemp.next())
+                    {
+                        dh.setViewEstEmp(rsemp.getString("firstname") + " " + rsemp.getString("lastname"));
+                    }
+                    rsemp.close();
+
+                    isSuccess = true;
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            locationviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            if(isSuccess==true)
+            {
+                Intent startIntent = new Intent(UserDashboard.this, UserScanEstabViewer.class);
+                startActivity(startIntent);
+            }
+            else
+            {
+                dp.toasterlong(getApplicationContext(), msger+"");
+                dm.displayMessage(getApplicationContext(), dh.getViewEstName() + " " + dh.getViewEstAdr() + " " + dh.getViewEstContact() + " " + dh.getViewEstEmp());
+            }
+            locationviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
         }
     }
@@ -487,7 +561,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.estab)
+        if(item.getItemId()==R.id.home)
         {
             dh.setVisitmode("travel");
             Intent startIntent=new Intent(UserDashboard.this, UserDashboard.class);
