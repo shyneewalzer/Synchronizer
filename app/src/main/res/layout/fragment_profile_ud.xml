@@ -139,7 +139,7 @@
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
-                    app:startIconDrawable="@drawable/contact_icon">
+                    app:startIconDrawable="@drawable/age_icon">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/age"
                         android:layout_width="match_parent"

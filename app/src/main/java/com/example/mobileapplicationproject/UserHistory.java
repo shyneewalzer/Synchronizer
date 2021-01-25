@@ -24,7 +24,7 @@ import com.example.mobileapplicationproject.ui.main.SectionsPagerAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserHistory extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class UserHistory extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ConfirmDialog.ConfirmDialogListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -141,11 +141,21 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
 
         else if(item.getItemId()==R.id.logout || item.getItemId()==R.id.estlogout)
         {
+            ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to log out\nAre you sure?", "logout");
+            confirmDialog.show(getSupportFragmentManager(), "confirm dialog");
+        }
+
+        return false;
+    }
+
+    @Override
+    public void getDialogResponse(boolean dialogResponse, String purpose) {
+
+        if(purpose.equals("logout") && dialogResponse==true)
+        {
             Intent startIntent=new Intent(UserHistory.this, Login.class);
             startActivity(startIntent);
             finish();
         }
-
-        return false;
     }
 }

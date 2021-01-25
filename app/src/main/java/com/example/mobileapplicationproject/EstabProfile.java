@@ -34,7 +34,7 @@ import java.sql.Connection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EstabProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+public class EstabProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, ConfirmDialog.ConfirmDialogListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -139,6 +139,17 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
             }
         }
 
+    }
+
+    @Override
+    public void getDialogResponse(boolean dialogResponse, String purpose) {
+
+        if(purpose.equals("logout") && dialogResponse==true)
+        {
+            Intent startIntent=new Intent(EstabProfile.this, Login.class);
+            startActivity(startIntent);
+            finish();
+        }
     }
 
     private class Dbupdate extends AsyncTask<String, String, String>
@@ -253,9 +264,8 @@ public class EstabProfile extends AppCompatActivity implements NavigationView.On
         }
         else if(item.getItemId()==R.id.estlogout)
         {
-            Intent startIntent=new Intent(EstabProfile.this, Login.class);
-            startActivity(startIntent);
-            finish();
+            ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to log out\nAre you sure?", "logout");
+            confirmDialog.show(getSupportFragmentManager(), "confirm dialog");
         }
 
         return false;

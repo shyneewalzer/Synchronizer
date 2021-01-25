@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EmployeeActivation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class EmployeeActivation extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ConfirmDialog.ConfirmDialogListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -75,6 +75,15 @@ public class EmployeeActivation extends AppCompatActivity implements NavigationV
 
         Dbread dbread = new Dbread();
         dbread.execute();
+    }
+
+    @Override
+    public void getDialogResponse(boolean dialogResponse, String purpose) {
+        if(purpose.equals("activation") && dialogResponse==true)
+        {
+            Dbupdate dbupdate = new Dbupdate();
+            dbupdate.execute();
+        }
     }
 
     private class Dbread extends AsyncTask<String, String, String>
@@ -292,12 +301,14 @@ public class EmployeeActivation extends AppCompatActivity implements NavigationV
                     if(sStatus.get(position).equals("0"))
                     {
                         procedure = "Activate";
-                        dialogActivation("You are about to activate employee\nAre you sure?");
+                        ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to activate employee\nAre you sure?", "activation");
+                        confirmDialog.show(getSupportFragmentManager(), "confirm dialog");
                     }
                     else if(sStatus.get(position).equals("1"))
                     {
                         procedure = "Deactivate";
-                        dialogActivation("You are about to deactivate employee\nAre you sure?");
+                        ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to deactivate employee\nAre you sure?", "activation");
+                        confirmDialog.show(getSupportFragmentManager(), "confirm dialog");
                     }
 
                     dm.displayMessage(getApplicationContext(), selectedEmp);
@@ -308,32 +319,6 @@ public class EmployeeActivation extends AppCompatActivity implements NavigationV
         }
     }
 
-    private void dialogActivation(String iptmsg)
-    {
-        String notifMsg = iptmsg;
-        final AlertDialog.Builder builder = new AlertDialog.Builder(EmployeeActivation.this);
-        builder.setTitle("Confirmation");
-        builder.setMessage(notifMsg);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                // call function show alert dialog again
-                Dbupdate dbupdate = new Dbupdate();
-                dbupdate.execute();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        final AlertDialog alert = builder.create();
-        alert.show();
-
-
-
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

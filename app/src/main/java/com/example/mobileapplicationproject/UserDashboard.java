@@ -46,7 +46,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+public class UserDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, ConfirmDialog.ConfirmDialogListener{
 
     ArrayList<String> fname;
     ArrayList<String> lname;
@@ -328,6 +328,17 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
     }
 
+    @Override
+    public void getDialogResponse(boolean dialogResponse, String purpose) {
+
+        if(purpose.equals("logout") && dialogResponse==true)
+        {
+            Intent startIntent=new Intent(UserDashboard.this, Login.class);
+            startActivity(startIntent);
+            finish();
+        }
+    }
+
     private class Dbinsert extends AsyncTask<String, String, String>
     {
 
@@ -589,9 +600,8 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         }
         else if(item.getItemId()==R.id.logout)
         {
-            Intent startIntent=new Intent(UserDashboard.this, Login.class);
-            startActivity(startIntent);
-            finish();
+            ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to log out\nAre you sure?", "logout");
+            confirmDialog.show(getSupportFragmentManager(), "confirm dialog");
         }
 
 

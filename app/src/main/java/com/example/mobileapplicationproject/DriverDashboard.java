@@ -39,7 +39,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DriverDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+public class DriverDashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, ConfirmDialog.ConfirmDialogListener{
 
     ArrayList<String>vehiclelist;
     ArrayList<String>routelist;
@@ -235,6 +235,18 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
     }
 
+    @Override
+    public void getDialogResponse(boolean dialogResponse, String purpose) {
+
+        if(purpose.equals("logout") && dialogResponse==true)
+        {
+            Intent startIntent=new Intent(DriverDashboard.this, Login.class);
+            startActivity(startIntent);
+            finish();
+        }
+
+    }
+
     private class Dbread extends AsyncTask<String, String, String>
     {
 
@@ -407,9 +419,9 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         }
         else if(item.getItemId()==R.id.drivelogout)
         {
-            Intent startIntent=new Intent(DriverDashboard.this, Login.class);
-            startActivity(startIntent);
-            finish();
+            ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to log out\nAre you sure?", "logout");
+            confirmDialog.show(getSupportFragmentManager(), "confirm dialog");
+
         }
 
         return false;

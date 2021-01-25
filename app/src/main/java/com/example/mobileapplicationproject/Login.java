@@ -234,27 +234,24 @@ public class Login extends AppCompatActivity {
                 {
                     Intent myIntent = new Intent(Login.this, UserDashboard.class);
                     startActivity(myIntent);
-                    dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," );
-
+                    dp.toastershort(getApplicationContext(), "Hi " + dh.getpFName() + " " + dh.getpLName());
                 }
                 else if(dh.getType().equals("Driver"))
                 {
                     Intent myIntent = new Intent(Login.this, DriverDashboard.class);
                     startActivity(myIntent);
+                    dp.toastershort(getApplicationContext(), "Hi " + dh.getpFName() + " " + dh.getpLName());
                 }
                 else if(dh.getType().equals("Establishment"))
                 {
                     Intent myIntent = new Intent(Login.this, EstabDashboard.class);
                     startActivity(myIntent);
-                    //dm.displayMessage(getApplicationContext(), dh.getEstID() + " " + dh.getEstName() + " " + dh.getEstStreet() + " " + dh.getEstContact() + " " + dh.getEstOwner());
+                    dp.toastershort(getApplicationContext(), "Hi " + dh.getEstOwner());
                 }
-
                 finish();
-                dp.toastershort(getApplicationContext(), "Logged In Successfully");
             }
             else
             {
-                dm.displayMessage(getApplicationContext(), dh.getpFName() + "," + dh.getpLName() + "," + dh.getpMName() + "," + dh.getpBday() + "," + dh.getpContact() + "," + dh.getpImage() + ", ");
                 dp.toastershort(getApplicationContext(), msger);
                 btns.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.INVISIBLE);
