@@ -5,7 +5,7 @@ import android.widget.Toast;
 
 public class DebugMode {
 
-    private static boolean debugmode = false;
+    private static boolean debugmode = true;
 
 
     public boolean getDebugMode()

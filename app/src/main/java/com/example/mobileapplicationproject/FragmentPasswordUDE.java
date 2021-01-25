@@ -167,13 +167,32 @@ public class FragmentPasswordUDE extends Fragment implements View.OnClickListene
 
         if(v.getId()==R.id.btn_changepassword)
         {
-            if(edt_oldpassword.getText().toString().trim().isEmpty() || edt_newpassword.getText().toString().trim().isEmpty() || edt_confirmpassword.getText().toString().trim().isEmpty())
+            if(edt_oldpassword.getText().toString().trim().isEmpty())
             {
-                dp.toasterlong(getContext(), "Please enter password");
+                edt_oldpassword.setError("Password cannot be empty");
+                dp.toasterlong(getContext(), "Passwords cannot be empty");
+            }
+            else if(edt_newpassword.getText().toString().trim().isEmpty())
+            {
+                edt_newpassword.setError("Password cannot be empty");
+                dp.toasterlong(getContext(), "Passwords cannot be empty");
+            }
+            else if(edt_confirmpassword.getText().toString().trim().isEmpty())
+            {
+                edt_confirmpassword.setError("Password cannot be empty");
+                dp.toasterlong(getContext(), "Passwords cannot be empty");
             }
             else if(!edt_newpassword.getText().toString().equals(edt_confirmpassword.getText().toString()))
             {
+                edt_newpassword.setError("Password do not match!");
+                edt_confirmpassword.setError("Password do not match!");
                 dp.toasterlong(getContext(), "Password do not match!");
+            }
+            else if(!dp.passwordValidator(edt_newpassword.getText().toString()))
+            {
+                edt_newpassword.setError("Password too weak!");
+                edt_confirmpassword.setError("Password too weak!");
+                dp.toasterlong(getContext(), "Password too weak!");
             }
             else
             {

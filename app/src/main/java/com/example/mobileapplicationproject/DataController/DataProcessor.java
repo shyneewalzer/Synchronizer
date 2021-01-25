@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Patterns;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class DataProcessor {
 
@@ -29,6 +31,16 @@ public class DataProcessor {
     private static Bitmap decodedByte;
     private static Date datee = new Date();
     private static boolean dlgresult = false;
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[0-9])" +         //at least 1 digit
+                    "(?=.*[a-z])" +         //at least 1 lower case letter
+                    "(?=.*[A-Z])" +         //at least 1 upper case letter
+                    //"(?=.*[a-zA-Z])" +      //any letter
+                    //"(?=.*[@#$%^&+=])" +    //at least 1 special character
+                    "(?=\\S+$)" +           //no white spaces
+                    ".{8,}" +               //at least 8 characters
+                    "$");
 
 
     public void toastershort(Context context, String iptmsg)
@@ -104,5 +116,20 @@ public class DataProcessor {
         }
         return tokenholder;
     }
+
+    public boolean passwordValidator(String iptpassword)
+    {
+        boolean passwordValidatorResponse;
+        if(!PASSWORD_PATTERN.matcher(iptpassword).matches())
+        {
+            passwordValidatorResponse = false;
+        }
+        else
+        {
+            passwordValidatorResponse = true;
+        }
+        return passwordValidatorResponse;
+    }
+
 
 }

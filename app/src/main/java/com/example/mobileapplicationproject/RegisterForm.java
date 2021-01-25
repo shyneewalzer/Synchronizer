@@ -1,11 +1,13 @@
 package com.example.mobileapplicationproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -27,6 +29,10 @@ public class RegisterForm extends AppCompatActivity {
     TextInputEditText emailInput, passwordInput;
     RadioGroup accountRadio;
     Button signUpRegister;
+
+    ConstraintLayout lo_main;
+    ProgressBar pbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,9 @@ public class RegisterForm extends AppCompatActivity {
         passwordInput = (TextInputEditText) findViewById(R.id.passwordInput);
         accountRadio = (RadioGroup) findViewById(R.id.radioButton);
         signUpRegister = (Button) findViewById(R.id.signUpRegister);
+        lo_main = findViewById(R.id.lo_main);
+        pbar = findViewById(R.id.pbar);
+
         signUpRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +59,7 @@ public class RegisterForm extends AppCompatActivity {
                     return;
                 }
                 if ( password.matches("")) {
-                    Toast.makeText(getApplicationContext(), "Please Input Passowrd", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please Input Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (accountRadio.getCheckedRadioButtonId() == -1)
@@ -62,12 +71,17 @@ public class RegisterForm extends AppCompatActivity {
                 int selectedId = accountRadio.getCheckedRadioButtonId();
                 radioButton = (RadioButton) findViewById(selectedId);
                 accountType = radioButton.getText().toString();
+
+                lo_main.setVisibility(View.GONE);
+                pbar.setVisibility(View.VISIBLE);
+
                 createPost();
             }
         });
     }
 
     private void createPost() {
+
         Post post = new Post(email, password, accountType);
 
         Call<Post> call = apiInterface.createPost(post);
@@ -79,19 +93,28 @@ public class RegisterForm extends AppCompatActivity {
                     APIError apiError = ErrorUtils.parseError(response);
                     Toast.makeText(RegisterForm.this, "error "+ apiError.getMessage(), Toast.LENGTH_LONG).show();
 
+                    lo_main.setVisibility(View.VISIBLE);
+                    pbar.setVisibility(View.GONE);
+
                     return;
                 }
                 Toast.makeText(RegisterForm.this, "We send a verification to your email address", Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(RegisterForm.this, Login.class);
                 startActivity(myIntent);
 
+                lo_main.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+
             }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
                 Toast.makeText(RegisterForm.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                lo_main.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
             }
         });
+
     }
 
     public void login_register_txt(View view) {

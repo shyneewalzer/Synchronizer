@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -66,13 +67,20 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please Input Email", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if ( password.equals("")) {
+                else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                {
+                    emailInput.setError("Please enter a valid email address");
+                }
+                else if ( password.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Input Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                else
+                {
+                    Dblogin dblogin = new Dblogin();
+                    dblogin.execute();
+                }
 
-                Dblogin dblogin = new Dblogin();
-                dblogin.execute();
             }
         });
 
