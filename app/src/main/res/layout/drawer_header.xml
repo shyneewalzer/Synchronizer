@@ -5,15 +5,15 @@
     android:id="@+id/drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingVertical="20dp"
+    android:paddingVertical="10dp"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/cimg_user"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/profile_icon"
             android:layout_marginHorizontal="10dp"/>
 
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name Here"
-            android:textSize="23sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             app:autoSizeTextType="uniform"
             android:shadowColor="@color/white"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Type: "
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         app:autoSizeTextType="uniform"
         android:shadowColor="@color/white"

@@ -1,6 +1,7 @@
 package com.example.mobileapplicationproject;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -164,7 +165,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                 int cal_dy = cal.get(Calendar.DAY_OF_MONTH);
                 dm.displayMessage(getContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
 
-                DatePickerDialog datepicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datepicker = new DatePickerDialog(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
