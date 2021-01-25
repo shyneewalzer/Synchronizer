@@ -6,7 +6,7 @@
     android:orientation="vertical"
     app:cardElevation="10dp"
     app:cardCornerRadius="8dp"
-    android:background="@android:color/transparent">
+    app:cardUseCompatPadding="true">
 
 
     <LinearLayout
