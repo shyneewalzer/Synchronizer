@@ -31,7 +31,7 @@ public class ConfirmDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle(dialogTitle);
         builder.setMessage(dialogMessage);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
