@@ -76,7 +76,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Home");
+        toolbar.setTitle("Employee List");
 
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);
