@@ -129,7 +129,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Destination");
+        toolbar.setTitle("Set Destination");
 
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);

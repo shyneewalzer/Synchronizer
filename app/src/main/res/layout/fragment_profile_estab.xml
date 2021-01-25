@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="20dp">
+            android:paddingTop="10dp"
+            android:paddingHorizontal="10dp">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -46,7 +47,6 @@
                 android:layout_marginTop="20dp"
                 android:hint="Name"
                 android:paddingVertical="5dp"
-                android:paddingHorizontal="15dp"
                 android:textColor="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:hintTextColor="@color/black"
@@ -70,7 +70,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Owner"
-                android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 android:textColor="@color/black"
                 app:boxStrokeColor="@color/black"
@@ -95,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:hint="Contact"
                 android:paddingVertical="5dp"
-                android:paddingHorizontal="15dp"
                 android:textColor="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:hintTextColor="@color/black"
@@ -119,7 +117,6 @@
                 android:layout_height="wrap_content"
                 android:hint="Address"
                 android:paddingVertical="5dp"
-                android:paddingHorizontal="15dp"
                 android:textColor="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:hintTextColor="@color/black"

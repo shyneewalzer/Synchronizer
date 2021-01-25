@@ -26,26 +26,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:paddingHorizontal="10dp"
-                android:padding="5dp">
+                android:paddingTop="20dp"
+                android:paddingHorizontal="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vehicle Details"
-                    android:textSize="20sp"
-                    android:textColor="@color/gray"
-                    android:layout_gravity="center_horizontal"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Vehicle Details"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textColor="@color/gray"-->
+<!--                    android:layout_gravity="center_horizontal"/>-->
 
                 <TextView
                     android:id="@+id/txt_addvehicle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Vehicle"
-                    android:textSize="18sp"
-                    android:textColor="@color/gray"
+                    android:textSize="20sp"
+                    android:textColor="@color/light_green"
                     android:layout_marginTop="20dp"
+                    android:textStyle="bold"
                     android:drawableLeft="@drawable/ic_vehicle"
                     android:gravity="center"/>
 

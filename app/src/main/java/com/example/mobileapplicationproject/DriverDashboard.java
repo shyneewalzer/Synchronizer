@@ -94,7 +94,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("User Panel");
+        toolbar.setTitle("Vehicle Details");
 
         drawerLayout = findViewById(R.id.drawer);
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer);

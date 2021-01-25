@@ -27,23 +27,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:paddingTop="20dp"
+                android:paddingHorizontal="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Profile"
-                        android:textAlignment="center"
-                        android:textColor="@color/gray"
-                        android:textSize="25sp"
-                        android:layout_marginTop="20dp"/>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_horizontal"-->
+<!--                        android:text="Profile"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textColor="@color/gray"-->
+<!--                        android:textSize="25sp"-->
+<!--                        android:layout_marginTop="20dp"/>-->
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_addempprof"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_marginTop="15dp"
                     android:src="@drawable/profile_icon"
                     android:layout_gravity="center"/>
 
@@ -65,7 +66,6 @@
                     android:layout_marginTop="10dp"
                     android:hint="@string/firstname"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -88,7 +88,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/middlename"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -111,7 +110,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/lastname"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -134,7 +132,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/age"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -158,7 +155,6 @@
                     android:layout_height="wrap_content"
                     android:hint="Contact#"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -180,7 +176,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/house_lot_building"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -203,7 +198,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/barangay"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
@@ -226,7 +220,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/city"
                     android:paddingVertical="5dp"
-                    android:paddingHorizontal="15dp"
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"

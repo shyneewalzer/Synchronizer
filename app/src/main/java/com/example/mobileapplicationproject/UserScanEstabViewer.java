@@ -45,7 +45,7 @@ public class UserScanEstabViewer extends AppCompatActivity implements Navigation
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_backarrow);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Employee Profile");
+        toolbar.setTitle("Establishment Details");
 
         btn_estviewclose.setOnClickListener(new View.OnClickListener() {
             @Override

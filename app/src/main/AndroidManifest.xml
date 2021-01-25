@@ -30,7 +30,6 @@
         <activity android:name=".EmployeeeProfile" />
         <activity android:name=".EstabProfile" />
         <activity android:name=".DriverDashboard" />
-        <activity android:name=".UserDriverPassword" />
         <activity android:name=".EmployeeMain" />
         <activity android:name=".UserDashboard" />
         <activity android:name=".Login" />

@@ -45,7 +45,7 @@
                     android:text="FirstName MiddleName LastName"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/light_green"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:text="Status: "
                     android:textStyle="bold|italic"
-                    android:textColor="@color/black"
+                    android:textColor="@color/light_green"
                     android:textSize="15sp"
                     android:layout_weight="2.5"/>
 
