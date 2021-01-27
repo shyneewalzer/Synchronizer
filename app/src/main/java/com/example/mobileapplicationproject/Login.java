@@ -240,6 +240,7 @@ public class Login extends AppCompatActivity {
 
                 if(dh.getType().equals("Individual"))
                 {
+                    dh.setVisitmode("travel");//refresh activity sequence
                     Intent myIntent = new Intent(Login.this, UserDashboard.class);
                     startActivity(myIntent);
                     dp.toastershort(getApplicationContext(), "Hi " + dh.getpFName() + " " + dh.getpLName());

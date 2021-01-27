@@ -83,7 +83,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         fragtrav = inflater.inflate(R.layout.fragment_user_travel_history, container, false);
 
         travelviewer = fragtrav.findViewById(R.id.travelviewer);
-//        pbar = findViewById(R.id.pbar);
+        pbar = fragtrav.findViewById(R.id.pbar);
         listView = fragtrav.findViewById(R.id.listView);
 
         spr_search = fragtrav.findViewById(R.id.spr_search);
@@ -237,14 +237,11 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             datee = new ArrayList<>();
 
             travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
@@ -312,8 +309,6 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         @Override
         protected void onPreExecute() {
 
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
             listChild.clear();
         }
 
@@ -321,7 +316,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         protected void onPostExecute(String a){
 
             travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            pbar.setVisibility(View.GONE);
 
             adapterTravelHistory = new AdapterTravelHistory(listGroup, listChild, destination, timee, datee);
             expandableListView.setAdapter(adapterTravelHistory);
@@ -383,14 +378,11 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
 
             dm.displayMessage(getContext(), sqlsearch+"");
             travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();

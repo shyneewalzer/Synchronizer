@@ -62,7 +62,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
     ///////////////////UI ELEMENTS////////////////
     View fragestab;
-    LinearLayout travelviewer;
+    LinearLayout estabviewer;
     ProgressBar pbar;
     ListView listView;
 
@@ -81,8 +81,8 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
         fragestab = inflater.inflate(R.layout.fragment_user_estab_history, container, false);
 
-        travelviewer = fragestab.findViewById(R.id.travelviewer);
-//        pbar = findViewById(R.id.pbar);
+        estabviewer = fragestab.findViewById(R.id.estabviewer);
+        pbar = fragestab.findViewById(R.id.pbar);
         listView = fragestab.findViewById(R.id.listView);
 
         spr_search = fragestab.findViewById(R.id.spr_search);
@@ -234,15 +234,12 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            estabviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbestabreader dbestabreader = new Dbestabreader();
             dbestabreader.execute();
@@ -300,17 +297,12 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPreExecute() {
 
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
             destination = new ArrayList<>();
             adr = new ArrayList<>();
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
@@ -373,16 +365,14 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPreExecute() {
 
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
             listChild.clear();
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            estabviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
 
             expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
             expandableListView.setAdapter(expandAdapter);
@@ -472,15 +462,12 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             datee = new ArrayList<>();
 
             dm.displayMessage(getContext(), sqlsearch+"");
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            estabviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbestabreader dbestabreader = new Dbestabreader();
             dbestabreader.execute();
