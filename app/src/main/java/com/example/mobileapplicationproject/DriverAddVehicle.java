@@ -42,7 +42,7 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
     LinearLayout lo_addvehicleviewer;
     ProgressBar pbar;
 
-    TextInputEditText edt_plate, edt_bodynum, edt_type, edt_color;
+    TextInputEditText edt_plate, edt_bodynum, edt_color;
     AutoCompleteTextView edt_route;
     Button btn_addvehicle;
 
@@ -54,7 +54,6 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
         edt_plate = findViewById(R.id.edt_plate);
         edt_bodynum = findViewById(R.id.edt_bodynum);
         edt_route = findViewById(R.id.edt_route);
-        edt_type = findViewById(R.id.edt_type);
         edt_color = findViewById(R.id.edt_color);
         btn_addvehicle = findViewById(R.id.btn_addvehicle);
         lo_addvehicleviewer = findViewById(R.id.lo_addvehicleviewer);
@@ -108,7 +107,7 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into vehicles (plate_number, body_number, vehicle_route, vehicle_type, color, isActive, account_id) VALUES('"+ edt_plate.getText() +"', '"+ edt_bodynum.getText() +"', '"+ edt_route.getText() +"', '"+ edt_type.getText() +"', '"+ edt_color.getText() +"', '0', '"+ dh.getUserid() +"')");
+                        con.createStatement().executeUpdate("INSERT into vehicles (plate_number, body_number, vehicle_route, color, isActive, account_id) VALUES('"+ edt_plate.getText() +"', '"+ edt_bodynum.getText() +"', '"+ edt_route.getText() +"', '"+ edt_color.getText() +"', '0', '"+ dh.getUserid() +"')");
                         isSuccess = true;
                     }
 

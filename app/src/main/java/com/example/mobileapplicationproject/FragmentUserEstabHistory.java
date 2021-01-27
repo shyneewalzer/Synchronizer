@@ -409,7 +409,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
                     if(sqlsearch.equals("est"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE name = '"+ edt_search.getText() +"' ");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE name like '%"+ edt_search.getText() +"%' ");
 
                         if(rs.isBeforeFirst())
                         {

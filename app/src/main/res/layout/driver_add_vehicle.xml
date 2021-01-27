@@ -110,29 +110,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="Vehicle Type"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="15dp"
-                android:textColor="@color/black"
-                app:boxStrokeColor="@color/black"
-                app:hintTextColor="@color/black"
-                app:startIconDrawable="@drawable/name_icon">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:padding="10dp"
-                    android:textSize="20sp">
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:theme="@style/Theme.MobileApplicationProject"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:hint="Vehicle Color"
                 android:paddingVertical="5dp"
                 android:paddingHorizontal="15dp"

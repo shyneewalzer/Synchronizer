@@ -326,7 +326,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
                 }
                 else
                 {
-                    dp.toasterlong(getApplicationContext(), msger + "Only (" + 2 + ") employees can be activated at a time");
+                    dp.toasterlong(getApplicationContext(), "Only (" + 2 + ") employees can be activated at a time");
                 }
             }
             else
