@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -195,7 +196,7 @@ public class EstabAddEmployee extends AppCompatActivity implements NavigationVie
             int cal_dy = dh.getTempDate().get(Calendar.DAY_OF_MONTH);
             dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
 
-            DatePickerDialog datepicker = new DatePickerDialog(EstabAddEmployee.this, new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datepicker = new DatePickerDialog(EstabAddEmployee.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     month = month + 1;
