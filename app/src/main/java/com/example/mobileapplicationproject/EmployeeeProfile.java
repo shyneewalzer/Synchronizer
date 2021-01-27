@@ -293,14 +293,6 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.prof)
-        {
-            Intent startIntent=new Intent(EmployeeeProfile.this, EmployeeeProfile.class);
-            startActivity(startIntent);
-            finish();
-        }
-
-
         return false;
     }
 

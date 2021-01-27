@@ -49,4 +49,84 @@
     <string name="tab_text_2">Establishment</string>
 
 
+    <!--    USER TYPE INFO-->
+
+    <string name="indiv_info">Individual\nThis type of user is for people who commutes a lot and goes to a establishments</string>
+    <string name="driver_info">Driver\nThis type of user is for people who works on a transportation vehicle</string>
+    <string name="estab_info">Individual\nThis type of user is for people who owns an establishment</string>
+
+
+    <!--    ABOUT CONTENTS-->
+
+    <string name = "string_indiv_hometitle">Set Destination</string>
+    <string name = "string_driver_hometitle">Set Vehicle</string>
+    <string name = "string_est_hometitle">Employee List</string>
+
+    <string name="string_est_overview">
+        - This user can add employees to scan the customer QR Code when entering in the establishment.
+    </string>
+
+    <string name="string_est_home">
+        - You can see the list of the Employees who are currently active.\n
+        - You can add an employee by clicking ADD EMPLOYEE button.\n
+        - You can even deactivate/activate an account by clicking the DEACTIVATE/ ACTIVATE EMPLOYEE there you can select if you want to deactivate/activate an employee\n
+        - You can activate the employee scanner and QR Code by clicking their name on the list.\n
+        - When the account of employee is activated for scanning, they can scan the customer QR Code, they can even generate a QR Code for the customers to scan by simply setting their Information Details on the Kebab Menu.\n
+    </string>
+
+    <string name="string_est_prof">
+        - You can edit your Establishment Details.\n
+        - You can change your account password by clicking the ACCOUNT tab.
+    </string>
+
+    <string name="string_est_history">
+        - You can see the list of the customers that have been scanned by your employee.\n
+        - You can see the list of the total numbers of your employees have scanned by clicking the COUNTS tab.
+    </string>
+
+
+    <string name="string_driver_overview">
+        - This user can scan the generated QR Codes of the passengers and can even set the vehicle of what they want to use.
+    </string>
+
+    <string name="string_driver_home">
+        - You can add a vehicle by clicking the add vehicle and input the details.\n
+        - You can select the vehicle that you have registered on the plate number and it will display the details.\n
+        - After you have set the vehicle that you have choose, you can now scan the QR Codes of the passengers.\n
+    </string>
+
+    <string name="string_driver_prof">
+        - You can edit or set your Information Details that will generate as a QR Code.\n
+        - You can change your account password by clicking the ACCOUNT tab.\n
+    </string>
+
+    <string name="string_driver_history">
+        - You can see the list of the passengers that you have scanned on the vehicle that you have choose.\n
+    </string>
+
+
+    <string name="string_indiv_overview">
+        - This user can generate their own QR Code for traveling and entering establishment.
+    </string>
+
+    <string name="string_indiv_home">
+        - It can generate a QR Code by setting your destination and you can even add a companion.
+    </string>
+
+    <string name="string_indiv_estab">
+        - It can Generate a QR Code and can add a companion for the employees to scan before you enter.\n
+        - You can even scan the QR Code of the establishments using the scan button before you enter if want to.\n
+    </string>
+
+    <string name="string_indiv_prof">
+        - You can edit or set your Information Details that will generate as a QR Code.
+        - You can change your account password by clicking the ACCOUNT tab.
+    </string>
+
+    <string name="string_indiv_history">
+        - You can check the list of your destination in travel history.\n
+        - You can check your visited establishment by clicking the ESTABLISHMENT tab.
+    </string>
+
+
 </resources>

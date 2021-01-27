@@ -32,7 +32,7 @@
     <group
         android:id="@+id/menu_grp2">
     <item
-        android:id="@+id/nabout"
+        android:id="@+id/about"
         android:icon="@drawable/ic_info"
         android:title="About"/>
     <item

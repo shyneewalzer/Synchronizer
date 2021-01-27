@@ -1,37 +1,31 @@
 package com.example.mobileapplicationproject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager.widget.ViewPager;
-
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
 import com.example.mobileapplicationproject.DataController.DataProcessor;
-import com.example.mobileapplicationproject.ui.main.SPASecond;
-import com.example.mobileapplicationproject.ui.main.SectionsPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileTabbed extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ConfirmDialog.ConfirmDialogListener{
+public class About extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ConfirmDialog.ConfirmDialogListener{
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
     DataProcessor dp = new DataProcessor();
 
-    SPASecond sectionsPagerAdapter;
-
-    ///////////////UI ELEMENTS/////////////////
+    //////////////UI ELEMENTS///////////////////
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
@@ -40,12 +34,20 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
 
+    TextView txt_string_overview, txt_string_home, txt_string_xtra, txt_string_prof, txt_string_history, txt_string_titlehome, txt_string_titlextra;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_history);
+        setContentView(R.layout.about);
 
-        sectionsPagerAdapter = new SPASecond(this, getSupportFragmentManager());
+        txt_string_overview = findViewById(R.id.txt_string_overview);
+        txt_string_home = findViewById(R.id.txt_string_home);
+        txt_string_xtra = findViewById(R.id.txt_string_xtra);
+        txt_string_prof = findViewById(R.id.txt_string_prof);
+        txt_string_history = findViewById(R.id.txt_string_history);
+        txt_string_titlehome = findViewById(R.id.txt_string_titlehome);
+        txt_string_titlextra = findViewById(R.id.txt_string_titlextra);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,6 +75,15 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
             {
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
+
+            txt_string_overview.setText(R.string.string_indiv_overview);
+            txt_string_titlehome.setText(R.string.string_indiv_hometitle);
+            txt_string_home.setText(R.string.string_indiv_home);
+            txt_string_titlextra.setVisibility(View.VISIBLE);
+            txt_string_xtra.setText(R.string.string_indiv_estab);
+            txt_string_xtra.setVisibility(View.VISIBLE);
+            txt_string_prof.setText(R.string.string_indiv_prof);
+            txt_string_history.setText(R.string.string_indiv_history);
         }
         else if(dh.getType().equals("Driver"))
         {
@@ -83,6 +94,12 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
             {
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
+
+            txt_string_overview.setText(R.string.string_driver_overview);
+            txt_string_titlehome.setText(R.string.string_driver_hometitle);
+            txt_string_home.setText(R.string.string_driver_home);
+            txt_string_prof.setText(R.string.string_driver_prof);
+            txt_string_history.setText(R.string.string_driver_history);
         }
         else if(dh.getType().equals("Establishment"))
         {
@@ -94,13 +111,25 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
             {
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
+
+            txt_string_overview.setText(R.string.string_est_overview);
+            txt_string_titlehome.setText(R.string.string_est_hometitle);
+            txt_string_home.setText(R.string.string_est_home);
+            txt_string_prof.setText(R.string.string_est_prof);
+            txt_string_history.setText(R.string.string_est_history);
         }
         draw_type.setText(dh.getType());
+    }
 
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+    @Override
+    public void getDialogResponse(boolean dialogResponse, String purpose) {
+
+        if(purpose.equals("logout") && dialogResponse==true)
+        {
+            Intent startIntent=new Intent(About.this, Login.class);
+            startActivity(startIntent);
+            finish();
+        }
     }
 
     @Override
@@ -109,50 +138,62 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
         if(item.getItemId()==R.id.home)
         {
             dh.setVisitmode("travel");
-            Intent startIntent=new Intent(ProfileTabbed.this, UserDashboard.class);
-            startActivity(startIntent);
-            finish();
-        }
-        else if(item.getItemId()==R.id.history)
-        {
-            Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
+            Intent startIntent=new Intent(About.this, UserDashboard.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.estab)
         {
             dh.setVisitmode("estab");
-            Intent startIntent=new Intent(ProfileTabbed.this, UserDashboard.class);
+            Intent startIntent=new Intent(About.this, UserDashboard.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.prof)
+        {
+            Intent startIntent=new Intent(About.this, ProfileTabbed.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.history)
+        {
+            Intent startIntent=new Intent(About.this, UserHistory.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.drivehome)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, DriverDashboard.class);
+            Intent startIntent=new Intent(About.this, DriverDashboard.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.driveprof)
+        {
+            Intent startIntent=new Intent(About.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.drivehistory)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, DriverHistory.class);
+            Intent startIntent=new Intent(About.this, DriverHistory.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.esthome)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, EstabDashboard.class);
+            Intent startIntent=new Intent(About.this, EstabDashboard.class);
+            startActivity(startIntent);
+            finish();
+        }
+        else if(item.getItemId()==R.id.estprof)
+        {
+            Intent startIntent=new Intent(About.this, ProfileTabbed.class);
             startActivity(startIntent);
             finish();
         }
         else if(item.getItemId()==R.id.esthistory)
         {
-            Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
-            startActivity(startIntent);
-            finish();
-        }
-        else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
-        {
-            Intent startIntent=new Intent(ProfileTabbed.this, About.class);
+            Intent startIntent=new Intent(About.this, UserHistory.class);
             startActivity(startIntent);
             finish();
         }
@@ -163,16 +204,5 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
         }
 
         return false;
-    }
-
-    @Override
-    public void getDialogResponse(boolean dialogResponse, String purpose) {
-
-        if(purpose.equals("logout") && dialogResponse==true)
-        {
-            Intent startIntent=new Intent(ProfileTabbed.this, Login.class);
-            startActivity(startIntent);
-            finish();
-        }
     }
 }

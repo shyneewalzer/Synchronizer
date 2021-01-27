@@ -13,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mobileapplicationproject.DataController.DebugMode;
 import com.example.mobileapplicationproject.model.Post;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -22,6 +23,9 @@ import retrofit2.Response;
 
 
 public class RegisterForm extends AppCompatActivity {
+
+    DebugMode dm = new DebugMode();
+
     private TextView textViewResult;
     private RadioButton radioButton;
     APIInterface apiInterface;
@@ -29,6 +33,7 @@ public class RegisterForm extends AppCompatActivity {
     TextInputEditText emailInput, passwordInput;
     RadioGroup accountRadio;
     Button signUpRegister;
+    TextView txt_usertypeinfo;
 
     ConstraintLayout lo_main;
     ProgressBar pbar;
@@ -44,6 +49,7 @@ public class RegisterForm extends AppCompatActivity {
         signUpRegister = (Button) findViewById(R.id.signUpRegister);
         lo_main = findViewById(R.id.lo_main);
         pbar = findViewById(R.id.pbar);
+        txt_usertypeinfo = findViewById(R.id.txt_usertypeinfo);
 
         signUpRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,10 +78,35 @@ public class RegisterForm extends AppCompatActivity {
                 radioButton = (RadioButton) findViewById(selectedId);
                 accountType = radioButton.getText().toString();
 
+
+
                 lo_main.setVisibility(View.GONE);
                 pbar.setVisibility(View.VISIBLE);
 
                 createPost();
+            }
+        });
+
+        accountRadio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if(checkedId==R.id.radio_button_left_register)
+                {
+                    txt_usertypeinfo.setText(R.string.indiv_info);
+                    txt_usertypeinfo.setVisibility(View.VISIBLE);
+                }
+                else if(checkedId==R.id.radio_button_center_register)
+                {
+                    txt_usertypeinfo.setText(R.string.driver_info);
+                    txt_usertypeinfo.setVisibility(View.VISIBLE);
+                }
+                else if(checkedId==R.id.radio_button_right_register)
+                {
+                    txt_usertypeinfo.setText(R.string.estab_info);
+                    txt_usertypeinfo.setVisibility(View.VISIBLE);
+                }
+
             }
         });
     }

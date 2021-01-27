@@ -627,6 +627,12 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             startActivity(startIntent);
             finish();
         }
+        else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
+        {
+            Intent startIntent=new Intent(DriverHistory.this, About.class);
+            startActivity(startIntent);
+            finish();
+        }
         else if(item.getItemId()==R.id.drivelogout)
         {
             ConfirmDialog confirmDialog = new ConfirmDialog("Confirmation", "You are about to log out\nAre you sure?", "logout");
