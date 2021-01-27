@@ -195,7 +195,8 @@
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
-                    app:startIconDrawable="@drawable/home_icon">
+                    app:startIconDrawable="@drawable/home_icon"
+                    android:visibility="gone">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/ehouse"
                         android:layout_width="match_parent"
@@ -219,7 +220,8 @@
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
-                    app:startIconDrawable="@drawable/home_icon">
+                    app:startIconDrawable="@drawable/home_icon"
+                    android:visibility="gone">
                     <AutoCompleteTextView
                         android:id="@+id/ebarangay"
                         android:layout_width="match_parent"
@@ -243,7 +245,8 @@
                     android:textColor="@color/black"
                     app:boxStrokeColor="@color/black"
                     app:hintTextColor="@color/black"
-                    app:startIconDrawable="@drawable/home_icon">
+                    app:startIconDrawable="@drawable/home_icon"
+                    android:visibility="gone">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/ecity"
                         android:layout_width="match_parent"
