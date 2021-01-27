@@ -55,17 +55,81 @@ public class IntroForm extends AppCompatActivity {
         btn_retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dbread dbread = new Dbread();
-                dbread.execute();
+                Dbreadroute dbreadroute = new Dbreadroute();
+                dbreadroute.execute();
             }
         });
 
-        Dbread dbread = new Dbread();
-        dbread.execute();
+        Dbreadroute dbreadroute = new Dbreadroute();
+        dbreadroute.execute();
 
     }
 
-    private class Dbread extends AsyncTask<String, String, String>
+    private class Dbreadroute extends AsyncTask<String, String, String>
+    {
+
+        String msger;
+        Boolean isSuccess=false;
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            try{
+                Connection con=cc.CONN();
+                if(con==null)
+                {
+                    msger="Please Check your Internet Connection";
+                }
+                else
+                {
+                    ResultSet rs=con.createStatement().executeQuery("select * from vehicle_routes");
+
+                    while (rs.next())
+                    {
+                        listroutes.add(rs.getString("vr_routes"));
+                    }
+                    isSuccess = true;
+                    rs.close();
+                    con.close();
+                }
+            }
+            catch (Exception ex){
+                msger="Exception" + ex;
+            }
+            return msger;
+
+
+        }
+
+        @SuppressLint("WrongThread")
+        @Override
+        protected void onPreExecute() {
+
+            listroutes = new ArrayList<>();
+
+            txt_loader.setText("Loading route references");
+
+        }
+
+        @Override
+        protected void onPostExecute(String a){
+
+            if(isSuccess==true)
+            {
+                Dbreaddestination dbreaddestination = new Dbreaddestination();
+                dbreaddestination.execute();
+            }
+            else
+            {
+                txt_loader.setText(msger+"");
+                btn_retry.setVisibility(View.VISIBLE);
+            }
+            pbar.setVisibility(View.GONE);
+
+        }
+    }
+
+    private class Dbreaddestination extends AsyncTask<String, String, String>
     {
 
         String msger;
@@ -86,11 +150,6 @@ public class IntroForm extends AppCompatActivity {
 
                     while (rs.next())
                     {
-                        String routechecker = rs.getString("routes");
-                        if(routechecker!=null && !routechecker.isEmpty())
-                        {
-                            listroutes.add(routechecker);
-                        }
                         String destinationchecker = rs.getString("destination");
                         if(destinationchecker!=null && !destinationchecker.isEmpty())
                         {
@@ -122,7 +181,6 @@ public class IntroForm extends AppCompatActivity {
             btn_retry.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
 
-            listroutes = new ArrayList<>();
             listdestination = new ArrayList<>();
             listbrgy = new ArrayList<>();
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
@@ -42,7 +44,7 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
     LinearLayout lo_addvehicleviewer;
     ProgressBar pbar;
 
-    TextInputEditText edt_plate, edt_bodynum, edt_color;
+    TextInputEditText edt_plate, edt_bodynum;
     AutoCompleteTextView edt_route;
     Button btn_addvehicle;
 
@@ -54,7 +56,6 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
         edt_plate = findViewById(R.id.edt_plate);
         edt_bodynum = findViewById(R.id.edt_bodynum);
         edt_route = findViewById(R.id.edt_route);
-        edt_color = findViewById(R.id.edt_color);
         btn_addvehicle = findViewById(R.id.btn_addvehicle);
         lo_addvehicleviewer = findViewById(R.id.lo_addvehicleviewer);
         pbar = findViewById(R.id.pbar);
@@ -73,7 +74,6 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
         edt_route.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 edt_route.setText(adapter.getItem(position));
             }
         });
@@ -107,7 +107,7 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into vehicles (plate_number, body_number, vehicle_route, color, isActive, account_id) VALUES('"+ edt_plate.getText() +"', '"+ edt_bodynum.getText() +"', '"+ edt_route.getText() +"', '"+ edt_color.getText() +"', '0', '"+ dh.getUserid() +"')");
+                        con.createStatement().executeUpdate("INSERT into vehicles (plate_number, body_number, vehicle_route, isActive, account_id) VALUES('"+ edt_plate.getText() +"', '"+ edt_bodynum.getText() +"', '"+ edt_route.getText() +"', '0', '"+ dh.getUserid() +"')");
                         isSuccess = true;
                     }
 
