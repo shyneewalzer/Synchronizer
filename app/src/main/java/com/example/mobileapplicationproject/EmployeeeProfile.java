@@ -296,12 +296,6 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int optid=item.getItemId();
 

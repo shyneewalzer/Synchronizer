@@ -51,9 +51,7 @@ public class EstabAddEmployee extends AppCompatActivity implements NavigationVie
 
     Uri imageuri;
     InputStream imageStream;
-
-    Calendar datenow = Calendar.getInstance();
-    DatePickerDialog.OnDateSetListener dateSetListener;
+    String imageholder;
 
     /////////////////UI ELEMENTS//////////////////
     Toolbar toolbar;
@@ -125,8 +123,14 @@ public class EstabAddEmployee extends AppCompatActivity implements NavigationVie
 
                     if(activecount<2)
                     {
-                        con.createStatement().executeUpdate("INSERT into user_profile (firstname, lastname, middlename, birthday, contactnumber, image, isActive, account_id) VALUES('"+ edt_addempfname.getText() +"', '"+ edt_addemplname.getText() +"', '"+  edt_addempmname.getText() +"', '"+ edt_addempage.getText() +"', '"+ edt_addempcontact.getText() +"', '"+ dh.getpImage() +"', '1', '"+ dh.getEstAcctID() +"')");
-
+                        if(imageholder!=null && !imageholder.isEmpty())
+                        {
+                            con.createStatement().executeUpdate("INSERT into user_profile (firstname, lastname, middlename, birthday, contactnumber, image, isActive, account_id) VALUES('"+ edt_addempfname.getText() +"', '"+ edt_addemplname.getText() +"', '"+  edt_addempmname.getText() +"', '"+ edt_addempage.getText() +"', '"+ edt_addempcontact.getText() +"', '"+ imageholder +"', '1', '"+ dh.getEstAcctID() +"')");
+                        }
+                        else
+                        {
+                            con.createStatement().executeUpdate("INSERT into user_profile (firstname, lastname, middlename, birthday, contactnumber, image, isActive, account_id) VALUES('"+ edt_addempfname.getText() +"', '"+ edt_addemplname.getText() +"', '"+  edt_addempmname.getText() +"', '"+ edt_addempage.getText() +"', '"+ edt_addempcontact.getText() +"', NULL, '1', '"+ dh.getEstAcctID() +"')");
+                        }
                         isSuccess = true;
                     }
                     else
@@ -225,7 +229,7 @@ public class EstabAddEmployee extends AppCompatActivity implements NavigationVie
                 e.printStackTrace();
             }
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            dh.setpImage(dp.encodeImage(selectedImage));
+            imageholder = dp.encodeImage(selectedImage);
 
         }
     }
