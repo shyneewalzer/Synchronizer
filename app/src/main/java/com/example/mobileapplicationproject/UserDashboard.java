@@ -473,6 +473,9 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPostExecute(String a){
 
+            locationviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
+
             if(isSuccess==true)
             {
                 Intent startIntent = new Intent(UserDashboard.this, UserScanEstabViewer.class);
@@ -483,8 +486,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                 dp.toasterlong(getApplicationContext(), msger+"");
                 dm.displayMessage(getApplicationContext(), dh.getViewEstName() + " " + dh.getViewEstAdr() + " " + dh.getViewEstContact() + " " + dh.getViewEstEmp());
             }
-            locationviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
+
         }
     }
 
