@@ -71,12 +71,13 @@ public class DataHolder {
         estImage = iptImage;
     }
 
-    public void setEstProfile(String iptName, String iptStreet, String iptContact, String iptOwner)
+    public void setEstProfile(String iptName, String iptStreet, String iptContact, String iptOwner, String iptImg)
     {
         estName = iptName;
         estStreet = iptStreet;
         estContact = iptContact;
         estOwner = iptOwner;
+        estImage = iptImg;
     }
 
     public String getEstAcctID()

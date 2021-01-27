@@ -47,8 +47,8 @@ public class FragmentProfileEstab extends Fragment implements View.OnClickListen
     DebugMode dm = new DebugMode();
 
     Uri imageuri;
-
     InputStream imageStream;
+    String imageholder;
 
     ///////////////////UI ELEMENTS////////////////
     NavigationView navigationView;
@@ -148,8 +148,14 @@ public class FragmentProfileEstab extends Fragment implements View.OnClickListen
                 }
                 else
                 {
-
-                    con.createStatement().executeUpdate("UPDATE establishments SET name = '" + edt_name.getText() + "', street = '" + edt_street.getText() + "', telephone_number = '" + edt_contact.getText() + "', est_owner = '" + edt_owner.getText() + "', image = '" + dh.getEstImage() + "' where est_id = '"+ dh.getEstID() +"'");
+                    if(imageholder!=null && !imageholder.isEmpty())
+                    {
+                        con.createStatement().executeUpdate("UPDATE establishments SET name = '" + edt_name.getText() + "', street = '" + edt_street.getText() + "', telephone_number = '" + edt_contact.getText() + "', est_owner = '" + edt_owner.getText() + "', image = '" + imageholder + "' where est_id = '"+ dh.getEstID() +"'");
+                    }
+                    else
+                    {
+                        con.createStatement().executeUpdate("UPDATE establishments SET name = '" + edt_name.getText() + "', street = '" + edt_street.getText() + "', telephone_number = '" + edt_contact.getText() + "', est_owner = '" + edt_owner.getText() + "', image = 'NULL' where est_id = '"+ dh.getEstID() +"'");
+                    }
 
                     isSuccess=true;
                     con.close();
@@ -176,7 +182,7 @@ public class FragmentProfileEstab extends Fragment implements View.OnClickListen
 
             if(isSuccess==true)
             {
-                dh.setEstProfile(edt_name.getText()+"", edt_street.getText()+"", edt_contact.getText()+"", edt_owner.getText()+"");
+                dh.setEstProfile(edt_name.getText()+"", edt_street.getText()+"", edt_contact.getText()+"", edt_owner.getText()+"", imageholder);
                 dataSet();
                 dp.toasterlong(getContext(), "Profile Successfully Updated");
             }
@@ -207,8 +213,7 @@ public class FragmentProfileEstab extends Fragment implements View.OnClickListen
                 e.printStackTrace();
             }
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            dh.setEstImage(dp.encodeImage(selectedImage));
-
+            imageholder = dp.encodeImage(selectedImage);
         }
     }
 

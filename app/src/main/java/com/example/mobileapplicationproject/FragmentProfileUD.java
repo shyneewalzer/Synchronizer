@@ -67,8 +67,8 @@ public class FragmentProfileUD extends Fragment implements View.OnClickListener{
     int age;
 
     Uri imageuri;
-
     InputStream imageStream;
+    String imageholder;
 
     ///////////////////UI ELEMENTS////////////////
     NavigationView navigationView;
@@ -208,8 +208,14 @@ public class FragmentProfileUD extends Fragment implements View.OnClickListener{
                 }
                 else
                 {
-
-                    con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_firstname.getText() + "', lastname = '" + edt_lastname.getText() + "', middlename = '" + edt_middlename.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_contact.getText() + "', image='"+ dh.getpImage() +"' where account_id='" + dh.getUserid() + "' ");
+                    if(imageholder!=null && !imageholder.isEmpty())
+                    {
+                        con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_firstname.getText() + "', lastname = '" + edt_lastname.getText() + "', middlename = '" + edt_middlename.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_contact.getText() + "', image='"+ imageholder +"' where account_id='" + dh.getUserid() + "' ");
+                    }
+                    else
+                    {
+                        con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_firstname.getText() + "', lastname = '" + edt_lastname.getText() + "', middlename = '" + edt_middlename.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_contact.getText() + "', image='NULL' where account_id='" + dh.getUserid() + "' ");
+                    }
 
                     con.createStatement().executeUpdate("UPDATE address_table SET house_lot_number = '" + edt_house.getText() + "', barangay = '" + edt_brgy.getText() + "', city = '" + edt_city.getText() + "'  where account_id='" + dh.getUserid() + "' ");
 
@@ -238,7 +244,7 @@ public class FragmentProfileUD extends Fragment implements View.OnClickListener{
 
             if(isSuccess==true)
             {
-                dh.setProfile(edt_firstname.getText()+"", edt_lastname.getText()+"", edt_middlename.getText()+"", dp.stringToDate(edt_age.getText()+""), edt_contact.getText()+"", dh.getpImage());
+                dh.setProfile(edt_firstname.getText()+"", edt_lastname.getText()+"", edt_middlename.getText()+"", dp.stringToDate(edt_age.getText()+""), edt_contact.getText()+"", imageholder);
                 dh.setAddress(edt_house.getText()+"", edt_brgy.getText()+"", edt_city.getText()+"");
                 dataSet();
                 Toast.makeText(getContext(), "Profile Updated", Toast.LENGTH_LONG);
@@ -272,8 +278,7 @@ public class FragmentProfileUD extends Fragment implements View.OnClickListener{
                 e.printStackTrace();
             }
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            dh.setpImage(dp.encodeImage(selectedImage));
-
+            imageholder = dp.encodeImage(selectedImage);
         }
     }
 

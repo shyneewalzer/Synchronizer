@@ -44,7 +44,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     ArrayList<String>vehiclelist;
     ArrayList<String>routelist;
     ArrayList<String>bodynumlist;
-    ArrayList<String>colorlist;
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -74,7 +73,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     ProgressBar pbar;
 
     Spinner spr_platenum;
-    TextView txt_route, txt_bodynum, txt_color, txt_addvehicle;
+    TextView txt_route, txt_bodynum, txt_addvehicle;
     Button btn_driver_scan;
 
     @Override
@@ -89,7 +88,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         txt_route = findViewById(R.id.txt_route);
         btn_driver_scan = findViewById(R.id.btn_driver_scan);
         txt_bodynum = findViewById(R.id.txt_bodynum);
-        txt_color = findViewById(R.id.txt_color);
         txt_addvehicle = findViewById(R.id.txt_addvehicle);
 
         toolbar = findViewById(R.id.toolbar);
@@ -124,7 +122,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         vehiclelist = new ArrayList<>();
         routelist = new ArrayList<>();
         bodynumlist = new ArrayList<>();
-        colorlist = new ArrayList<>();
 
         vehiclelist.add(0,"Select Plate Number");
 
@@ -143,14 +140,12 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                 {
                     txt_route.setText(routelist.get(position-1));
                     txt_bodynum.setText(bodynumlist.get(position-1));
-                    txt_color.setText(colorlist.get(position-1));
                 }
                 else
                 {
                     dp.toasterlong(getApplicationContext(), "Please Select Vehicle");
                     txt_route.setText("");
                     txt_bodynum.setText("");
-                    txt_color.setText("");
                 }
 
             }
@@ -270,7 +265,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                         vehiclelist.add(rsqr.getString("plate_number"));
                         routelist.add(rsqr.getString("vehicle_route"));
                         bodynumlist.add(rsqr.getString("body_number"));
-                        colorlist.add(rsqr.getString("color"));
                     }
                     rsqr.close();
                     con.close();
