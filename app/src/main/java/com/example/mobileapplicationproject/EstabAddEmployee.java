@@ -126,6 +126,7 @@ public class EstabAddEmployee extends AppCompatActivity implements NavigationVie
                     if(activecount<2)
                     {
                         con.createStatement().executeUpdate("INSERT into user_profile (firstname, lastname, middlename, birthday, contactnumber, image, isActive, account_id) VALUES('"+ edt_addempfname.getText() +"', '"+ edt_addemplname.getText() +"', '"+  edt_addempmname.getText() +"', '"+ edt_addempage.getText() +"', '"+ edt_addempcontact.getText() +"', '"+ dh.getpImage() +"', '1', '"+ dh.getEstAcctID() +"')");
+
                         isSuccess = true;
                     }
                     else

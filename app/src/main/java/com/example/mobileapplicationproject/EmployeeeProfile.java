@@ -198,8 +198,7 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
                 {
 
                     con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_Fname.getText() + "', lastname = '" + edt_Lname.getText() + "', middlename = '" + edt_Mname.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_Contact.getText() + "', image='"+ dh.getpImage() +"' where user_id='" + dh.getUserid() + "' ");
-
-                    con.createStatement().executeUpdate("UPDATE address_table SET house_lot_number = '" + edt_house.getText() + "', barangay = '" + edt_brgy.getText() + "', city = '" + edt_city.getText() + "'  where user_id='" + dh.getUserid() + "' ");
+//                    con.createStatement().executeUpdate("UPDATE address_table SET house_lot_number = '" + edt_house.getText() + "', barangay = '" + edt_brgy.getText() + "', city = '" + edt_city.getText() + "'  where user_id='" + dh.getUserid() + "' ");
 
                     isSuccess=true;
                     con.close();
