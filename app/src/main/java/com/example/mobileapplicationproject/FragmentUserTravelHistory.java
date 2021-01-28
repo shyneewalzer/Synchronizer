@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,6 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
     ArrayList<String> datee;
     ArrayList<String> searcher;
 
-    String sqlsearch="";
     String testers = "";
 
     DatePickerDialog.OnDateSetListener dateSetListener;
@@ -111,19 +111,16 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
 
                 if(parent.getItemAtPosition(position).equals("Destination"))
                 {
-                    sqlsearch="destination";
                     edt_search.setEnabled(true);
                     edt_search.setFocusableInTouchMode(true);
                 }
                 else if(parent.getItemAtPosition(position).equals("Date"))
                 {
-                    sqlsearch="date_boarded";
                     edt_search.setEnabled(true);
                     edt_search.setFocusableInTouchMode(false);
                 }
                 else
                 {
-                    dp.toasterlong(getContext(), "Please Select Search Criteria");
                     edt_search.setEnabled(false);
                 }
 
@@ -202,7 +199,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                 {
 
                     ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE account_id = '"+ dh.getUserid() +"' GROUP BY batch ORDER BY date_boarded ASC, time_boarded ASC");
-
+                    isSuccess = true;
                     if(rs.isBeforeFirst())
                     {
                         isSuccess=true;
@@ -215,6 +212,10 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                             listGroup.add(rs.getString("batch"));
 
                         }
+                    }
+                    else
+                    {
+                        isSuccess = false;
                     }
                     rs.close();
                     con.close();
@@ -243,10 +244,18 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         @Override
         protected void onPostExecute(String a){
 
-            Dbreadsecond dbreadsecond = new Dbreadsecond();
-            dbreadsecond.execute();
+            if(isSuccess==true)
+            {
+                Dbreadsecond dbreadsecond = new Dbreadsecond();
+                dbreadsecond.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), "Nothing Found");
+                Log.d("Search Results", msger+"");
+            }
 
-            dm.displayMessage(getContext(), listGroup+"");
         }
     }
 
@@ -318,14 +327,23 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             travelviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
-            adapterTravelHistory = new AdapterTravelHistory(listGroup, listChild, destination, timee, datee);
-            expandableListView.setAdapter(adapterTravelHistory);
-            dm.displayMessage(getContext(), testers+"");
+            if(isSuccess==true)
+            {
+                adapterTravelHistory = new AdapterTravelHistory(listGroup, listChild, destination, timee, datee);
+                expandableListView.setAdapter(adapterTravelHistory);
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), msger+"");
+            }
+
         }
     }
 
     private class Dbsearch extends AsyncTask<String, String, String>
     {
+        String sqlsearch;
         int tempp;
         String msger;
         Boolean isSuccess=false;
@@ -340,9 +358,16 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                 }
                 else
                 {
-                    //TODO: fix sql search
-                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE "+ sqlsearch +" = '"+ edt_search.getText() +"' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch");
-
+                    if(spr_search.getSelectedItem().equals("Destination"))
+                    {
+                        sqlsearch = "SELECT * FROM travel_history WHERE destination LIKE '%"+ edt_search.getText() +"%' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch";
+                    }
+                    else if(spr_search.getSelectedItem().equals("Date"))
+                    {
+                        sqlsearch = "SELECT * FROM travel_history WHERE date_boarded = '"+ edt_search.getText() +"' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch";
+                    }
+                    ResultSet rs=con.createStatement().executeQuery(sqlsearch);
+                    isSuccess = true;
                     if(rs.isBeforeFirst())
                     {
                         isSuccess=true;
@@ -355,6 +380,10 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
 
                             listGroup.add(rs.getString("batch"));
                         }
+                    }
+                    else
+                    {
+                        isSuccess = false;
                     }
                     rs.close();
                     con.close();
@@ -376,7 +405,6 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
-            dm.displayMessage(getContext(), sqlsearch+"");
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -384,8 +412,18 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         @Override
         protected void onPostExecute(String a){
 
-            Dbreadsecond dbreadsecond = new Dbreadsecond();
-            dbreadsecond.execute();
+
+            if(isSuccess==true)
+            {
+                Dbreadsecond dbreadsecond = new Dbreadsecond();
+                dbreadsecond.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), "Nothing Found");
+                Log.d("Search results", msger+"");
+            }
 
             dm.displayMessage(getContext(), tempp+"");
         }
