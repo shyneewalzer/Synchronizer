@@ -373,8 +373,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                 }
             }
 
-            dm.displayMessage(getApplicationContext(), "iddest content = " + iddest.get(2) + " " + temp+"");
-
         }
 
         @Override

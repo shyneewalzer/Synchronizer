@@ -356,8 +356,8 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                     {
                         for(int x = 0; x<personlists.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, lastname, contact_number, edt_id, employee_id, account_id, time_entered, date_entered) " +
-                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"','"+ estinfo.get(1) +"','"+ estinfo.get(2) +"' '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, lastname, contact_number, est_id, employee_id, account_id, time_entered, date_entered) " +
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"','"+ estinfo.get(1) +"','"+ estinfo.get(0) +"', '"+ dh.getUserid() +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
@@ -382,16 +382,11 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         protected void onPreExecute() {
 
             timestamp = new Timestamp(System.currentTimeMillis());
-            String temp="";
 
             estinfo = new ArrayList<>();
-            personinfo = new ArrayList<>();
-            personlists = new ArrayList<List<String>>();
-
             estinfo = dp.splitter(qrscan, ",");
 
             batch = dh.getUserid() + estinfo.get(0) + batchformatter.format(timestamp);
-            dm.displayMessage(getApplicationContext(), qrcode+"");
 
             locationviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
@@ -511,10 +506,13 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
             TextView tv_fname=(TextView)view.findViewById(R.id.list_txt_cFname);
             TextView tv_lname=(TextView)view.findViewById(R.id.list_txt_cLname);
+            TextView tv_contact=(TextView)view.findViewById(R.id.list_txt_cContact);
+
             CheckBox cb = (CheckBox)view.findViewById(R.id.list_cb);
 
             tv_fname.setText(fname.get(i));
             tv_lname.setText(lname.get(i));
+            tv_contact.setText(tv_contact.getText() + contact.get(i));
 
             return view;
         }
