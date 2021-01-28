@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -304,10 +305,17 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPostExecute(String a){
 
-            Dbreadsecond dbreadsecond = new Dbreadsecond();
-            dbreadsecond.execute();
+            if(isSuccess==true)
+            {
+                Dbreadsecond dbreadsecond = new Dbreadsecond();
+                dbreadsecond.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), msger+"");
+            }
 
-            dm.displayMessage(getContext(), listPerson+"");
         }
     }
 
@@ -374,9 +382,17 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             estabviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
-            expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
-            expandableListView.setAdapter(expandAdapter);
-            dm.displayMessage(getContext(), listPerson+"");
+            if(isSuccess==true)
+            {
+                expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
+                expandableListView.setAdapter(expandAdapter);
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), msger+"");
+            }
+
         }
     }
 
@@ -400,7 +416,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                     if(sqlsearch.equals("est"))
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE name like '%"+ edt_search.getText() +"%' ");
-
+                        isSuccess=true;
                         if(rs.isBeforeFirst())
                         {
                             isSuccess=true;
@@ -412,32 +428,53 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                         }
                         rs.close();
 
-                        ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE est_id = '"+ idholder +"' GROUP BY batch");
-
-                        while (rsid.next())
+                        if(isSuccess==true)
                         {
-                            destid.add(rsid.getString("est_id"));
-                            timee.add(rsid.getString("time_entered"));
-                            datee.add(rsid.getString("date_entered"));
+                            ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE est_id = '"+ idholder +"' GROUP BY batch");
+                            isSuccess = true;
+                            if(rsid.isBeforeFirst())
+                            {
+                                while (rsid.next())
+                                {
+                                    destid.add(rsid.getString("est_id"));
+                                    timee.add(rsid.getString("time_entered"));
+                                    datee.add(rsid.getString("date_entered"));
 
-                            listGroup.add(rsid.getString("batch"));
+                                    listGroup.add(rsid.getString("batch"));
 
+                                }
+                            }
+                            else
+                            {
+                                isSuccess = false;
+                            }
+                            rsid.close();
                         }
-                        rsid.close();
+
+
                     }
                     else if(sqlsearch.equals("date"))
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE date_entered = '"+ edt_search.getText() +"' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch");
-
-                        while (rs.next())
+                        isSuccess = true;
+                        if(rs.isBeforeFirst())
                         {
-                            destid.add(rs.getString("est_id"));
-                            timee.add(rs.getString("time_entered"));
-                            datee.add(rs.getString("date_entered"));
+                            isSuccess = true;
+                            while (rs.next())
+                            {
+                                destid.add(rs.getString("est_id"));
+                                timee.add(rs.getString("time_entered"));
+                                datee.add(rs.getString("date_entered"));
 
-                            listGroup.add(rs.getString("batch"));
+                                listGroup.add(rs.getString("batch"));
 
+                            }
                         }
+                        else
+                        {
+                            isSuccess = false;
+                        }
+
                         rs.close();
                     }
 
@@ -469,8 +506,17 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPostExecute(String a){
 
-            Dbestabreader dbestabreader = new Dbestabreader();
-            dbestabreader.execute();
+            if(isSuccess==true)
+            {
+                Dbestabreader dbestabreader = new Dbestabreader();
+                dbestabreader.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), "Nothing Found");
+                Log.d("Search Results", msger+"");
+            }
 
         }
     }
