@@ -206,6 +206,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                         rsbatch.close();
                         employeecount.add(getcount);
                         getcount = 0;
+
                     }
 
 
