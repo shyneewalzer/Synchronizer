@@ -244,7 +244,7 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
                 }
             }
             batch = tempholder.get(0) + dh.getUserid() + batchformatter.format(timestamp);
-            dm.displayMessage(getApplicationContext(), "tempholder=" + tempholder.get(1));
+            dm.displayMessage(getApplicationContext(), "qrholder=" + qrholder);
 
             pbar.setVisibility(View.VISIBLE);
         }
