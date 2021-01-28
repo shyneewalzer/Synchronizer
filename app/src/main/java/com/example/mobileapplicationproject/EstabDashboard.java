@@ -380,7 +380,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    selectedEmp = tvID.getText()+"";
+                    selectedEmp = sID.get(position)+"";
 
                     Dbreadprofile dbreadprofile = new Dbreadprofile();
                     dbreadprofile.execute();
