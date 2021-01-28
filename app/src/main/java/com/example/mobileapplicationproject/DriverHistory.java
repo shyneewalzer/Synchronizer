@@ -88,7 +88,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.driver_history);
 
         lo_routeviewer = findViewById(R.id.lo_routeviewer);
-//        pbar = findViewById(R.id.pbar);
+        pbar = findViewById(R.id.pbar);
         listView = findViewById(R.id.listView);
 
         spr_search = findViewById(R.id.spr_search);
@@ -254,14 +254,11 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             datee = new ArrayList<>();
 
             lo_routeviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            lo_routeviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbvehiclereader dbvehiclereader = new Dbvehiclereader();
             dbvehiclereader.execute();
@@ -317,17 +314,11 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPreExecute() {
 
-            lo_routeviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
-
             route = new ArrayList<>();
         }
 
         @Override
         protected void onPostExecute(String a){
-
-            lo_routeviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
 
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
@@ -353,7 +344,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                 }
                 else
                 {
-
+                    //TODO: database do not match
                     for(int x=0;x<=listGroup.size();x++)
                     {
                         listPerson = new ArrayList<>();
@@ -391,9 +382,6 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPreExecute() {
 
-            lo_routeviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
-
             listChild.clear();
 
         }
@@ -402,7 +390,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         protected void onPostExecute(String a){
 
             lo_routeviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            pbar.setVisibility(View.GONE);
 
             expandAdapter = new AdapterDriverHistory(listGroup, listChild, plate, timee, datee, route);
             expandableListView.setAdapter(expandAdapter);
@@ -559,14 +547,14 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
             dm.displayMessage(getApplicationContext(), parentid+"");
             lo_routeviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
 
             lo_routeviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            pbar.setVisibility(View.GONE);
 
             Dbvehiclereader dbvehiclereader = new Dbvehiclereader();
             dbvehiclereader.execute();

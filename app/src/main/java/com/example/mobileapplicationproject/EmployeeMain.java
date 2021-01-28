@@ -195,14 +195,14 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
                     {
                         for(int x = 0; x<personlists.size();x++)
                         {
-                            con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, middlename, lastname, contact_number, address, employee_id, account_id, time_entered, date_entered) " +
-                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ personlists.get(x).get(3) +"', '"+ personlists.get(x).get(4) +"', '"+ dh.getUserid() +"', '"+  idholder +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                            con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, lastname, contact_number, est_id, employee_id, account_id, time_entered, date_entered) " +
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ dh.getEstID() +"', '"+  dh.getUserid() +"', '"+ idholder +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into employee_scanned (batch, employee_id, account_id, time_entered, date_entered) VALUES('"+ batch +"', '"+ dh.getUserid() +"', '"+  idholder +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                        con.createStatement().executeUpdate("INSERT into employee_scanned (batch, est_id, employee_id, account_id, time_entered, date_entered) VALUES('"+ batch +"', '"+ idholder +"', '"+ dh.getUserid() +"', '"+  idholder +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                         isSuccess = true;
                     }
 

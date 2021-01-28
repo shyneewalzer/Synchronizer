@@ -340,7 +340,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                 }
                 else
                 {
-
+                    //TODO: fix sql search
                     ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE "+ sqlsearch +" = '"+ edt_search.getText() +"' AND account_id = '"+ dh.getUserid() +"' GROUP BY batch");
 
                     if(rs.isBeforeFirst())

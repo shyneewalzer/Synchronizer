@@ -119,18 +119,12 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         btn_driver_scan.setOnClickListener(this);
         txt_addvehicle.setOnClickListener(this);
 
-        vehiclelist = new ArrayList<>();
-        routelist = new ArrayList<>();
-        bodynumlist = new ArrayList<>();
-
-        vehiclelist.add(0,"Select Plate Number");
-
-        Dbread dbread = new Dbread();
-        dbread.execute();
-
         timeformatter = new SimpleDateFormat("HH:mm");
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
         batchformatter = new SimpleDateFormat("yyyyMMddHHmmss");
+
+        Dbread dbread = new Dbread();
+        dbread.execute();
 
         spr_platenum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -283,6 +277,12 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
             pbar.setVisibility(View.VISIBLE);
             dashboardviewer.setVisibility(View.GONE);
+
+            vehiclelist = new ArrayList<>();
+            routelist = new ArrayList<>();
+            bodynumlist = new ArrayList<>();
+
+            vehiclelist.add(0,"Select Plate Number");
         }
 
         @Override
@@ -345,6 +345,9 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         @Override
         protected void onPreExecute() {
 
+            dashboardviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+
             timestamp = new Timestamp(System.currentTimeMillis());
             String temp="";
 
@@ -357,7 +360,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
 
             if(iddest.size()>2)
             {
-                personinfo = dp.splitter(iddest.get(1), ",");
+                personinfo = dp.splitter(iddest.get(2), ",");
                 for (int x = 0; x < personinfo.size(); x++) {
                     personlists.add(new ArrayList<>(dp.splitter(personinfo.get(x), "_")));
                 }
@@ -370,15 +373,12 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                 }
             }
 
-            dm.displayMessage(getApplicationContext(), "id=" + iddest.get(0) + " " + temp+"");
+            dm.displayMessage(getApplicationContext(), "iddest content = " + iddest.get(2) + " " + temp+"");
 
-            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
-//            Intent myIntent = new Intent(SetLocation.this, UserDriverDashboard.class);
-//            startActivity(myIntent);
 
             if(isSuccess==true)
             {
@@ -388,6 +388,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             {
                 dp.toastershort(getApplicationContext(), msger);
             }
+            dashboardviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
         }
     }
@@ -427,5 +428,10 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+
+    }
 }

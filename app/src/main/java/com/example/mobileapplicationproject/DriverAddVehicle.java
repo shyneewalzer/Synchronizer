@@ -136,6 +136,10 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
 
             if(isSuccess==true)
             {
+                edt_plate.setText("");
+                edt_bodynum.setText("");
+                edt_route.setText("");
+
                 dp.toastershort(getApplicationContext(), "Vehicle successfully added");
             }
             else if(isSuccess==false)

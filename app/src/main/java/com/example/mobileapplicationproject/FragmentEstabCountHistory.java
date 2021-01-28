@@ -95,6 +95,8 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
         Dbreadstart dbreadstart = new Dbreadstart();
         dbreadstart.execute();
 
+        //TODO: refersher data
+
         return fragtrav;
     }
 

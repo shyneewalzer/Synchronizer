@@ -129,6 +129,16 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="250dp"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/circle"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

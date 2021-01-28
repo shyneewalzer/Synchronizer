@@ -178,8 +178,6 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             }
         });
 
-        dm.displayMessage(getApplicationContext(), dh.getListDestination().size()+"");
-
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -239,7 +237,6 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         });
 
         img_scanbox.setImageBitmap(dp.createQR(dh.getUserid() + "#" + txt_destination.getText() + "#"));//generate qr code for solo
-        dm.displayMessage(getApplicationContext(), "visit mode: "+dh.getVisitmode());
 
         if(dh.getVisitmode().equals("estab"))
         {
@@ -265,7 +262,6 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             personinfo.add(edt_cFname.getText()+"");
             personinfo.add(edt_cLname.getText()+"");
             personinfo.add(edt_cContact.getText()+"");
-            personinfo.add(txt_destination.getText()+"");
             personlists.add(new ArrayList<>(personinfo));
 
             customAdapter.notifyDataSetChanged();
