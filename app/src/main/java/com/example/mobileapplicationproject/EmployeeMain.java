@@ -229,9 +229,9 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
             personlists = new ArrayList<List<String>>();
 
             tempholder = new ArrayList<>(dp.splitter(qrscan, "#"));
-            if(tempholder.size()>1)
+            if(tempholder.size()>2)
             {
-                qrholder = dp.splitter(tempholder.get(1), ",");
+                qrholder = dp.splitter(tempholder.get(2), ",");
                 for (int x = 0; x < qrholder.size(); x++) {
                     personlists.add(new ArrayList<>(dp.splitter(qrholder.get(x), "_")));
                 }
