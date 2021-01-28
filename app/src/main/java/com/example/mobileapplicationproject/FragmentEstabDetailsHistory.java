@@ -405,7 +405,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
             expandAdapter = new AdapterDetailsHistory(listGroup, listChild, empname, timee, datee);
             expandableListView.setAdapter(expandAdapter);
-            dm.displayMessage(getContext(), listPerson+"");
+            dm.displayMessage(getContext(), "empname: " + empname);
         }
     }
 
