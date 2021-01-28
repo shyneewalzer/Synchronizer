@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -171,7 +172,9 @@ public class DriverAddVehicle extends AppCompatActivity implements NavigationVie
     public boolean onOptionsItemSelected(MenuItem item) {
         int optid=item.getItemId();
 
-        onBackPressed();
+        Intent startIntent = new Intent(DriverAddVehicle.this, DriverDashboard.class);
+        startActivity(startIntent);
+        finish();
 
         return true;
 

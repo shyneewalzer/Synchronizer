@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -313,6 +314,8 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
         @Override
         protected void onPreExecute() {
+            lo_routeviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
 
             route = new ArrayList<>();
         }
@@ -322,6 +325,9 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
+
+            lo_routeviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
 
             dm.displayMessage(getApplicationContext(), listGroup+"");
         }
@@ -382,6 +388,9 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPreExecute() {
 
+            lo_routeviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+
             listChild.clear();
 
         }
@@ -416,7 +425,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
                     if(spr_search.getSelectedItem().equals("Plate Number"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE plate_number = '"+ edt_search.getText() +"' AND driver_id='"+ dh.getUserid() +"' GROUP BY batch ORDER BY date_boarded ASC, time_boarded ASC");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE plate_number like '%"+ edt_search.getText() +"%' AND driver_id='"+ dh.getUserid() +"' GROUP BY batch ORDER BY date_boarded ASC, time_boarded ASC");
 
                         if(rs.isBeforeFirst())
                         {
@@ -453,7 +462,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                     }
                     else if(spr_search.getSelectedItem().equals("Destination"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE destination = '"+ edt_search.getText() +"' AND driver_id='"+ dh.getUserid() +"' ");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE destination like '%"+ edt_search.getText() +"' AND driver_id='%"+ dh.getUserid() +"' ");
 
                         if(rs.isBeforeFirst())
                         {
@@ -587,7 +596,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                 int cal_dy = cal.get(Calendar.DAY_OF_MONTH);
                 dm.displayMessage(getApplicationContext(),cal_yr + "-" + cal_mo + "-" + cal_dy);
 
-                DatePickerDialog datepicker = new DatePickerDialog(DriverHistory.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datepicker = new DatePickerDialog(DriverHistory.this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;

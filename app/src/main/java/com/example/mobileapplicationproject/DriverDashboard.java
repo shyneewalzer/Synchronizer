@@ -173,6 +173,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         {
             Intent startIntent = new Intent(DriverDashboard.this, DriverAddVehicle.class);
             startActivity(startIntent);
+            finish();
         }
     }
 
@@ -426,10 +427,4 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         return false;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-    }
 }
