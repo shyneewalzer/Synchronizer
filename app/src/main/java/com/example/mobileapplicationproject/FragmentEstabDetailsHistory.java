@@ -44,11 +44,11 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
     DebugMode dm = new DebugMode();
 
     ArrayList<String> parentid;
-    ArrayList<String> destid;
-    ArrayList<String> destination;
     ArrayList<String> timee;
     ArrayList<String> datee;
     ArrayList<String> searcher;
+    ArrayList<String> empid;
+    ArrayList<String> empname;
 
     DatePickerDialog.OnDateSetListener dateSetListener;
 
@@ -205,9 +205,9 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         while (rs.next())
                         {
                             parentid.add(rs.getString("account_id"));
-                            destid.add(rs.getString("est_id"));
                             timee.add(rs.getString("time_entered"));
                             datee.add(rs.getString("date_entered"));
+                            empid.add(rs.getString("employee_id"));
 
                             listGroup.add(rs.getString("batch"));
 
@@ -244,9 +244,9 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
             listGroup = new ArrayList<>();
             parentid = new ArrayList<>();
-            destid = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
+            empid = new ArrayList<>();
 
             travelviewer.setVisibility(View.GONE);
 //            pbar.setVisibility(View.VISIBLE);
@@ -258,14 +258,14 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             travelviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
 
-            Dbestabreader dbestabreader = new Dbestabreader();
-            dbestabreader.execute();
+            Dbreademp dbreademp = new Dbreademp();
+            dbreademp.execute();
 
             dm.displayMessage(getContext(), listGroup+"");
         }
     }
 
-    private class Dbestabreader extends AsyncTask<String, String, String>
+    private class Dbreademp extends AsyncTask<String, String, String>
     {
 
         String msger;
@@ -282,21 +282,18 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                 }
                 else
                 {
-
-                    for(int x=0;x<destid.size();x++)
+                    for(int x=0;x<listGroup.size();x++)
                     {
-                        listPerson = new ArrayList<>();
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE est_id = '"+ destid.get(x) +"' ");
 
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            destination.add(rs.getString("name"));
-                        }
+                    }
+                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ dh.getEstID() +"' ");
 
-                        rs.close();
+                    while (rs.next())
+                    {
+                        empname.add(rs.getString("firstname") + " " + rs.getString("lastname"));
                     }
 
+                    rs.close();
 
                     con.close();
                 }
@@ -314,7 +311,8 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
             travelviewer.setVisibility(View.GONE);
 //            pbar.setVisibility(View.VISIBLE);
-            destination = new ArrayList<>();
+
+            empname = new ArrayList<>();
         }
 
         @Override
@@ -326,7 +324,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
 
-            dm.displayMessage(getContext(), listPerson+"");
+            dm.displayMessage(getContext(), listGroup+"");
         }
     }
 
@@ -405,7 +403,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             travelviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
 
-            expandAdapter = new AdapterDetailsHistory(listGroup, listChild, destination, timee, datee);
+            expandAdapter = new AdapterDetailsHistory(listGroup, listChild, empname, timee, datee);
             expandableListView.setAdapter(expandAdapter);
             dm.displayMessage(getContext(), listPerson+"");
         }
@@ -450,7 +448,6 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         {
 
                             parentid.add(rsid.getString("account_id"));
-                            destid.add(rsid.getString("est_id"));
                             timee.add(rsid.getString("time_entered"));
                             datee.add(rsid.getString("date_entered"));
 
@@ -495,7 +492,6 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         {
 
                             parentid.add(rsid.getString("account_id"));
-                            destid.add(rsid.getString("est_id"));
                             timee.add(rsid.getString("time_entered"));
                             datee.add(rsid.getString("date_entered"));
 
@@ -525,7 +521,6 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         while (rs.next())
                         {
                             parentid.add(rs.getString("account_id"));
-                            destid.add(rs.getString("est_id"));
                             timee.add(rs.getString("time_entered"));
                             datee.add(rs.getString("date_entered"));
 
@@ -565,7 +560,6 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         protected void onPreExecute() {
 
             listGroup = new ArrayList<>();
-            destid = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
@@ -580,8 +574,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             travelviewer.setVisibility(View.VISIBLE);
 //            pbar.setVisibility(View.GONE);
             dm.displayMessage(getContext(), "row"+xxx);
-            Dbestabreader dbestabreader = new Dbestabreader();
-            dbestabreader.execute();
+
 
         }
     }
