@@ -48,7 +48,7 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
     DataProcessor dp = new DataProcessor();
     DebugMode dm = new DebugMode();
 
-    String qrscan, idholder, batch;
+    String qrscan, batch;
     ArrayList<String> qrholder;
     ArrayList<String>tempholder;
     ArrayList<String> personinfo;
@@ -196,13 +196,13 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
                         for(int x = 0; x<personlists.size();x++)
                         {
                             con.createStatement().executeUpdate("INSERT into employee_scanned (batch, firstname, lastname, contact_number, est_id, employee_id, account_id, time_entered, date_entered) " +
-                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ dh.getEstID() +"', '"+  dh.getUserid() +"', '"+ idholder +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ dh.getEstID() +"', '"+  dh.getUserid() +"', '"+ tempholder.get(0) +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("INSERT into employee_scanned (batch, est_id, employee_id, account_id, time_entered, date_entered) VALUES('"+ batch +"', '"+ idholder +"', '"+ dh.getUserid() +"', '"+  idholder +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                        con.createStatement().executeUpdate("INSERT into employee_scanned (batch, est_id, employee_id, account_id, time_entered, date_entered) VALUES('"+ batch +"', '"+ dh.getEstID() +"', '"+ dh.getUserid() +"', '"+  tempholder.get(0) +"', '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                         isSuccess = true;
                     }
 
@@ -229,7 +229,6 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
             personlists = new ArrayList<List<String>>();
 
             tempholder = new ArrayList<>(dp.splitter(qrscan, "#"));
-            idholder = tempholder.get(0);
             if(tempholder.size()>1)
             {
                 qrholder = dp.splitter(tempholder.get(1), ",");
@@ -244,8 +243,8 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
                     temp = temp + ".";
                 }
             }
-            batch = idholder + batchformatter.format(timestamp);
-            dm.displayMessage(getApplicationContext(), "id=" + idholder + " " + temp+"");
+            batch = tempholder.get(0) + dh.getUserid() + batchformatter.format(timestamp);
+            dm.displayMessage(getApplicationContext(), "id=" + tempholder.get(0) + " " + temp+"");
 
             pbar.setVisibility(View.VISIBLE);
         }
