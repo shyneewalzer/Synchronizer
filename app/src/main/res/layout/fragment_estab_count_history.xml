@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".FragmentEstabCountHistory">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/lo_estabcountrefresher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -135,6 +139,7 @@
         </LinearLayout>
 
     </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/pbar"

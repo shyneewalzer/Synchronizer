@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
@@ -70,6 +71,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
     Spinner spr_search;
     EditText edt_search;
     Button btn_search;
+    SwipeRefreshLayout lo_usertravelrefresher;
 
 
     public FragmentUserTravelHistory() {
@@ -89,6 +91,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         spr_search = fragtrav.findViewById(R.id.spr_search);
         edt_search = fragtrav.findViewById(R.id.edt_search);
         btn_search = fragtrav.findViewById(R.id.btn_search);
+        lo_usertravelrefresher = fragtrav.findViewById(R.id.lo_usertravelrefresher);
 
         expandableListView = fragtrav.findViewById(R.id.expandableListView);
 
@@ -131,6 +134,15 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
 
                 dp.toasterlong(getContext(), "Please Select Search Criteria");
 
+            }
+        });
+
+        lo_usertravelrefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                lo_usertravelrefresher.setRefreshing(false);
+                Dbread dbread = new Dbread();
+                dbread.execute();
             }
         });
 
@@ -237,6 +249,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
+            lo_usertravelrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -324,13 +337,14 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
         @Override
         protected void onPostExecute(String a){
 
-            travelviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
-
             if(isSuccess==true)
             {
                 adapterTravelHistory = new AdapterTravelHistory(listGroup, listChild, destination, timee, datee);
                 expandableListView.setAdapter(adapterTravelHistory);
+
+                lo_usertravelrefresher.setVisibility(View.VISIBLE);
+                travelviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
             }
             else
             {
@@ -405,6 +419,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
+            lo_usertravelrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -420,6 +435,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             }
             else
             {
+                lo_usertravelrefresher.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.VISIBLE);
                 dp.toasterlong(getContext(), "Nothing Found");
                 Log.d("Search results", msger+"");

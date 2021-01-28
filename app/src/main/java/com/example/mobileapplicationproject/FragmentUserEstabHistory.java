@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
@@ -71,6 +72,8 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
     EditText edt_search;
     Button btn_search;
 
+    SwipeRefreshLayout lo_userestabrefresher;
+
 
     public FragmentUserEstabHistory() {
 
@@ -89,6 +92,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         spr_search = fragestab.findViewById(R.id.spr_search);
         edt_search = fragestab.findViewById(R.id.edt_search);
         btn_search = fragestab.findViewById(R.id.btn_search);
+        lo_userestabrefresher = fragestab.findViewById(R.id.lo_userestabrefresher);
 
         expandableListView = fragestab.findViewById(R.id.expandableListView);
 
@@ -133,6 +137,14 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
                 dp.toasterlong(getContext(), "Please Select Search Criteria");
 
+            }
+        });
+
+        lo_userestabrefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Dbread dbread = new Dbread();
+                dbread.execute();
             }
         });
 
@@ -235,6 +247,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
+            lo_userestabrefresher.setVisibility(View.GONE);
             estabviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -379,6 +392,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPostExecute(String a){
 
+            lo_userestabrefresher.setVisibility(View.VISIBLE);
             estabviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
@@ -499,6 +513,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             datee = new ArrayList<>();
 
             dm.displayMessage(getContext(), sqlsearch+"");
+            lo_userestabrefresher.setVisibility(View.GONE);
             estabviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }

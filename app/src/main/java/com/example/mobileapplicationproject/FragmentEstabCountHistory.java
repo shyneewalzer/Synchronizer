@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
@@ -69,6 +70,8 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
     EditText edt_start, edt_end;
     Button btn_search;
 
+    SwipeRefreshLayout lo_estabcountrefresher;
+
 
     public FragmentEstabCountHistory() {
 
@@ -87,10 +90,20 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
         edt_start = fragtrav.findViewById(R.id.edt_start);
         edt_end = fragtrav.findViewById(R.id.edt_end);
         btn_search = fragtrav.findViewById(R.id.btn_search);
+        lo_estabcountrefresher = fragtrav.findViewById(R.id.lo_estabcountrefresher);
 
         btn_search.setOnClickListener(this);
         edt_start.setOnClickListener(this);
         edt_end.setOnClickListener(this);
+
+        lo_estabcountrefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                lo_estabcountrefresher.setRefreshing(false);
+                Dbreadstart dbreadstart = new Dbreadstart();
+                dbreadstart.execute();
+            }
+        });
 
         Dbreadstart dbreadstart = new Dbreadstart();
         dbreadstart.execute();
@@ -143,6 +156,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             employeename = new ArrayList<>();
             employeeid = new ArrayList<>();
 
+            lo_estabcountrefresher.setVisibility(View.GONE);
             lo_countviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -234,6 +248,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
         @Override
         protected void onPreExecute() {
 
+            lo_estabcountrefresher.setVisibility(View.GONE);
             lo_countviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
 
@@ -257,6 +272,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                 customAdapter = new CustomAdapter();
                 listView.setAdapter(customAdapter);;
 
+                lo_estabcountrefresher.setVisibility(View.VISIBLE);
                 lo_countviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
             }
@@ -326,6 +342,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             finalcount = 0;
             employeecount = new ArrayList<>();
 
+            lo_estabcountrefresher.setVisibility(View.GONE);
             lo_countviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -342,6 +359,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
 
                 customAdapter.notifyDataSetChanged();
 
+                lo_estabcountrefresher.setVisibility(View.VISIBLE);
                 lo_countviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
             }

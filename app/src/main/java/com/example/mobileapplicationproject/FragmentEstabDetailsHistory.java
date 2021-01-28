@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
 import com.example.mobileapplicationproject.DataController.DataHolder;
@@ -69,6 +70,8 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
     EditText edt_search;
     Button btn_search;
 
+    SwipeRefreshLayout lo_estabdetailsrefresher;
+
 
     public FragmentEstabDetailsHistory() {
 
@@ -87,6 +90,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         spr_search = fragestab.findViewById(R.id.spr_search);
         edt_search = fragestab.findViewById(R.id.edt_search);
         btn_search = fragestab.findViewById(R.id.btn_search);
+        lo_estabdetailsrefresher = fragestab.findViewById(R.id.lo_estabdetailsrefresher);
 
         expandableListView = fragestab.findViewById(R.id.expandableListView);
 
@@ -131,6 +135,15 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                 dp.toasterlong(getContext(), "Please Select Search Criteria");
 
+            }
+        });
+
+        lo_estabdetailsrefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                lo_estabdetailsrefresher.setRefreshing(false);
+                Dbread dbread = new Dbread();
+                dbread.execute();
             }
         });
 
@@ -249,6 +262,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             datee = new ArrayList<>();
             empid = new ArrayList<>();
 
+            lo_estabdetailsrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -409,6 +423,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                 expandAdapter = new AdapterDetailsHistory(listGroup, listChild, empname, timee, datee);
                 expandableListView.setAdapter(expandAdapter);
 
+                lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
                 travelviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
             }
@@ -614,6 +629,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             datee = new ArrayList<>();
 
 
+            lo_estabdetailsrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -624,6 +640,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
             if(isSuccess==true)
             {
+                lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
                 travelviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
 

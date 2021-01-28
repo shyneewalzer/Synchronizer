@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -83,6 +84,8 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
     EditText edt_search;
     Button btn_search;
 
+    SwipeRefreshLayout lo_driverhistoryrefresher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +98,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         spr_search = findViewById(R.id.spr_search);
         edt_search = findViewById(R.id.edt_search);
         btn_search = findViewById(R.id.btn_dsearch);
+        lo_driverhistoryrefresher = findViewById(R.id.lo_driverhistoryrefresher);
 
         expandableListView = findViewById(R.id.expandableListView);
 
@@ -163,6 +167,15 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        lo_driverhistoryrefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                lo_driverhistoryrefresher.setRefreshing(false);
+                Dbread dbread = new Dbread();
+                dbread.execute();
             }
         });
 
@@ -254,6 +267,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             timee = new ArrayList<>();
             datee = new ArrayList<>();
 
+            lo_driverhistoryrefresher.setVisibility(View.GONE);
             lo_routeviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -314,6 +328,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
         @Override
         protected void onPreExecute() {
+            lo_driverhistoryrefresher.setVisibility(View.GONE);
             lo_routeviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
 
@@ -326,6 +341,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             Dbreadsecond dbreadsecond = new Dbreadsecond();
             dbreadsecond.execute();
 
+            lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
             lo_routeviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
@@ -388,6 +404,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPreExecute() {
 
+            lo_driverhistoryrefresher.setVisibility(View.GONE);
             lo_routeviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
 
@@ -398,6 +415,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPostExecute(String a){
 
+            lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
             lo_routeviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
@@ -555,6 +573,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             datee = new ArrayList<>();
 
             dm.displayMessage(getApplicationContext(), parentid+"");
+            lo_driverhistoryrefresher.setVisibility(View.GONE);
             lo_routeviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -562,6 +581,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPostExecute(String a){
 
+            lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
             lo_routeviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
 
