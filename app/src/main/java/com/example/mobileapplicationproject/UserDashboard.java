@@ -313,6 +313,8 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
                 lo_destination.setVisibility(View.GONE);
                 lo_qr.setVisibility(View.VISIBLE);
                 txt_destination.setText(edt_destinaiton.getText()+"");
+                img_scanbox.setImageBitmap(dp.createQR(dh.getUserid() + "#" + txt_destination.getText() + "#"));//generate qr code for solo
+
             }
 
         }

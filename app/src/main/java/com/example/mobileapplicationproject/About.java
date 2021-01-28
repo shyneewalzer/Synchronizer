@@ -72,6 +72,7 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
             draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_menu);
+            if(dh.getpImage()==null)
             {
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
@@ -91,6 +92,7 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
             draw_img_user.setImageBitmap(dp.createImage(dh.getpImage()));
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_driver_menu);
+            if(dh.getpImage()==null)
             {
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
