@@ -81,7 +81,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
         fragtrav = inflater.inflate(R.layout.fragment_estab_count_history, container, false);
 
         lo_countviewer = fragtrav.findViewById(R.id.lo_countviewer);
-//        pbar = findViewById(R.id.pbar);
+        pbar = fragtrav.findViewById(R.id.pbar);
         listView = fragtrav.findViewById(R.id.listView);
 
         edt_start = fragtrav.findViewById(R.id.edt_start);
@@ -117,7 +117,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                 else
                 {
                     ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstAcctID() +"' ");
-
+                    isSuccess = true;
                     while(rs.next())
                     {
                         employeeid.add(rs.getString("user_id"));
@@ -142,26 +142,30 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
 
             employeename = new ArrayList<>();
             employeeid = new ArrayList<>();
+
             lo_countviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            lo_countviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
-
-            if(searcher.equals("passive"))
+            if(searcher.equals("passive") && isSuccess==true)
             {
                 Dbdateuptonow dbdateuptonow = new Dbdateuptonow();
                 dbdateuptonow.execute();
             }
-            else if(searcher.equals("active"))
+            else if(searcher.equals("active") && isSuccess==true)
             {
                 Dbreadbetweendates dbreadbetweendates = new Dbreadbetweendates();
                 dbreadbetweendates.execute();
             }
+            else
+            {
+                dp.toasterlong(getContext(), msger+"");
+                pbar.setVisibility(View.GONE);
+            }
+
 
         }
     }
@@ -203,6 +207,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                         {
                             getcount = getcount + 1;
                         }
+                        isSuccess = true;
                         rsbatch.close();
                         employeecount.add(getcount);
                         getcount = 0;
@@ -225,27 +230,37 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
         @Override
         protected void onPreExecute() {
 
+            lo_countviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
+
             finalcount = 0;
             employeecount = new ArrayList<>();
             dateofnow = Calendar.getInstance();
             strdate = dateofnow.get(Calendar.YEAR) + "-" + (dateofnow.get(Calendar.MONTH)+1) + "-" + (dateofnow.get(Calendar.DAY_OF_MONTH)+1);
-            lo_countviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            lo_countviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
-
-            for(int x=0;x<employeecount.size();x++)
+            if(isSuccess==true)
             {
-                finalcount = finalcount + employeecount.get(x);
-            }
+                for(int x=0;x<employeecount.size();x++)
+                {
+                    finalcount = finalcount + employeecount.get(x);
+                }
 
-            customAdapter = new CustomAdapter();
-            listView.setAdapter(customAdapter);;
+                customAdapter = new CustomAdapter();
+                listView.setAdapter(customAdapter);;
+
+                lo_countviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
+            else
+            {
+                pbar.setVisibility(View.GONE);
+                dp.toasterlong(getContext(), msger+"");
+            }
 
         }
     }
@@ -304,26 +319,34 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
 
             ender.add(Calendar.DAY_OF_MONTH, 1);
             ender.add(Calendar.MONTH, 1);
-            //dm.displayMessage(getContext(), starter.get(Calendar.YEAR) + "-" + starter.get(Calendar.MONTH) + "-" + starter.get(Calendar.DAY_OF_MONTH));
             finalcount = 0;
             employeecount = new ArrayList<>();
 
             lo_countviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            lo_countviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
-
-            for(int x=0;x<employeecount.size();x++)
+            if(isSuccess = true)
             {
-                finalcount = finalcount + employeecount.get(x);
+                for(int x=0;x<employeecount.size();x++)
+                {
+                    finalcount = finalcount + employeecount.get(x);
+                }
+
+                customAdapter.notifyDataSetChanged();
+
+                lo_countviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
+            else
+            {
+                pbar.setVisibility(View.GONE);
+                dp.toasterlong(getContext(), msger+"");
             }
 
-            customAdapter.notifyDataSetChanged();
 
         }
     }

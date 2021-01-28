@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         fragestab = inflater.inflate(R.layout.fragment_estab_details_history, container, false);
 
         travelviewer = fragestab.findViewById(R.id.travelviewer);
-//        pbar = findViewById(R.id.pbar);
+        pbar = fragestab.findViewById(R.id.pbar);
         listView = fragestab.findViewById(R.id.listView);
 
         spr_search = fragestab.findViewById(R.id.spr_search);
@@ -220,7 +221,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         for (int x=0;x<listGroup.size();x++)
                         {
                             ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ parentid.get(x) +"' ");
-
+                            isSuccess = true;
                             while (rsparent.next())
                             {
                                 parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
@@ -249,19 +250,23 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             empid = new ArrayList<>();
 
             travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            if(isSuccess==true)
+            {
+                Dbreademp dbreademp = new Dbreademp();
+                dbreademp.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.GONE);
+                dp.toasterlong(getContext(), msger+"");
+            }
 
-            Dbreademp dbreademp = new Dbreademp();
-            dbreademp.execute();
-
-            dm.displayMessage(getContext(), listGroup+"");
         }
     }
 
@@ -285,7 +290,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                     for(int x=0;x<listGroup.size();x++)
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ empid.get(x) +"' ");
-
+                        isSuccess = true;
                         while (rs.next())
                         {
                             empname.add(rs.getString("firstname") + " " + rs.getString("lastname"));
@@ -309,22 +314,23 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         @Override
         protected void onPreExecute() {
 
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
-
             empname = new ArrayList<>();
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            if(isSuccess==true)
+            {
+                Dbreadsecond dbreadsecond = new Dbreadsecond();
+                dbreadsecond.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.GONE);
+                dp.toasterlong(getContext(), msger+"");
+            }
 
-            Dbreadsecond dbreadsecond = new Dbreadsecond();
-            dbreadsecond.execute();
-
-            dm.displayMessage(getContext(), listGroup+"");
         }
     }
 
@@ -392,26 +398,31 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         @Override
         protected void onPreExecute() {
 
-            travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
             listChild.clear();
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
+            if(isSuccess==true)
+            {
+                expandAdapter = new AdapterDetailsHistory(listGroup, listChild, empname, timee, datee);
+                expandableListView.setAdapter(expandAdapter);
 
-            expandAdapter = new AdapterDetailsHistory(listGroup, listChild, empname, timee, datee);
-            expandableListView.setAdapter(expandAdapter);
-            dm.displayMessage(getContext(), "empname: " + empname);
+                travelviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
+            else
+            {
+                pbar.setVisibility(View.GONE);
+                dp.toasterlong(getContext(), msger+"");
+            }
+
         }
     }
 
     private class Dbsearch extends AsyncTask<String, String, String>
     {
-        int xxx;
         String idholder;
         String msger;
         Boolean isSuccess=false;
@@ -430,38 +441,56 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                     if(spr_search.getSelectedItem().equals("Individuals"))
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE concat_ws(' ', firstname, lastname) LIKE '%"+ edt_search.getText() +"%' ");
+                        isSuccess = true;
 
                         if(rs.isBeforeFirst())
                         {
-                            isSuccess=true;
+                            isSuccess = true;
                             while (rs.next())
                             {
                                 idholder = rs.getString("account_id");
 
                             }
                         }
+                        else
+                        {
+                            isSuccess = false;
+                        }
                         rs.close();
 
-                        ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE account_id = '"+ idholder +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-
-                        while (rsid.next())
+                        if(isSuccess==true)
                         {
+                            ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE account_id = '"+ idholder +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
+                            isSuccess = true;
+                            if(rsid.isBeforeFirst())
+                            {
+                                isSuccess = true;
+                                while (rsid.next())
+                                {
 
-                            parentid.add(rsid.getString("account_id"));
-                            timee.add(rsid.getString("time_entered"));
-                            datee.add(rsid.getString("date_entered"));
+                                    parentid.add(rsid.getString("account_id"));
+                                    timee.add(rsid.getString("time_entered"));
+                                    datee.add(rsid.getString("date_entered"));
 
-                            listGroup.add(rsid.getString("batch"));
+                                    listGroup.add(rsid.getString("batch"));
 
+                                }
+                            }
+                            else
+                            {
+                                isSuccess = false;
+                            }
+                            rsid.close();
                         }
-                        rsid.close();
+
+
 
                         if(isSuccess==true)
                         {
                             for (int x=0;x<listGroup.size();x++)
                             {
                                 ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ parentid.get(x) +"' ");
-
+                                isSuccess = true;
                                 while (rsparent.next())
                                 {
                                     parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
@@ -470,11 +499,11 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             }
                         }
                     }
-                    //TODO: fix employee search
+
                     else if(spr_search.getSelectedItem().equals("Employees"))
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE concat_ws(' ', firstname, lastname) LIKE '%"+ edt_search.getText() +"%' ");
-
+                        isSuccess = true;
                         if(rs.isBeforeFirst())
                         {
                             isSuccess=true;
@@ -484,28 +513,41 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                             }
                         }
+                        else
+                        {
+                            isSuccess = false;
+                        }
                         rs.close();
 
-                        ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ idholder +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-
-                        while (rsid.next())
+                        if(isSuccess==true)
                         {
+                            ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ idholder +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
+                            isSuccess = true;
+                            if(rsid.isBeforeFirst())
+                            {
+                                isSuccess = true;
+                                while (rsid.next())
+                                {
+                                    parentid.add(rsid.getString("account_id"));
+                                    timee.add(rsid.getString("time_entered"));
+                                    datee.add(rsid.getString("date_entered"));
 
-                            parentid.add(rsid.getString("account_id"));
-                            timee.add(rsid.getString("time_entered"));
-                            datee.add(rsid.getString("date_entered"));
-
-                            listGroup.add(rsid.getString("batch"));
-
+                                    listGroup.add(rsid.getString("batch"));
+                                }
+                            }
+                            else
+                            {
+                                isSuccess = false;
+                            }
+                            rsid.close();
                         }
-                        rsid.close();
 
                         if(isSuccess==true)
                         {
                             for (int x=0;x<listGroup.size();x++)
                             {
                                 ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE employee_id = '"+ parentid.get(x) +"' ");
-
+                                isSuccess = true;
                                 while (rsparent.next())
                                 {
                                     parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
@@ -517,15 +559,23 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                     else if(spr_search.getSelectedItem().equals("Date"))
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE date_entered = '"+ edt_search.getText() +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-
-                        while (rs.next())
+                        isSuccess = true;
+                        if(rs.isBeforeFirst())
                         {
-                            parentid.add(rs.getString("account_id"));
-                            timee.add(rs.getString("time_entered"));
-                            datee.add(rs.getString("date_entered"));
+                            isSuccess = true;
+                            while (rs.next())
+                            {
+                                parentid.add(rs.getString("account_id"));
+                                timee.add(rs.getString("time_entered"));
+                                datee.add(rs.getString("date_entered"));
 
-                            listGroup.add(rs.getString("batch"));
+                                listGroup.add(rs.getString("batch"));
 
+                            }
+                        }
+                        else
+                        {
+                            isSuccess = false;
                         }
                         rs.close();
 
@@ -534,7 +584,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             for (int x=0;x<listGroup.size();x++)
                             {
                                 ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE employee_id = '"+ parentid.get(x) +"' ");
-
+                                isSuccess = true;
                                 while (rsparent.next())
                                 {
                                     parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
@@ -565,15 +615,27 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
 
             travelviewer.setVisibility(View.GONE);
-//            pbar.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            travelviewer.setVisibility(View.VISIBLE);
-//            pbar.setVisibility(View.GONE);
-            dm.displayMessage(getContext(), "row"+xxx);
+
+            if(isSuccess==true)
+            {
+                travelviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+
+                Dbreademp dbreademp = new Dbreademp();
+                dbreademp.execute();
+            }
+            else
+            {
+                pbar.setVisibility(View.VISIBLE);
+                dp.toasterlong(getContext(), "Nothing Found");
+                Log.d("Search Result", msger+"");
+            }
 
 
         }
