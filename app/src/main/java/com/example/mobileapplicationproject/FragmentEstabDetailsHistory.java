@@ -284,16 +284,16 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                 {
                     for(int x=0;x<listGroup.size();x++)
                     {
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ empid.get(x) +"' ");
 
+                        while (rs.next())
+                        {
+                            empname.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                        }
+
+                        rs.close();
                     }
-                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ dh.getUserid() +"' ");
 
-                    while (rs.next())
-                    {
-                        empname.add(rs.getString("firstname") + " " + rs.getString("lastname"));
-                    }
-
-                    rs.close();
 
                     con.close();
                 }
