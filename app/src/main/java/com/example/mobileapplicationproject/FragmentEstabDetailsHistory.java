@@ -501,6 +501,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                                     parentid.add(rsid.getString("account_id"));
                                     timee.add(rsid.getString("time_entered"));
                                     datee.add(rsid.getString("date_entered"));
+                                    empid.add(rsid.getString("employee_id"));
 
                                     listGroup.add(rsid.getString("batch"));
 
