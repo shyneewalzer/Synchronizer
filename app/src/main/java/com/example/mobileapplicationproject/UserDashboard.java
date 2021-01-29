@@ -86,7 +86,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
     ImageView img_scanbox;
     Button btn_eAddCompanion, btn_scan, btn_backdestination, btn_eAddCompanionCancel, btn_destination;
-    TextView txt_companionExpander, txt_destination;
+    TextView txt_companionExpander, txt_destination, txt_location;
     ListView lv;
 
     LinearLayout locationviewer, lo_companionlist, lo_addcompanion, lo_qr, lo_destination;
@@ -110,6 +110,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         btn_destination = findViewById(R.id.btn_destination);
         btn_backdestination = findViewById(R.id.btn_backdestination);
         txt_destination = findViewById(R.id.txt_destination);
+        txt_location = findViewById(R.id.txt_location);
 
         edt_cFname = findViewById(R.id.edt_cFname);
         edt_cLname = findViewById(R.id.edt_cLname);
@@ -244,7 +245,8 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             lo_qr.setVisibility(View.VISIBLE);
             btn_backdestination.setVisibility(View.GONE);
             btn_scan.setVisibility(View.VISIBLE);
-            txt_destination.setText("Establishment");
+            txt_destination.setVisibility(View.GONE);
+            txt_location.setText("Establishment");
         }
 
     }
