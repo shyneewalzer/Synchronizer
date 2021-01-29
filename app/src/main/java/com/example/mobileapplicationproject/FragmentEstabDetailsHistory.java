@@ -539,7 +539,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             isSuccess=true;
                             while (rs.next())
                             {
-                                idholder = rs.getString("account_id");
+                                idholder = rs.getString("user_id");
 
                             }
                         }
@@ -664,7 +664,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             }
             else
             {
-                pbar.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
                 dp.toasterlong(getContext(), "Nothing Found");
                 Log.d("Search Result", msger+"");
             }
