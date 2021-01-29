@@ -101,6 +101,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             @Override
             public void onRefresh() {
                 lo_estabcountrefresher.setRefreshing(false);
+                searcher="passive";
                 Dbreadstart dbreadstart = new Dbreadstart();
                 dbreadstart.execute();
             }
@@ -122,8 +123,6 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
 
         Dbreadstart dbreadstart = new Dbreadstart();
         dbreadstart.execute();
-
-        //TODO: refersher data
 
         return fragtrav;
     }
@@ -269,6 +268,7 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
 
             finalcount = 0;
             employeecount = new ArrayList<>();
+            dateofnow.clear();
             dateofnow = Calendar.getInstance();
             strdate = dateofnow.get(Calendar.YEAR) + "-" + (dateofnow.get(Calendar.MONTH)+1) + "-" + (dateofnow.get(Calendar.DAY_OF_MONTH)+1);
 
