@@ -244,7 +244,7 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
             lo_qr.setVisibility(View.VISIBLE);
             btn_backdestination.setVisibility(View.GONE);
             btn_scan.setVisibility(View.VISIBLE);
-            txt_destination.setVisibility(View.GONE);
+            txt_destination.setText("Establishment");
         }
 
     }
