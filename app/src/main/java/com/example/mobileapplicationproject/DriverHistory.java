@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -138,7 +139,7 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         searcher.add("Plate Number");
         searcher.add("Date");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(DriverHistory.this, R.layout.spinner_format, searcher);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(DriverHistory.this, R.layout.spinner_format, searcher);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spr_search.setAdapter(dataAdapter);
 
@@ -176,6 +177,20 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                 lo_driverhistoryrefresher.setRefreshing(false);
                 Dbread dbread = new Dbread();
                 dbread.execute();
+            }
+        });
+
+        expandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (expandableListView.getChildAt(0) != null) {
+                    lo_driverhistoryrefresher.setEnabled(expandableListView.getFirstVisiblePosition() == 0 && expandableListView.getChildAt(0).getTop() == 0);
+                }
             }
         });
 

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -102,6 +103,20 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                 lo_estabcountrefresher.setRefreshing(false);
                 Dbreadstart dbreadstart = new Dbreadstart();
                 dbreadstart.execute();
+            }
+        });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (listView.getChildAt(0) != null) {
+                    lo_estabcountrefresher.setEnabled(listView.getFirstVisiblePosition() == 0 && listView.getChildAt(0).getTop() == 0);
+                }
             }
         });
 
