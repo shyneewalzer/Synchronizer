@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/background_halfcircle">
+        android:background="@drawable/bg_features">
 
         <include
             android:layout_width="match_parent"
@@ -24,122 +24,218 @@
             android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/lo_indivabout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="#B3000000"
             android:paddingTop="20dp"
             android:paddingHorizontal="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ABOUT"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_gravity="center_horizontal"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/txt_string_overview"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ABOUT"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/txt_string_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_indiv_overview"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Overview"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"/>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="#e75b4a"
+                android:layout_marginTop="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Features: "
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/txt_string_titlehome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HOME"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"/>
+                    <TextView
+                        android:id="@+id/txt_string_titlehome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_indiv_hometitle"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/light_green"/>
 
-            <TextView
-                android:id="@+id/txt_string_home"
+                    <TextView
+                        android:id="@+id/txt_string_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_indiv_home"
+                        android:textSize="15sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginHorizontal="15dp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_location"
+                    android:layout_weight="1"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="HOME"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="15dp"/>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="#e4f0ff"
+                android:layout_marginTop="20dp">
 
-            <TextView
-                android:id="@+id/txt_string_titlextra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ESTABLISHMENT"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"
-                android:visibility="gone"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_estab"
+                    android:layout_weight="1"/>
 
-            <TextView
-                android:id="@+id/txt_string_xtra"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txt_string_titlextra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Establishment"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/light_green"/>
+
+                    <TextView
+                        android:id="@+id/txt_string_xtra"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_indiv_estab"
+                        android:textSize="15sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginHorizontal="15dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="HOME"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="15dp"
-                android:visibility="gone"/>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="#ffc966"
+                android:layout_marginTop="20dp">
 
-            <TextView
-                android:id="@+id/txt_string_titleprof"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PROFILE"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/txt_string_prof"
+                    <TextView
+                        android:id="@+id/txt_string_titleprof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Profile"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/light_green"/>
+
+                    <TextView
+                        android:id="@+id/txt_string_prof"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_indiv_prof"
+                        android:textSize="15sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginHorizontal="15dp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_profedit"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="HOME"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="15dp"/>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="#e4b2ff"
+                android:layout_marginTop="20dp">
 
-            <TextView
-                android:id="@+id/txt_string_titlehistory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="HISTORY"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_history"
+                    android:layout_weight="1"/>
 
-            <TextView
-                android:id="@+id/txt_string_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="HISTORY"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="15dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txt_string_titlehistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HISTORY"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/light_green"
+                        android:layout_marginTop="20dp"/>
+
+                    <TextView
+                        android:id="@+id/txt_string_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_indiv_history"
+                        android:textSize="15sp"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginHorizontal="15dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
         </ScrollView>

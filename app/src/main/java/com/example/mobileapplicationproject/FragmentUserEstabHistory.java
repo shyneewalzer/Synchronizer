@@ -377,7 +377,15 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                             String lnamechecker = rs.getString("lastname");
                             if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
                             {
-                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname"));
+                                String contactchecker = rs.getString("contact_number");
+                                if(contactchecker!=null && !contactchecker.isEmpty())
+                                {
+                                    listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + " - " + rs.getString("contact_number"));
+                                }
+                                else
+                                {
+                                    listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + "- No Contact Provided");
+                                }
                             }
                         }
 
@@ -407,10 +415,6 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPostExecute(String a){
 
-            lo_userestabrefresher.setVisibility(View.VISIBLE);
-            estabviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
-
             if(isSuccess==true)
             {
                 expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
@@ -418,9 +422,11 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             }
             else
             {
-                pbar.setVisibility(View.VISIBLE);
                 dp.toasterlong(getContext(), msger+"");
             }
+            lo_userestabrefresher.setVisibility(View.VISIBLE);
+            estabviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
 
         }
     }
