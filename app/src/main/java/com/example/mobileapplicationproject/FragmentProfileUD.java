@@ -310,6 +310,8 @@ public class FragmentProfileUD extends Fragment implements View.OnClickListener{
             draw_img_user.setImageResource(R.drawable.ic_person);
             img_profile.setImageResource(R.drawable.ic_person);
         }
+
+        imageholder = dh.getpImage();
     }
 
 }

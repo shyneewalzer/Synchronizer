@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
@@ -34,20 +35,16 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
     TextView draw_name, draw_type;
     CircleImageView draw_img_user;
 
-    TextView txt_string_overview, txt_string_home, txt_string_xtra, txt_string_prof, txt_string_history, txt_string_titlehome, txt_string_titlextra;
+    LinearLayout lo_indivabout, lo_driverabout, lo_estabout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
 
-        txt_string_overview = findViewById(R.id.txt_string_overview);
-        txt_string_home = findViewById(R.id.txt_string_home);
-        txt_string_xtra = findViewById(R.id.txt_string_xtra);
-        txt_string_prof = findViewById(R.id.txt_string_prof);
-        txt_string_history = findViewById(R.id.txt_string_history);
-        txt_string_titlehome = findViewById(R.id.txt_string_titlehome);
-        txt_string_titlextra = findViewById(R.id.txt_string_titlextra);
+        lo_indivabout = findViewById(R.id.lo_indivabout);
+        lo_driverabout = findViewById(R.id.lo_drivervabout);
+        lo_estabout = findViewById(R.id.lo_estabout);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,14 +74,7 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
 
-            txt_string_overview.setText(R.string.string_indiv_overview);
-            txt_string_titlehome.setText(R.string.string_indiv_hometitle);
-            txt_string_home.setText(R.string.string_indiv_home);
-            txt_string_titlextra.setVisibility(View.VISIBLE);
-            txt_string_xtra.setText(R.string.string_indiv_estab);
-            txt_string_xtra.setVisibility(View.VISIBLE);
-            txt_string_prof.setText(R.string.string_indiv_prof);
-            txt_string_history.setText(R.string.string_indiv_history);
+            lo_indivabout.setVisibility(View.VISIBLE);
         }
         else if(dh.getType().equals("Driver"))
         {
@@ -97,11 +87,7 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
 
-            txt_string_overview.setText(R.string.string_driver_overview);
-            txt_string_titlehome.setText(R.string.string_driver_hometitle);
-            txt_string_home.setText(R.string.string_driver_home);
-            txt_string_prof.setText(R.string.string_driver_prof);
-            txt_string_history.setText(R.string.string_driver_history);
+            lo_driverabout.setVisibility(View.VISIBLE);
         }
         else if(dh.getType().equals("Establishment"))
         {
@@ -114,11 +100,7 @@ public class About extends AppCompatActivity implements NavigationView.OnNavigat
                 draw_img_user.setImageResource(R.drawable.ic_person);
             }
 
-            txt_string_overview.setText(R.string.string_est_overview);
-            txt_string_titlehome.setText(R.string.string_est_hometitle);
-            txt_string_home.setText(R.string.string_est_home);
-            txt_string_prof.setText(R.string.string_est_prof);
-            txt_string_history.setText(R.string.string_est_history);
+            lo_estabout.setVisibility(View.VISIBLE);
         }
         draw_type.setText(dh.getType());
     }

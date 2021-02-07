@@ -23,14 +23,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/lo_indivabout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#B3000000"
-            android:paddingTop="20dp"
-            android:paddingHorizontal="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lo_indivabout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#B3000000"
+                android:paddingTop="20dp"
+                android:paddingHorizontal="10dp"
+                android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,10 +51,14 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
+                    android:layout_marginVertical="5dp"/>
 
                 <TextView
-                    android:id="@+id/txt_string_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/string_indiv_overview"
@@ -56,7 +66,12 @@
                     android:textColor="@color/white"
                     android:textAlignment="center"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
+                    android:layout_marginVertical="5dp"/>
 
             </LinearLayout>
 
@@ -76,23 +91,25 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/txt_string_titlehome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/string_indiv_hometitle"
                         android:textSize="17sp"
                         android:textStyle="bold"
-                        android:textColor="@color/light_green"/>
+                        android:textColor="@color/light_green"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:layout_marginVertical="5dp"/>
 
                     <TextView
-                        android:id="@+id/txt_string_home"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/string_indiv_home"
                         android:textSize="15sp"
                         android:textColor="@color/gray"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginHorizontal="15dp"/>
+                        android:layout_marginTop="5dp"/>
                 </LinearLayout>
 
                 <ImageView
@@ -127,23 +144,25 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/txt_string_titlextra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Establishment"
                         android:textSize="17sp"
                         android:textStyle="bold"
-                        android:textColor="@color/light_green"/>
+                        android:textColor="@color/light_green"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:layout_marginVertical="5dp"/>
 
                     <TextView
-                        android:id="@+id/txt_string_xtra"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/string_indiv_estab"
                         android:textSize="15sp"
                         android:textColor="@color/gray"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginHorizontal="15dp"/>
+                        android:layout_marginTop="5dp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -164,23 +183,25 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/txt_string_titleprof"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Profile"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="@color/light_green"/>
+                        android:textColor="@color/light_green"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:layout_marginVertical="5dp"/>
 
                     <TextView
-                        android:id="@+id/txt_string_prof"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/string_indiv_prof"
                         android:textSize="15sp"
                         android:textColor="@color/gray"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginHorizontal="15dp"/>
+                        android:layout_marginTop="5dp"/>
                 </LinearLayout>
 
                 <ImageView
@@ -213,24 +234,25 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/txt_string_titlehistory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="HISTORY"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/light_green"
-                        android:layout_marginTop="20dp"/>
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:layout_marginVertical="5dp"/>
 
                     <TextView
-                        android:id="@+id/txt_string_history"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/string_indiv_history"
                         android:textSize="15sp"
                         android:textColor="@color/gray"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginHorizontal="15dp"/>
+                        android:layout_marginTop="5dp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -238,6 +260,380 @@
 
 
         </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lo_drivervabout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#B3000000"
+                android:paddingTop="20dp"
+                android:paddingHorizontal="10dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ABOUT"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center_horizontal"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:layout_marginVertical="5dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/string_driver_overview"
+                        android:textSize="15sp"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1.5"
+                        android:shadowDy="1.3"
+                        android:shadowRadius="1.6"
+                        android:layout_marginVertical="5dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="#95b8f8"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/string_driver_hometitle"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/light_green"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1.5"
+                            android:shadowDy="1.3"
+                            android:shadowRadius="1.6"
+                            android:layout_marginVertical="5dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/string_driver_home"
+                            android:textSize="15sp"
+                            android:textColor="@color/gray"
+                            android:layout_marginTop="5dp"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/bg_vehicle"
+                        android:layout_weight="1"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="#ffc966"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Profile"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/light_green"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1.5"
+                            android:shadowDy="1.3"
+                            android:shadowRadius="1.6"
+                            android:layout_marginVertical="5dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/string_driver_prof"
+                            android:textSize="15sp"
+                            android:textColor="@color/gray"
+                            android:layout_marginTop="5dp"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/bg_profedit"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="#e4b2ff"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/bg_history"
+                        android:layout_weight="1"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="History"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/light_green"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1.5"
+                            android:shadowDy="1.3"
+                            android:shadowRadius="1.6"
+                            android:layout_marginVertical="5dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/string_driver_history"
+                            android:textSize="15sp"
+                            android:textColor="@color/gray"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/lo_estabout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#B3000000"
+                    android:paddingTop="20dp"
+                    android:paddingHorizontal="10dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ABOUT"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:layout_gravity="center_horizontal"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1.5"
+                            android:shadowDy="1.3"
+                            android:shadowRadius="1.6"
+                            android:layout_marginVertical="5dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/string_est_overview"
+                            android:textSize="15sp"
+                            android:textColor="@color/white"
+                            android:textAlignment="center"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:shadowColor="@color/black"
+                            android:shadowDx="1.5"
+                            android:shadowDy="1.3"
+                            android:shadowRadius="1.6"
+                            android:layout_marginVertical="5dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="#39a1ff"
+                        android:layout_marginTop="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_est_hometitle"
+                                android:textSize="17sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/light_green"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1.5"
+                                android:shadowDy="1.3"
+                                android:shadowRadius="1.6"
+                                android:layout_marginVertical="5dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_est_home"
+                                android:textSize="15sp"
+                                android:textColor="@color/gray"
+                                android:layout_marginTop="5dp"/>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/bg_employees"
+                            android:layout_weight="1"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="#ffc966"
+                        android:layout_marginTop="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Profile"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/light_green"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1.5"
+                                android:shadowDy="1.3"
+                                android:shadowRadius="1.6"
+                                android:layout_marginVertical="5dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_est_prof"
+                                android:textSize="15sp"
+                                android:textColor="@color/gray"
+                                android:layout_marginTop="5dp"/>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/bg_profedit"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="#e4b2ff"
+                        android:layout_marginTop="20dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/bg_history"
+                            android:layout_weight="1"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="History"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/light_green"
+                                android:shadowColor="@color/black"
+                                android:shadowDx="1.5"
+                                android:shadowDy="1.3"
+                                android:shadowRadius="1.6"
+                                android:layout_marginVertical="5dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_est_history"
+                                android:textSize="15sp"
+                                android:textColor="@color/gray"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
         </ScrollView>
 
     </LinearLayout>

@@ -69,9 +69,8 @@
     <string name="string_est_home">
         - You can see the list of the Employees who are currently active.\n
         - You can add an employee by clicking ADD EMPLOYEE button.\n
-        - You can even deactivate/activate an account by clicking the DEACTIVATE/ ACTIVATE EMPLOYEE there you can select if you want to deactivate/activate an employee\n
+        - You can even deactivate/activate an account by clicking the DEACTIVATE/ ACTIVATE EMPLOYEE\n
         - You can activate the employee scanner and QR Code by clicking their name on the list.\n
-        - When the account of employee is activated for scanning, they can scan the customer QR Code, they can even generate a QR Code for the customers to scan by simply setting their Information Details on the Kebab Menu.\n
     </string>
 
     <string name="string_est_prof">

@@ -236,6 +236,8 @@ public class FragmentProfileEstab extends Fragment implements View.OnClickListen
             img_estprof.setImageResource(R.drawable.ic_person);
         }
 
+        imageholder = dh.getEstImage();
+
     }
 
 }

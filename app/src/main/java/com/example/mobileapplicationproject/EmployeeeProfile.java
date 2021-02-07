@@ -199,7 +199,7 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
                     }
                     else
                     {
-                        con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_Fname.getText() + "', lastname = '" + edt_Lname.getText() + "', middlename = '" + edt_Mname.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_Contact.getText() + "', image=NULL where user_id='" + dh.getUserid() + "' ");
+                        con.createStatement().executeUpdate("UPDATE user_profile SET firstname = '" + edt_Fname.getText() + "', lastname = '" + edt_Lname.getText() + "', middlename = '" + edt_Mname.getText() + "', birthday = '" + edt_age.getText() + "', contactnumber = '" + edt_Contact.getText() + "', image = 'NULL' where user_id='" + dh.getUserid() + "' ");
                     }
 
                     isSuccess=true;
@@ -227,6 +227,7 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
 
             if(isSuccess==true)
             {
+
                 dh.setProfile(edt_Fname.getText()+"", edt_Lname.getText()+"", edt_Mname.getText()+"", dp.stringToDate(edt_age.getText()+""), edt_Contact.getText()+"", imageholder);
                 dh.setAddress(edt_house.getText()+"", edt_brgy.getText()+"", edt_city.getText()+"");
                 dataSet();
@@ -268,6 +269,7 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
         edt_house.setText(dh.getHouse());
         edt_brgy.setText(dh.getBrgy());
         edt_city.setText(dh.getCity());
+        imageholder = dh.getpImage();
     }
 
     @Override
