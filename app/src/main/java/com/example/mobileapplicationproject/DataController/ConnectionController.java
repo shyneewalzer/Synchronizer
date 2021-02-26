@@ -12,7 +12,7 @@ public class ConnectionController {
 
     String clazz="com.mysql.jdbc.Driver";
 
-    String url="jdbc:mysql://148.66.138.153/capstone_db";
+    String url="jdbc:mysql://184.168.99.251/capstonedb";
     String dbusername="cliljdn";
     String dbpassword="jaudian29";
 
