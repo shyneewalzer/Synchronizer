@@ -88,7 +88,7 @@
                 android:background="@drawable/main_button"
                 android:text="LOGIN"
                 android:textColor="#fff"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:layout_gravity="center" />
 
             <LinearLayout

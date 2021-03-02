@@ -105,6 +105,8 @@ public class IntroForm extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
 
+            pbar.setVisibility(View.VISIBLE);
+
             listroutes = new ArrayList<>();
 
             txt_loader.setText("Loading route references");
@@ -113,6 +115,8 @@ public class IntroForm extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String a){
+
+            pbar.setVisibility(View.GONE);
 
             if(isSuccess==true)
             {
@@ -124,7 +128,6 @@ public class IntroForm extends AppCompatActivity {
                 txt_loader.setText(msger+"");
                 btn_retry.setVisibility(View.VISIBLE);
             }
-            pbar.setVisibility(View.GONE);
 
         }
     }
@@ -179,12 +182,12 @@ public class IntroForm extends AppCompatActivity {
         protected void onPreExecute() {
 
             btn_retry.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
 
             listdestination = new ArrayList<>();
             listbrgy = new ArrayList<>();
 
             txt_loader.setText("Loading location references");
+            pbar.setVisibility(View.VISIBLE);
 
         }
 

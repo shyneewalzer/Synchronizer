@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -344,6 +345,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         protected void onPreExecute() {
 
             empname = new ArrayList<>();
+            Log.d("Phase: ", "2nd phase");
         }
 
         @Override
@@ -428,6 +430,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         protected void onPreExecute() {
 
             listChild.clear();
+            Log.d("Phase: ", "3nd phase");
         }
 
         @Override
@@ -600,7 +603,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                                 parentid.add(rs.getString("account_id"));
                                 timee.add(rs.getString("time_entered"));
                                 datee.add(rs.getString("date_entered"));
-
+                                empid.add(rs.getString("employee_id"));
                                 listGroup.add(rs.getString("batch"));
 
                             }
@@ -615,7 +618,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         {
                             for (int x=0;x<listGroup.size();x++)
                             {
-                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE employee_id = '"+ parentid.get(x) +"' ");
+                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ parentid.get(x) +"' ");
                                 isSuccess = true;
                                 while (rsparent.next())
                                 {
@@ -645,10 +648,12 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             timee = new ArrayList<>();
             datee = new ArrayList<>();
             empid = new ArrayList<>();
+            parentid = new ArrayList<>();
 
             lo_estabdetailsrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -657,16 +662,17 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
             if(isSuccess==true)
             {
-                lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
-                travelviewer.setVisibility(View.VISIBLE);
-                pbar.setVisibility(View.GONE);
-
+                Log.d("Batch", parentid+", ");
                 Dbreademp dbreademp = new Dbreademp();
                 dbreademp.execute();
             }
             else
             {
+                expandableListView.setAdapter((ExpandableListAdapter) null);
+                lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
+                travelviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
+
                 dp.toasterlong(getContext(), "Nothing Found");
                 Log.d("Search Result", msger+"");
             }
