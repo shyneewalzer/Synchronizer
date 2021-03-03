@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -399,6 +400,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                     isSuccess = true;
                     if(rs.isBeforeFirst())
                     {
+                        Log.d("isSuccess", "true");
                         isSuccess=true;
                         while (rs.next())
                         {
@@ -413,6 +415,7 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                     else
                     {
                         isSuccess = false;
+                        Log.d("isSuccess", "false");
                     }
                     rs.close();
                     con.close();
@@ -450,10 +453,13 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
             }
             else
             {
+                expandableListView.setAdapter((ExpandableListAdapter) null);
                 lo_usertravelrefresher.setVisibility(View.VISIBLE);
+                travelviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.VISIBLE);
+
                 dp.toasterlong(getContext(), "Nothing Found");
-                Log.d("Search results", msger+"");
+                Log.d("Search results--", msger+"");
             }
 
             dm.displayMessage(getContext(), tempp+"");

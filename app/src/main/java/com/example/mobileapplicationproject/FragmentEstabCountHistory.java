@@ -327,9 +327,23 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                         }
                         rs.close();
 
+                        ResultSet rsbatch=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ employeeid.get(x) +"' AND (date_entered between '"+ edt_start.getText() +"' and '"+ edt_end.getText() +"') GROUP BY batch ");
+
+                        while (rsbatch.next())
+                        {
+                            String fnamechecker = rsbatch.getString("firstname");
+                            String lnamechecker = rsbatch.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                getcount = getcount + 1;
+                            }
+                        }
+                        rsbatch.close();
+
                         employeecount.add(getcount);
-                        Log.d("employee", employeecount+"");
+                        Log.d("Employee Count", employeecount+"");
                         getcount=0;
+
                     }
 
 

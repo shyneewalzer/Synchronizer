@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -549,6 +550,9 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             }
             else
             {
+                expandableListView.setAdapter((ExpandableListAdapter) null);
+                lo_userestabrefresher.setVisibility(View.VISIBLE);
+                estabviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.VISIBLE);
                 dp.toasterlong(getContext(), "Nothing Found");
                 Log.d("Search Results", msger+"");
