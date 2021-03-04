@@ -292,7 +292,16 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                             String lnamechecker = rst.getString("lastname");
                             if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
                             {
-                                listPerson.add(rst.getString("firstname") + " " + rst.getString("lastname") + "_" + rst.getString("contact_number") + "_" + rst.getString("destination"));
+                                String contactchecker = rst.getString("contact_number");
+                                if (contactchecker!=null && !contactchecker.isEmpty())
+                                {
+                                    listPerson.add(rst.getString("firstname") + " " + rst.getString("lastname") + "_" + rst.getString("contact_number") + "_" + rst.getString("destination"));
+                                }
+                                else
+                                {
+                                    listPerson.add(rst.getString("firstname") + " " + rst.getString("lastname") + "_" + "No Contact Provided" + "_" + rst.getString("destination"));
+
+                                }
                             }
                         }
 
