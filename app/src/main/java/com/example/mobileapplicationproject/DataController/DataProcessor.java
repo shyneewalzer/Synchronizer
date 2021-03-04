@@ -130,7 +130,7 @@ public class DataProcessor {
             }
             else
             {
-                tokenholder.add(null);
+                tokenholder.add(" ");
             }
 
         }

@@ -321,7 +321,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
                         for(int x = 0; x<personlists.size();x++)
                         {
                             con.createStatement().executeUpdate("INSERT into travel_history (batch, firstname, lastname, contact_number, destination, driver_id, plate_number, account_id, time_boarded, date_boarded) " +
-                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2) +"', '"+ iddest.get(1) +"', '"+ dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ iddest.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
+                                    "VALUES('"+ batch +"', '"+ personlists.get(x).get(0) +"', '"+ personlists.get(x).get(1) +"', '"+ personlists.get(x).get(2).trim() +"', '"+ iddest.get(1) +"', '"+ dh.getUserid() +"', '"+ spr_platenum.getSelectedItem() +"', '"+ iddest.get(0) +"',  '"+ timeformatter.format(timestamp) +"', '"+ dateformatter.format(timestamp) +"')");
                             isSuccess = true;
                         }
                     }
