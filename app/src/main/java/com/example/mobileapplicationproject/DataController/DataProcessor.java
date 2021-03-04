@@ -131,7 +131,7 @@ public class DataProcessor {
         {
             for(int x = 0;x<3 - tokenizer.countTokens();x++)
             {
-                tokenholder.add(null);
+                tokenholder.add("");
             }
         }
         return tokenholder;
