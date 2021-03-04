@@ -233,7 +233,7 @@ public class EmployeeMain extends AppCompatActivity implements View.OnClickListe
             {
                 qrholder = dp.splitter(tempholder.get(2), ",");
                 for (int x = 0; x < qrholder.size(); x++) {
-                    personlists.add(new ArrayList<>(dp.splitter(qrholder.get(x), "_")));
+                    personlists.add(new ArrayList<>(dp.splitternull(qrholder.get(x), "_")));
                 }
 
                 for (int a = 0; a < personlists.size(); a++) {
