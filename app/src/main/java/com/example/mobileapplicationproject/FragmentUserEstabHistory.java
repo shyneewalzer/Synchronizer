@@ -434,7 +434,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
     private class Dbsearch extends AsyncTask<String, String, String>
     {
-        String idholder;
+        ArrayList<String> idholder;
         String msger;
         Boolean isSuccess=false;
         @Override
@@ -458,7 +458,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                             isSuccess=true;
                             while (rs.next())
                             {
-                                idholder = rs.getString("est_id");
+                                idholder.add(rs.getString("est_id"));
 
                             }
                         }
@@ -466,25 +466,26 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
                         if(isSuccess==true)
                         {
-                            ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE est_id = '"+ idholder +"' GROUP BY batch");
-                            isSuccess = true;
-                            if(rsid.isBeforeFirst())
+                            for(int x=0;x<idholder.size();x++)
                             {
-                                while (rsid.next())
+                                ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE est_id = '"+ idholder.get(x) +"' GROUP BY batch");
+                                isSuccess = true;
+                                if(rsid.isBeforeFirst())
                                 {
-                                    destid.add(rsid.getString("est_id"));
-                                    timee.add(rsid.getString("time_entered"));
-                                    datee.add(rsid.getString("date_entered"));
+                                    while (rsid.next())
+                                    {
+                                        destid.add(rsid.getString("est_id"));
+                                        timee.add(rsid.getString("time_entered"));
+                                        datee.add(rsid.getString("date_entered"));
 
-                                    listGroup.add(rsid.getString("batch"));
+                                        listGroup.add(rsid.getString("batch"));
 
+                                    }
                                 }
+
+                                rsid.close();
                             }
-                            else
-                            {
-                                isSuccess = false;
-                            }
-                            rsid.close();
+
                         }
 
 
@@ -529,6 +530,7 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPreExecute() {
 
+            idholder = new ArrayList<>();
             listGroup = new ArrayList<>();
             destid = new ArrayList<>();
             timee = new ArrayList<>();

@@ -456,7 +456,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
     private class Dbsearch extends AsyncTask<String, String, String>
     {
-        String idholder;
+        ArrayList<String> idholder;
         String msger;
         Boolean isSuccess=false;
         @Override
@@ -473,7 +473,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                     if(spr_search.getSelectedItem().equals("Individuals"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE concat_ws(' ', firstname, lastname) LIKE '%"+ edt_search.getText() +"%' ");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE CONCAT_WS(' ', firstname, lastname) LIKE '%"+ edt_search.getText().toString() +"%' ");
                         isSuccess = true;
 
                         if(rs.isBeforeFirst())
@@ -481,7 +481,8 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             isSuccess = true;
                             while (rs.next())
                             {
-                                idholder = rs.getString("account_id");
+                                idholder.add(rs.getString("account_id"));
+                                parentid.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + rs.getString("contactnumber"));
 
                             }
                         }
@@ -493,58 +494,42 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                         if(isSuccess==true)
                         {
-                            ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE account_id = '"+ idholder +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-                            isSuccess = true;
-                            if(rsid.isBeforeFirst())
+                            for(int x = 0;x<idholder.size();x++)
                             {
+                                ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE account_id = '"+ idholder.get(x) +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
                                 isSuccess = true;
-                                while (rsid.next())
+                                if(rsid.isBeforeFirst())
                                 {
+                                    isSuccess = true;
+                                    while (rsid.next())
+                                    {
+                                        timee.add(rsid.getString("time_entered"));
+                                        datee.add(rsid.getString("date_entered"));
+                                        empid.add(rsid.getString("employee_id"));
 
-                                    parentid.add(rsid.getString("account_id"));
-                                    timee.add(rsid.getString("time_entered"));
-                                    datee.add(rsid.getString("date_entered"));
-                                    empid.add(rsid.getString("employee_id"));
+                                        listGroup.add(rsid.getString("batch"));
 
-                                    listGroup.add(rsid.getString("batch"));
-
+                                    }
                                 }
+
+                                rsid.close();
                             }
-                            else
-                            {
-                                isSuccess = false;
-                            }
-                            rsid.close();
+
                         }
 
-
-
-                        if(isSuccess==true)
-                        {
-                            for (int x=0;x<listGroup.size();x++)
-                            {
-                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ parentid.get(x) +"' ");
-                                isSuccess = true;
-                                while (rsparent.next())
-                                {
-                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
-                                }
-                                rsparent.close();
-                            }
-                        }
                     }
 
                     else if(spr_search.getSelectedItem().equals("Employees"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE concat_ws(' ', firstname, lastname) LIKE '%"+ edt_search.getText() +"%' ");
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE concat_ws(' ', firstname, lastname) LIKE '%"+ edt_search.getText().toString() +"%' ");
                         isSuccess = true;
                         if(rs.isBeforeFirst())
                         {
                             isSuccess=true;
                             while (rs.next())
                             {
-                                idholder = rs.getString("user_id");
-
+                                idholder.add(rs.getString("user_id"));
+                                parentid.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + rs.getString("contactnumber"));
                             }
                         }
                         else
@@ -555,41 +540,28 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                         if(isSuccess==true)
                         {
-                            ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ idholder +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-                            isSuccess = true;
-                            if(rsid.isBeforeFirst())
+                            for(int x = 0;x<idholder.size();x++)
                             {
+                                ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ idholder.get(x) +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
                                 isSuccess = true;
-                                while (rsid.next())
+                                if(rsid.isBeforeFirst())
                                 {
-                                    parentid.add(rsid.getString("account_id"));
-                                    timee.add(rsid.getString("time_entered"));
-                                    datee.add(rsid.getString("date_entered"));
-                                    empid.add(rsid.getString("employee_id"));
+                                    isSuccess = true;
+                                    while (rsid.next())
+                                    {
+                                        timee.add(rsid.getString("time_entered"));
+                                        datee.add(rsid.getString("date_entered"));
+                                        empid.add(rsid.getString("employee_id"));
 
-                                    listGroup.add(rsid.getString("batch"));
+                                        listGroup.add(rsid.getString("batch"));
+
+                                    }
                                 }
+
+                                rsid.close();
                             }
-                            else
-                            {
-                                isSuccess = false;
-                            }
-                            rsid.close();
                         }
 
-                        if(isSuccess==true)
-                        {
-                            for (int x=0;x<listGroup.size();x++)
-                            {
-                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE employee_id = '"+ parentid.get(x) +"' ");
-                                isSuccess = true;
-                                while (rsparent.next())
-                                {
-                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
-                                }
-                                rsparent.close();
-                            }
-                        }
                     }
                     else if(spr_search.getSelectedItem().equals("Date"))
                     {
@@ -644,6 +616,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
         @Override
         protected void onPreExecute() {
 
+            idholder = new ArrayList<>();
             listGroup = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
