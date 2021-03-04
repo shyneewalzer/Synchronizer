@@ -362,8 +362,15 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             if(iddest.size()>2)
             {
                 personinfo = dp.splitter(iddest.get(2), ",");
+                if(personinfo.size()<3)
+                {
+                    for(int x = 0;x<3 - personinfo.size();x++)
+                    {
+                        personinfo.add(null);
+                    }
+                }
                 for (int x = 0; x < personinfo.size(); x++) {
-                    personlists.add(new ArrayList<>(dp.splitternull(personinfo.get(x), "_")));
+                    personlists.add(new ArrayList<>(dp.splitter(personinfo.get(x), "_")));
                 }
 
                 for (int a = 0; a < personlists.size(); a++) {
