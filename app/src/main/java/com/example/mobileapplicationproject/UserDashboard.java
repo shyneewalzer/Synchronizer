@@ -256,36 +256,48 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
 
         if(v.getId()==R.id.btn_eAddCompanion)
         {
-            fname.add(edt_cFname.getText()+"");
-            lname.add(edt_cLname.getText()+"");
-            contact.add(edt_cContact.getText()+"");
-
-            personinfo.clear();
-            personinfo.add(edt_cFname.getText()+"");
-            personinfo.add(edt_cLname.getText()+"");
-            personinfo.add(edt_cContact.getText()+"");
-            personlists.add(new ArrayList<>(personinfo));
-
-            customAdapter.notifyDataSetChanged();
-
-            edt_cFname.setText("");
-            edt_cLname.setText("");
-            edt_cContact.setText("");
-
-            qrcode =dh.getUserid() + "#" + txt_destination.getText() + "#";//needed to refresh qr value
-            for(int x = 0;x<personlists.size();x++)
+            if(edt_cFname.getText().toString().trim().isEmpty())
             {
-                for(int y=0;y<personlists.get(x).size();y++)
+                edt_cFname.setError("First name cannot be empty!");
+            }
+            else if(edt_cLname.getText().toString().trim().isEmpty())
+            {
+                edt_cLname.setError("Last name cannot be empty!");
+            }
+            else
+            {
+                fname.add(edt_cFname.getText()+"");
+                lname.add(edt_cLname.getText()+"");
+                contact.add(edt_cContact.getText()+"");
+
+                personinfo.clear();
+                personinfo.add(edt_cFname.getText()+"");
+                personinfo.add(edt_cLname.getText()+"");
+                personinfo.add(edt_cContact.getText()+"");
+                personlists.add(new ArrayList<>(personinfo));
+
+                customAdapter.notifyDataSetChanged();
+
+                edt_cFname.setText("");
+                edt_cLname.setText("");
+                edt_cContact.setText("");
+
+                qrcode =dh.getUserid() + "#" + txt_destination.getText() + "#";//needed to refresh qr value
+                for(int x = 0;x<personlists.size();x++)
                 {
-                    qrcode = qrcode + personlists.get(x).get(y) + "_";
+                    for(int y=0;y<personlists.get(x).size();y++)
+                    {
+                        qrcode = qrcode + personlists.get(x).get(y) + "_";
+                    }
+                    qrcode = qrcode + ",";
                 }
-                qrcode = qrcode + ",";
+
+                img_scanbox.setImageBitmap(dp.createQR(qrcode));
+                qrcode="";
+                lo_companionlist.setVisibility(View.VISIBLE);
+                lo_addcompanion.setVisibility(View.GONE);
             }
 
-            img_scanbox.setImageBitmap(dp.createQR(qrcode));
-            qrcode="";
-            lo_companionlist.setVisibility(View.VISIBLE);
-            lo_addcompanion.setVisibility(View.GONE);
         }
         else if(v.getId()==R.id.txt_companionExpander)
         {
