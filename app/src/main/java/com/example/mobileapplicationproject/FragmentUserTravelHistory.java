@@ -318,7 +318,16 @@ public class FragmentUserTravelHistory extends Fragment implements View.OnClickL
                             String lnamechecker = rs.getString("lastname");
                             if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
                             {
-                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + " - " + rs.getString("contact_number"));
+                                String contactchecker = rs.getString("contact_number");
+                                if(contactchecker!=null && !contactchecker.isEmpty())
+                                {
+
+                                }
+                                else
+                                {
+                                    contactchecker = "No Contact Provided";
+                                }
+                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + " - " + contactchecker);
                             }
                             else
                             {
