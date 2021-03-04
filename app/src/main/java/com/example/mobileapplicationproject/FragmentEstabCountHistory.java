@@ -51,8 +51,6 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
     ArrayList<String> datee;
     int finalcount;
 
-    String searcher = "passive";
-
     DatePickerDialog.OnDateSetListener dateSetListener;
     DatePickerDialog.OnDateSetListener dateSetListener2;
 
@@ -101,9 +99,8 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             @Override
             public void onRefresh() {
                 lo_estabcountrefresher.setRefreshing(false);
-                searcher="passive";
-                Dbreadstart dbreadstart = new Dbreadstart();
-                dbreadstart.execute();
+                Dbdateuptonow dbdateuptonow = new Dbdateuptonow();
+                dbdateuptonow.execute();
             }
         });
 
@@ -121,82 +118,12 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             }
         });
 
-        Dbreadstart dbreadstart = new Dbreadstart();
-        dbreadstart.execute();
+        Dbdateuptonow dbdateuptonow = new Dbdateuptonow();
+        dbdateuptonow.execute();
 
         return fragtrav;
     }
 
-    private class Dbreadstart extends AsyncTask<String, String, String>
-    {
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-                    ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstAcctID() +"' ");
-                    isSuccess = true;
-                    while(rs.next())
-                    {
-                        employeeid.add(rs.getString("user_id"));
-                        employeename.add(rs.getString("firstname") + " " + rs.getString("lastname"));
-                    }
-
-                    rs.close();
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            employeename = new ArrayList<>();
-            employeeid = new ArrayList<>();
-
-            lo_estabcountrefresher.setVisibility(View.GONE);
-            lo_countviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            if(searcher.equals("passive") && isSuccess==true)
-            {
-                Dbdateuptonow dbdateuptonow = new Dbdateuptonow();
-                dbdateuptonow.execute();
-            }
-            else if(searcher.equals("active") && isSuccess==true)
-            {
-                Dbreadbetweendates dbreadbetweendates = new Dbreadbetweendates();
-                dbreadbetweendates.execute();
-            }
-            else
-            {
-                dp.toasterlong(getContext(), msger+"");
-                pbar.setVisibility(View.GONE);
-            }
-
-
-        }
-    }
 
     private class Dbdateuptonow extends AsyncTask<String, String, String>
     {
@@ -217,6 +144,17 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                 }
                 else
                 {
+                    ResultSet rsi=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstAcctID() +"' ");
+                    isSuccess = true;
+                    while(rsi.next())
+                    {
+                        employeeid.add(rsi.getString("user_id"));
+                        employeename.add(rsi.getString("firstname") + " " + rsi.getString("lastname"));
+                    }
+
+                    rsi.close();
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     for(int x=0;x<employeeid.size();x++)
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ employeeid.get(x) +"' AND date_entered < '"+ strdate +"' ");
@@ -266,6 +204,9 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             lo_countviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
 
+            employeename = new ArrayList<>();
+            employeeid = new ArrayList<>();
+
             finalcount = 0;
             employeecount = new ArrayList<>();
             dateofnow = Calendar.getInstance();
@@ -292,8 +233,13 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             }
             else
             {
+                customAdapter = new CustomAdapter();
+                listView.setAdapter(customAdapter);;
+
+                lo_estabcountrefresher.setVisibility(View.VISIBLE);
+                lo_countviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
-                dp.toasterlong(getContext(), msger+"");
+                dp.toasterlong(getContext(), "No Records yet");
             }
 
         }
@@ -316,6 +262,17 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
                 }
                 else
                 {
+                    ResultSet rsi=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ dh.getEstAcctID() +"' ");
+                    isSuccess = true;
+                    while(rsi.next())
+                    {
+                        employeeid.add(rsi.getString("user_id"));
+                        employeename.add(rsi.getString("firstname") + " " + rsi.getString("lastname"));
+                    }
+
+                    rsi.close();
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     for(int x=0;x<employeeid.size();x++)
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ employeeid.get(x) +"' AND (date_entered between '"+ edt_start.getText() +"' and '"+ edt_end.getText() +"') ");
@@ -370,6 +327,9 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             finalcount = 0;
             employeecount = new ArrayList<>();
 
+            employeename = new ArrayList<>();
+            employeeid = new ArrayList<>();
+
             lo_estabcountrefresher.setVisibility(View.GONE);
             lo_countviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
@@ -393,8 +353,12 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
             }
             else
             {
+                customAdapter.notifyDataSetChanged();
+
+                lo_estabcountrefresher.setVisibility(View.VISIBLE);
+                lo_countviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
-                dp.toasterlong(getContext(), msger+"");
+                dp.toasterlong(getContext(), "Nothing Found");
             }
 
 
@@ -406,9 +370,8 @@ public class FragmentEstabCountHistory extends Fragment implements View.OnClickL
 
         if(v.getId()==R.id.btn_search)
         {
-            searcher = "active";
-            Dbreadstart dbreadstart = new Dbreadstart();
-            dbreadstart.execute();
+            Dbreadbetweendates dbreadbetweendates = new Dbreadbetweendates();
+            dbreadbetweendates.execute();
 
         }
         else if(v.getId()==R.id.edt_start)

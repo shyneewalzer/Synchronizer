@@ -447,7 +447,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             isSuccess = true;
                             while (rs.next())
                             {
-                                idholder.add(rs.getString("account_id"));
+                                idholder.add(rs.getString("user_id"));
                                 Log.d("Profile Search", "Has "+ rs.getRow() +" rows");
                             }
                         }
@@ -486,7 +486,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                         {
                             for (int x=0;x<listGroup.size();x++)
                             {
-                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE employee_id = '"+ parentid.get(x) +"' ");
+                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ parentid.get(x) +"' ");
                                 isSuccess = true;
                                 while (rsparent.next())
                                 {
