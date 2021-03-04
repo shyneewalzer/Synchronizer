@@ -244,6 +244,57 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                         }
                     }
                     rs.close();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<destid.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rsest=con.createStatement().executeQuery("SELECT * FROM establishments WHERE est_id = '"+ destid.get(x) +"' ");
+
+                        isSuccess=true;
+                        while (rsest.next())
+                        {
+                            destination.add(rsest.getString("name"));
+                            adr.add(rsest.getString("street"));
+
+                        }
+
+                        rsest.close();
+                    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<listGroup.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rsemp=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
+
+                        isSuccess=true;
+                        while (rsemp.next())
+                        {
+                            String fnamechecker = rsemp.getString("firstname");
+                            String lnamechecker = rsemp.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                String contactchecker = rsemp.getString("contact_number");
+                                if(contactchecker!=null && !contactchecker.isEmpty())
+                                {
+                                    listPerson.add(rsemp.getString("firstname") + " " + rsemp.getString("lastname") + " - " + rsemp.getString("contact_number"));
+                                }
+                                else
+                                {
+                                    listPerson.add(rsemp.getString("firstname") + " " + rsemp.getString("lastname") + "- No Contact Provided");
+                                }
+                            }
+                        }
+
+                        listChild.put(listGroup.get(x), listPerson);
+
+                        rsemp.close();
+                    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     con.close();
                 }
             }
@@ -262,6 +313,9 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             destid = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
+            destination = new ArrayList<>();
+            adr = new ArrayList<>();
+            listChild.clear();
 
             lo_userestabrefresher.setVisibility(View.GONE);
             estabviewer.setVisibility(View.GONE);
@@ -271,164 +325,23 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
         @Override
         protected void onPostExecute(String a){
 
-            Dbestabreader dbestabreader = new Dbestabreader();
-            dbestabreader.execute();
-
-            dm.displayMessage(getContext(), listGroup+"");
-        }
-    }
-
-    private class Dbestabreader extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    for(int x=0;x<destid.size();x++)
-                    {
-                        listPerson = new ArrayList<>();
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM establishments WHERE est_id = '"+ destid.get(x) +"' ");
-
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            destination.add(rs.getString("name"));
-                            adr.add(rs.getString("street"));
-
-                        }
-
-                        rs.close();
-                    }
-
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            destination = new ArrayList<>();
-            adr = new ArrayList<>();
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            if(isSuccess==true)
-            {
-                Dbreadsecond dbreadsecond = new Dbreadsecond();
-                dbreadsecond.execute();
-            }
-            else
-            {
-                pbar.setVisibility(View.VISIBLE);
-                dp.toasterlong(getContext(), msger+"");
-            }
-
-        }
-    }
-
-    private class Dbreadsecond extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    for(int x=0;x<listGroup.size();x++)
-                    {
-                        listPerson = new ArrayList<>();
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
-
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            String fnamechecker = rs.getString("firstname");
-                            String lnamechecker = rs.getString("lastname");
-                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
-                            {
-                                String contactchecker = rs.getString("contact_number");
-                                if(contactchecker!=null && !contactchecker.isEmpty())
-                                {
-                                    listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + " - " + rs.getString("contact_number"));
-                                }
-                                else
-                                {
-                                    listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + "- No Contact Provided");
-                                }
-                            }
-                        }
-
-                        listChild.put(listGroup.get(x), listPerson);
-
-                        rs.close();
-                    }
-
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            listChild.clear();
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
             if(isSuccess==true)
             {
                 expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
                 expandableListView.setAdapter(expandAdapter);
+
             }
             else
             {
-                dp.toasterlong(getContext(), msger+"");
+                expandableListView.setAdapter((ExpandableListAdapter) null);
+
+                dp.toasterlong(getContext(), "Nothing Found");
+                Log.d("Search Results", msger+"");
             }
+
             lo_userestabrefresher.setVisibility(View.VISIBLE);
             estabviewer.setVisibility(View.VISIBLE);
             pbar.setVisibility(View.GONE);
-
         }
     }
 
@@ -515,6 +428,55 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
                         rs.close();
                     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<destid.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rsest=con.createStatement().executeQuery("SELECT * FROM establishments WHERE est_id = '"+ destid.get(x) +"' ");
+
+                        isSuccess=true;
+                        while (rsest.next())
+                        {
+                            destination.add(rsest.getString("name"));
+                            adr.add(rsest.getString("street"));
+
+                        }
+
+                        rsest.close();
+                    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<listGroup.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rsemp=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
+
+                        isSuccess=true;
+                        while (rsemp.next())
+                        {
+                            String fnamechecker = rsemp.getString("firstname");
+                            String lnamechecker = rsemp.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                String contactchecker = rsemp.getString("contact_number");
+                                if(contactchecker!=null && !contactchecker.isEmpty())
+                                {
+                                    listPerson.add(rsemp.getString("firstname") + " " + rsemp.getString("lastname") + " - " + rsemp.getString("contact_number"));
+                                }
+                                else
+                                {
+                                    listPerson.add(rsemp.getString("firstname") + " " + rsemp.getString("lastname") + "- No Contact Provided");
+                                }
+                            }
+                        }
+
+                        listChild.put(listGroup.get(x), listPerson);
+
+                        rsemp.close();
+                    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
                     con.close();
                 }
@@ -535,6 +497,9 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
             destid = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
+            destination = new ArrayList<>();
+            adr = new ArrayList<>();
+            listChild.clear();
 
             dm.displayMessage(getContext(), sqlsearch+"");
             lo_userestabrefresher.setVisibility(View.GONE);
@@ -547,18 +512,21 @@ public class FragmentUserEstabHistory extends Fragment implements View.OnClickLi
 
             if(isSuccess==true)
             {
-                Dbestabreader dbestabreader = new Dbestabreader();
-                dbestabreader.execute();
+                expandAdapter = new AdapterEstabHistory(listGroup, listChild, destination, timee, datee, adr);
+                expandableListView.setAdapter(expandAdapter);
+
             }
             else
             {
                 expandableListView.setAdapter((ExpandableListAdapter) null);
-                lo_userestabrefresher.setVisibility(View.VISIBLE);
-                estabviewer.setVisibility(View.VISIBLE);
-                pbar.setVisibility(View.VISIBLE);
+
                 dp.toasterlong(getContext(), "Nothing Found");
                 Log.d("Search Results", msger+"");
             }
+
+            lo_userestabrefresher.setVisibility(View.VISIBLE);
+            estabviewer.setVisibility(View.VISIBLE);
+            pbar.setVisibility(View.GONE);
 
         }
     }
