@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -261,6 +262,46 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
                         }
                     }
 
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<plate.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rsv=con.createStatement().executeQuery("SELECT * FROM vehicles WHERE plate_number = '"+ plate.get(x) +"' ");
+
+                        isSuccess=true;
+                        while (rsv.next())
+                        {
+                            route.add(rsv.getString("vehicle_route"));
+                        }
+
+                        rsv.close();
+                    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<=listGroup.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        listPerson.add(parentid.get(x));
+                        ResultSet rst=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_boarded ASC, time_boarded ASC");
+
+                        isSuccess=true;
+                        while (rst.next())
+                        {
+                            String fnamechecker = rst.getString("firstname");
+                            String lnamechecker = rst.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                listPerson.add(rst.getString("firstname") + " " + rst.getString("lastname") + "_" + rst.getString("contact_number") + "_" + rst.getString("destination"));
+                            }
+                        }
+
+                        listChild.put(listGroup.get(x), listPerson);
+
+                        rst.close();
+                    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
                     con.close();
                 }
             }
@@ -281,162 +322,35 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             plate = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
-
-            lo_driverhistoryrefresher.setVisibility(View.GONE);
-            lo_routeviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            Dbvehiclereader dbvehiclereader = new Dbvehiclereader();
-            dbvehiclereader.execute();
-
-            dm.displayMessage(getApplicationContext(), parentid+"rawr");
-        }
-    }
-
-    private class Dbvehiclereader extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    for(int x=0;x<plate.size();x++)
-                    {
-                        listPerson = new ArrayList<>();
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM vehicles WHERE plate_number = '"+ plate.get(x) +"' ");
-
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            route.add(rs.getString("vehicle_route"));
-                        }
-
-                        rs.close();
-                    }
-
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            lo_driverhistoryrefresher.setVisibility(View.GONE);
-            lo_routeviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
-
             route = new ArrayList<>();
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            Dbreadsecond dbreadsecond = new Dbreadsecond();
-            dbreadsecond.execute();
-
-            lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
-            lo_routeviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
-
-            dm.displayMessage(getApplicationContext(), listGroup+"");
-        }
-    }
-
-    private class Dbreadsecond extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-                    //TODO: database do not match
-                    for(int x=0;x<=listGroup.size();x++)
-                    {
-                        listPerson = new ArrayList<>();
-                        listPerson.add(parentid.get(x));
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_boarded ASC, time_boarded ASC");
-
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            String fnamechecker = rs.getString("firstname");
-                            String lnamechecker = rs.getString("lastname");
-                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
-                            {
-                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + rs.getString("contact_number") + "_" + rs.getString("destination"));
-                            }
-                        }
-
-                        listChild.put(listGroup.get(x), listPerson);
-
-                        rs.close();
-                    }
-
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            lo_driverhistoryrefresher.setVisibility(View.GONE);
-            lo_routeviewer.setVisibility(View.GONE);
-            pbar.setVisibility(View.VISIBLE);
-
             listChild.clear();
 
+            lo_driverhistoryrefresher.setVisibility(View.GONE);
+            lo_routeviewer.setVisibility(View.GONE);
+            pbar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String a){
 
-            lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
-            lo_routeviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
+            if(isSuccess==true)
+            {
+                expandAdapter = new AdapterDriverHistory(listGroup, listChild, plate, timee, datee, route);
+                expandableListView.setAdapter(expandAdapter);
 
-            expandAdapter = new AdapterDriverHistory(listGroup, listChild, plate, timee, datee, route);
-            expandableListView.setAdapter(expandAdapter);
-            dm.displayMessage(getApplicationContext(), listPerson+"");
+                lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
+                lo_routeviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
+            else
+            {
+                expandableListView.setAdapter((ExpandableListAdapter) null);
+                dp.toasterlong(getApplicationContext(), "Nothing Found");
+
+                lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
+                lo_routeviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -565,6 +479,44 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
 
                     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<plate.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        ResultSet rsv=con.createStatement().executeQuery("SELECT * FROM vehicles WHERE plate_number = '"+ plate.get(x) +"' ");
+
+                        isSuccess=true;
+                        while (rsv.next())
+                        {
+                            route.add(rsv.getString("vehicle_route"));
+                        }
+
+                        rsv.close();
+                    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<=listGroup.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        listPerson.add(parentid.get(x));
+                        ResultSet rst=con.createStatement().executeQuery("SELECT * FROM travel_history WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_boarded ASC, time_boarded ASC");
+
+                        isSuccess=true;
+                        while (rst.next())
+                        {
+                            String fnamechecker = rst.getString("firstname");
+                            String lnamechecker = rst.getString("lastname");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                listPerson.add(rst.getString("firstname") + " " + rst.getString("lastname") + "_" + rst.getString("contact_number") + "_" + rst.getString("destination"));
+                            }
+                        }
+
+                        listChild.put(listGroup.get(x), listPerson);
+
+                        rst.close();
+                    }
 
                     con.close();
                 }
@@ -586,6 +538,8 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
             plate = new ArrayList<>();
             timee = new ArrayList<>();
             datee = new ArrayList<>();
+            route = new ArrayList<>();
+            listChild.clear();
 
             dm.displayMessage(getApplicationContext(), parentid+"");
             lo_driverhistoryrefresher.setVisibility(View.GONE);
@@ -596,12 +550,24 @@ public class DriverHistory extends AppCompatActivity implements NavigationView.O
         @Override
         protected void onPostExecute(String a){
 
-            lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
-            lo_routeviewer.setVisibility(View.VISIBLE);
-            pbar.setVisibility(View.GONE);
+            if(isSuccess==true)
+            {
+                expandAdapter = new AdapterDriverHistory(listGroup, listChild, plate, timee, datee, route);
+                expandableListView.setAdapter(expandAdapter);
 
-            Dbvehiclereader dbvehiclereader = new Dbvehiclereader();
-            dbvehiclereader.execute();
+                lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
+                lo_routeviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
+            else
+            {
+                expandableListView.setAdapter((ExpandableListAdapter) null);
+                dp.toasterlong(getApplicationContext(), "Nothing Found");
+
+                lo_driverhistoryrefresher.setVisibility(View.VISIBLE);
+                lo_routeviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
+            }
 
         }
     }

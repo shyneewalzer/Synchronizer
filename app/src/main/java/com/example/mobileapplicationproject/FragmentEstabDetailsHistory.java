@@ -258,6 +258,53 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             rsparent.close();
                         }
                     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<listGroup.size();x++)
+                    {
+                        ResultSet rsemp=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ empid.get(x) +"' ");
+                        Log.d("Estab Details Phase", "2nd Phase");
+                        while (rsemp.next())
+                        {
+                            Log.d("Employee Profile Search", "Has "+ rsemp.getRow() +" rows");
+                            empname.add(rsemp.getString("firstname") + " " + rsemp.getString("lastname"));
+                        }
+
+                        rsemp.close();
+                    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<listGroup.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        listPerson.add(parentid.get(x));
+                        ResultSet rsbatch=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
+                        Log.d("Estab Details Phase", "3rd Phase");
+                        while (rsbatch.next())
+                        {
+                            Log.d("Profile Search", "Has "+ rsbatch.getRow() +" rows");
+                            String fnamechecker = rsbatch.getString("firstname");
+                            String lnamechecker = rsbatch.getString("lastname");
+                            String contactnum = rsbatch.getString("contact_number");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                if(contactnum!=null && !contactnum.isEmpty())
+                                {
+
+                                }
+                                else
+                                {
+                                    contactnum = "No Contact Provided";
+                                }
+                                listPerson.add(rsbatch.getString("firstname") + " " + rsbatch.getString("lastname") + "_" + contactnum);
+                            }
+                        }
+
+                        listChild.put(listGroup.get(x), listPerson);
+
+                        rsbatch.close();
+                    }
                     con.close();
                 }
             }
@@ -277,160 +324,12 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             timee = new ArrayList<>();
             datee = new ArrayList<>();
             empid = new ArrayList<>();
+            empname = new ArrayList<>();
+            listChild.clear();
 
             lo_estabdetailsrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            if(isSuccess==true)
-            {
-                Dbreademp dbreademp = new Dbreademp();
-                dbreademp.execute();
-            }
-            else
-            {
-                pbar.setVisibility(View.GONE);
-                dp.toasterlong(getContext(), msger+"");
-            }
-
-        }
-    }
-
-    private class Dbreademp extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-                    for(int x=0;x<listGroup.size();x++)
-                    {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ empid.get(x) +"' ");
-                        isSuccess = true;
-                        while (rs.next())
-                        {
-                            empname.add(rs.getString("firstname") + " " + rs.getString("lastname"));
-                        }
-
-                        rs.close();
-                    }
-
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            empname = new ArrayList<>();
-            Log.d("Phase: ", "2nd phase");
-        }
-
-        @Override
-        protected void onPostExecute(String a){
-
-            if(isSuccess==true)
-            {
-                Dbreadsecond dbreadsecond = new Dbreadsecond();
-                dbreadsecond.execute();
-            }
-            else
-            {
-                pbar.setVisibility(View.GONE);
-                dp.toasterlong(getContext(), msger+"");
-            }
-
-        }
-    }
-
-    private class Dbreadsecond extends AsyncTask<String, String, String>
-    {
-
-        String msger;
-        Boolean isSuccess=false;
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            try{
-                Connection con=cc.CONN();
-                if(con==null)
-                {
-                    msger="Please Check your Internet Connection";
-                }
-                else
-                {
-
-                    for(int x=0;x<listGroup.size();x++)
-                    {
-                        listPerson = new ArrayList<>();
-                        listPerson.add(parentid.get(x));
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
-
-                        isSuccess=true;
-                        while (rs.next())
-                        {
-                            String fnamechecker = rs.getString("firstname");
-                            String lnamechecker = rs.getString("lastname");
-                            String contactnum = rs.getString("contact_number");
-                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
-                            {
-                                if(contactnum!=null && !contactnum.isEmpty())
-                                {
-
-                                }
-                                else
-                                {
-                                    contactnum = "No Contact Provided";
-                                }
-                                listPerson.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + contactnum);
-                            }
-                        }
-
-                        listChild.put(listGroup.get(x), listPerson);
-
-                        rs.close();
-                    }
-
-
-                    con.close();
-                }
-            }
-            catch (Exception ex){
-                msger="Exception" + ex;
-            }
-            return msger;
-
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            listChild.clear();
-            Log.d("Phase: ", "3nd phase");
         }
 
         @Override
@@ -447,6 +346,9 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             }
             else
             {
+                expandableListView.setAdapter((ExpandableListAdapter) null);
+                lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
+                travelviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
                 dp.toasterlong(getContext(), msger+"");
             }
@@ -474,7 +376,6 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                     if(spr_search.getSelectedItem().equals("Individuals"))
                     {
                         ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE CONCAT_WS(' ', firstname, lastname) LIKE '%"+ edt_search.getText().toString() +"%' ");
-                        isSuccess = true;
 
                         if(rs.isBeforeFirst())
                         {
@@ -482,8 +383,7 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             while (rs.next())
                             {
                                 idholder.add(rs.getString("account_id"));
-                                parentid.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + rs.getString("contactnumber"));
-
+                                Log.d("Profile Search", "Has "+ rs.getRow() +" rows");
                             }
                         }
                         else
@@ -497,12 +397,13 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             for(int x = 0;x<idholder.size();x++)
                             {
                                 ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE account_id = '"+ idholder.get(x) +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-                                isSuccess = true;
+
                                 if(rsid.isBeforeFirst())
                                 {
-                                    isSuccess = true;
                                     while (rsid.next())
                                     {
+                                        Log.d("Scanned Search", "Has "+ rsid.getRow() +" rows");
+                                        parentid.add(rsid.getString("account_id"));
                                         timee.add(rsid.getString("time_entered"));
                                         datee.add(rsid.getString("date_entered"));
                                         empid.add(rsid.getString("employee_id"));
@@ -511,25 +412,43 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                                     }
                                 }
-
                                 rsid.close();
                             }
 
+                        }
+
+                        if(parentid.size()>0)
+                        {
+                            for (int x=0;x<listGroup.size();x++)
+                            {
+                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE account_id = '"+ parentid.get(x) +"' ");
+                                isSuccess = true;
+                                while (rsparent.next())
+                                {
+                                    Log.d("Profile ID Search", "Has "+ rsparent.getRow() +" rows");
+                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
+                                }
+                                rsparent.close();
+                            }
+                        }
+                        else
+                        {
+                            isSuccess = false;
                         }
 
                     }
 
                     else if(spr_search.getSelectedItem().equals("Employees"))
                     {
-                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE concat_ws(' ', firstname, lastname) LIKE '%"+ edt_search.getText().toString() +"%' ");
-                        isSuccess = true;
+                        ResultSet rs=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE CONCAT_WS(' ', firstname, lastname) LIKE '%"+ edt_search.getText().toString() +"%' ");
+
                         if(rs.isBeforeFirst())
                         {
-                            isSuccess=true;
+                            isSuccess = true;
                             while (rs.next())
                             {
-                                idholder.add(rs.getString("user_id"));
-                                parentid.add(rs.getString("firstname") + " " + rs.getString("lastname") + "_" + rs.getString("contactnumber"));
+                                idholder.add(rs.getString("account_id"));
+                                Log.d("Profile Search", "Has "+ rs.getRow() +" rows");
                             }
                         }
                         else
@@ -543,12 +462,13 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             for(int x = 0;x<idholder.size();x++)
                             {
                                 ResultSet rsid=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE employee_id = '"+ idholder.get(x) +"' AND est_id = '"+ dh.getEstID() +"' GROUP BY batch");
-                                isSuccess = true;
+
                                 if(rsid.isBeforeFirst())
                                 {
-                                    isSuccess = true;
                                     while (rsid.next())
                                     {
+                                        Log.d("Scanned Search", "Has "+ rsid.getRow() +" rows");
+                                        parentid.add(rsid.getString("account_id"));
                                         timee.add(rsid.getString("time_entered"));
                                         datee.add(rsid.getString("date_entered"));
                                         empid.add(rsid.getString("employee_id"));
@@ -557,9 +477,28 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
                                     }
                                 }
-
                                 rsid.close();
                             }
+
+                        }
+
+                        if(parentid.size()>0)
+                        {
+                            for (int x=0;x<listGroup.size();x++)
+                            {
+                                ResultSet rsparent=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE employee_id = '"+ parentid.get(x) +"' ");
+                                isSuccess = true;
+                                while (rsparent.next())
+                                {
+                                    Log.d("Profile ID Search", "Has "+ rsparent.getRow() +" rows");
+                                    parentid.set(x, rsparent.getString("firstname") + " " + rsparent.getString("lastname") + "_" + rsparent.getString("contactnumber"));
+                                }
+                                rsparent.close();
+                            }
+                        }
+                        else
+                        {
+                            isSuccess = false;
                         }
 
                     }
@@ -600,7 +539,52 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                             }
                         }
                     }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+                    for(int x=0;x<listGroup.size();x++)
+                    {
+                        ResultSet rsemp=con.createStatement().executeQuery("SELECT * FROM user_profile WHERE user_id = '"+ empid.get(x) +"' ");
+                        Log.d("Estab Details Phase", "2nd Phase");
+                        while (rsemp.next())
+                        {
+                            Log.d("Employee Profile Search", "Has "+ rsemp.getRow() +" rows");
+                            empname.add(rsemp.getString("firstname") + " " + rsemp.getString("lastname"));
+                        }
+
+                        rsemp.close();
+                    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(int x=0;x<listGroup.size();x++)
+                    {
+                        listPerson = new ArrayList<>();
+                        listPerson.add(parentid.get(x));
+                        ResultSet rsbatch=con.createStatement().executeQuery("SELECT * FROM employee_scanned WHERE batch = '"+ listGroup.get(x) +"' ORDER BY date_entered ASC, time_entered ASC");
+                        Log.d("Estab Details Phase", "3rd Phase");
+                        while (rsbatch.next())
+                        {
+                            Log.d("Profile Search", "Has "+ rsbatch.getRow() +" rows");
+                            String fnamechecker = rsbatch.getString("firstname");
+                            String lnamechecker = rsbatch.getString("lastname");
+                            String contactnum = rsbatch.getString("contact_number");
+                            if((fnamechecker!=null && !fnamechecker.isEmpty()) && (lnamechecker!=null && !lnamechecker.isEmpty()))
+                            {
+                                if(contactnum!=null && !contactnum.isEmpty())
+                                {
+
+                                }
+                                else
+                                {
+                                    contactnum = "No Contact Provided";
+                                }
+                                listPerson.add(rsbatch.getString("firstname") + " " + rsbatch.getString("lastname") + "_" + contactnum);
+                            }
+                        }
+
+                        listChild.put(listGroup.get(x), listPerson);
+
+                        rsbatch.close();
+                    }
 
                     con.close();
                 }
@@ -622,6 +606,8 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
             datee = new ArrayList<>();
             empid = new ArrayList<>();
             parentid = new ArrayList<>();
+            empname = new ArrayList<>();
+            listChild.clear();
 
             lo_estabdetailsrefresher.setVisibility(View.GONE);
             travelviewer.setVisibility(View.GONE);
@@ -635,9 +621,13 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
 
             if(isSuccess==true)
             {
-                Log.d("Batch", parentid+", ");
-                Dbreademp dbreademp = new Dbreademp();
-                dbreademp.execute();
+
+                expandAdapter = new AdapterDetailsHistory(listGroup, listChild, empname, timee, datee);
+                expandableListView.setAdapter(expandAdapter);
+
+                lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
+                travelviewer.setVisibility(View.VISIBLE);
+                pbar.setVisibility(View.GONE);
             }
             else
             {
@@ -645,12 +635,11 @@ public class FragmentEstabDetailsHistory extends Fragment implements View.OnClic
                 lo_estabdetailsrefresher.setVisibility(View.VISIBLE);
                 travelviewer.setVisibility(View.VISIBLE);
                 pbar.setVisibility(View.GONE);
-
                 dp.toasterlong(getContext(), "Nothing Found");
-                Log.d("Search Result", msger+"");
             }
 
 
         }
     }
+
 }
