@@ -117,6 +117,26 @@ public class DataProcessor {
         return tokenholder;
     }
 
+    public ArrayList<String>splitternull(String iptScanned, String iptdelimer)
+    {
+        ArrayList<String>tokenholder = new ArrayList<>();
+        StringTokenizer tokenizer = new StringTokenizer(iptScanned, iptdelimer);
+        while (tokenizer.hasMoreTokens())
+        {
+            String temp = tokenizer.nextToken();
+            if(temp!=null && !temp.isEmpty())
+            {
+                tokenholder.add(temp);
+            }
+            else
+            {
+                tokenholder.add(null);
+            }
+
+        }
+        return tokenholder;
+    }
+
     public boolean passwordValidator(String iptpassword)
     {
         boolean passwordValidatorResponse;
