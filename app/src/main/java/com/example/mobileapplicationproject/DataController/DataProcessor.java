@@ -124,13 +124,13 @@ public class DataProcessor {
         while (tokenizer.hasMoreTokens())
         {
             String temp = tokenizer.nextToken();
-            if(temp!=null && !temp.isEmpty())
+            tokenholder.add(temp);
+            if(tokenizer.countTokens() < 3)
             {
-                tokenholder.add(temp);
-            }
-            else
-            {
-                tokenholder.add(" ");
+                for(int x = 0;x<3 - tokenizer.countTokens();x++)
+                {
+                    tokenholder.add(null);
+                }
             }
 
         }
