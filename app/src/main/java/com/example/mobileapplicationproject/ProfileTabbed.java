@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
@@ -111,50 +112,50 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
             dh.setVisitmode("travel");
             Intent startIntent=new Intent(ProfileTabbed.this, UserDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.history)
         {
             Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.estab)
         {
             dh.setVisitmode("estab");
             Intent startIntent=new Intent(ProfileTabbed.this, UserDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.drivehome)
         {
             Intent startIntent=new Intent(ProfileTabbed.this, DriverDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.drivehistory)
         {
             Intent startIntent=new Intent(ProfileTabbed.this, DriverHistory.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.esthome)
         {
             Intent startIntent=new Intent(ProfileTabbed.this, EstabDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.esthistory)
         {
             Intent startIntent=new Intent(ProfileTabbed.this, UserHistory.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
         {
             Intent startIntent=new Intent(ProfileTabbed.this, About.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.logout || item.getItemId()==R.id.drivelogout || item.getItemId()==R.id.estlogout)
         {

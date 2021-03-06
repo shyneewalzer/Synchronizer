@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.mobileapplicationproject.DataController.ConnectionController;
@@ -44,6 +45,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     ArrayList<String>vehiclelist;
     ArrayList<String>routelist;
     ArrayList<String>bodynumlist;
+    ArrayAdapter<String> dataAdapter;
 
     ConnectionController cc = new ConnectionController();
     DataHolder dh = new DataHolder();
@@ -123,8 +125,13 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         dateformatter = new SimpleDateFormat("yyyy-MM-dd");
         batchformatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
-        Dbread dbread = new Dbread();
-        dbread.execute();
+        vehiclelist = new ArrayList<>();
+        routelist = new ArrayList<>();
+        bodynumlist = new ArrayList<>();
+
+        dataAdapter = new ArrayAdapter<String>(DriverDashboard.this, R.layout.spinner_format, vehiclelist);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spr_platenum.setAdapter(dataAdapter);
 
         spr_platenum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -173,7 +180,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         {
             Intent startIntent = new Intent(DriverDashboard.this, DriverAddVehicle.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
@@ -232,7 +239,6 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         {
             Intent startIntent=new Intent(DriverDashboard.this, Login.class);
             startActivity(startIntent);
-            finish();
         }
 
     }
@@ -279,9 +285,9 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
             pbar.setVisibility(View.VISIBLE);
             dashboardviewer.setVisibility(View.GONE);
 
-            vehiclelist = new ArrayList<>();
-            routelist = new ArrayList<>();
-            bodynumlist = new ArrayList<>();
+            vehiclelist.clear();
+            routelist.clear();
+            bodynumlist.clear();
 
             vehiclelist.add(0,"Select Plate Number");
         }
@@ -289,9 +295,7 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         @Override
         protected void onPostExecute(String a){
 
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(DriverDashboard.this, R.layout.spinner_format, vehiclelist);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spr_platenum.setAdapter(dataAdapter);
+            dataAdapter.notifyDataSetChanged();
 
             pbar.setVisibility(View.GONE);
             dashboardviewer.setVisibility(View.VISIBLE);
@@ -395,27 +399,23 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        if(item.getItemId()==R.id.drivehome)
-        {
-            dp.toastershort(getApplicationContext(), "Home");
-        }
-        else if(item.getItemId()==R.id.driveprof)
+        if(item.getItemId()==R.id.driveprof)
         {
             Intent startIntent=new Intent(DriverDashboard.this, ProfileTabbed.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.drivehistory)
         {
             Intent startIntent=new Intent(DriverDashboard.this, DriverHistory.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
         {
             Intent startIntent=new Intent(DriverDashboard.this, About.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.drivelogout)
         {
@@ -427,4 +427,12 @@ public class DriverDashboard extends AppCompatActivity implements NavigationView
         return false;
     }
 
+    @Override
+    protected void onResume() {
+
+        Dbread dbread = new Dbread();
+        dbread.execute();
+
+        super.onResume();
+    }
 }

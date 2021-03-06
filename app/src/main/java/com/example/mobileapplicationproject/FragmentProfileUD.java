@@ -144,6 +144,10 @@ public class FragmentProfileUD extends Fragment implements View.OnClickListener{
         {
             if(btn_update.getText().toString().equals("EDIT"))
             {
+                edt_firstname.setEnabled(true);
+                edt_middlename.setEnabled(true);
+                edt_lastname.setEnabled(true);
+                edt_age.setEnabled(true);
                 edt_contact.setEnabled(true);
                 edt_house.setEnabled(true);
                 edt_brgy.setEnabled(true);

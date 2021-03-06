@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.DialogInterface;
@@ -588,33 +589,33 @@ public class UserDashboard extends AppCompatActivity implements NavigationView.O
         {
             dh.setVisitmode("travel");
             Intent startIntent=new Intent(UserDashboard.this, UserDashboard.class);
-            finish();
             startActivity(startIntent);
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.prof)
         {
             Intent startIntent=new Intent(UserDashboard.this, ProfileTabbed.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.history)
         {
             Intent startIntent=new Intent(UserDashboard.this, UserHistory.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.estab)
         {
             dh.setVisitmode("estab");
             Intent startIntent=new Intent(UserDashboard.this, UserDashboard.class);
-            finish();
             startActivity(startIntent);
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
         {
             Intent startIntent=new Intent(UserDashboard.this, About.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.logout)
         {

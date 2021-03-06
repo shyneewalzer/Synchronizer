@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
@@ -399,19 +400,19 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
         {
             Intent startIntent=new Intent(EstabDashboard.this, ProfileTabbed.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.esthistory)
         {
             Intent startIntent=new Intent(EstabDashboard.this, UserHistory.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
         {
             Intent startIntent=new Intent(EstabDashboard.this, About.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.estlogout)
         {

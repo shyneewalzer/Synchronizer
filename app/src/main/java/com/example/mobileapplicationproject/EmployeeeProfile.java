@@ -134,6 +134,10 @@ public class EmployeeeProfile extends AppCompatActivity implements NavigationVie
         {
             if(btn_eUpdate.getText().toString().equals("EDIT"))
             {
+                edt_Fname.setEnabled(true);
+                edt_Mname.setEnabled(true);
+                edt_Lname.setEnabled(true);
+                edt_age.setEnabled(true);
                 edt_Contact.setEnabled(true);
                 edt_house.setEnabled(true);
                 edt_brgy.setEnabled(true);

@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -117,32 +118,32 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
             dh.setVisitmode("travel");
             Intent startIntent=new Intent(UserHistory.this, UserDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         if(item.getItemId()==R.id.estab)
         {
             dh.setVisitmode("estab");
             Intent startIntent=new Intent(UserHistory.this, UserDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.prof || item.getItemId()==R.id.estprof)
         {
             Intent startIntent=new Intent(UserHistory.this, ProfileTabbed.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.esthome)
         {
             Intent startIntent=new Intent(UserHistory.this, EstabDashboard.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.about || item.getItemId()==R.id.driveabout || item.getItemId()==R.id.estabout)
         {
             Intent startIntent=new Intent(UserHistory.this, About.class);
             startActivity(startIntent);
-            finish();
+            drawerLayout.closeDrawer(GravityCompat.START);
         }
         else if(item.getItemId()==R.id.logout || item.getItemId()==R.id.estlogout)
         {
