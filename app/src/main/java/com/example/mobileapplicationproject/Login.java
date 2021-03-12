@@ -257,7 +257,7 @@ public class Login extends AppCompatActivity {
                     startActivity(myIntent);
                     dp.toastershort(getApplicationContext(), "Hi " + dh.getEstOwner());
                 }
-                finish();
+//                finish();
             }
             else
             {
