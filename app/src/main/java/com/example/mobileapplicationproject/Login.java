@@ -242,22 +242,25 @@ public class Login extends AppCompatActivity {
                 {
                     dh.setVisitmode("travel");//refresh activity sequence
                     Intent myIntent = new Intent(Login.this, UserDashboard.class);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(myIntent);
                     dp.toastershort(getApplicationContext(), "Hi " + dh.getpFName() + " " + dh.getpLName());
                 }
                 else if(dh.getType().equals("Driver"))
                 {
                     Intent myIntent = new Intent(Login.this, DriverDashboard.class);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(myIntent);
                     dp.toastershort(getApplicationContext(), "Hi " + dh.getpFName() + " " + dh.getpLName());
                 }
                 else if(dh.getType().equals("Establishment"))
                 {
                     Intent myIntent = new Intent(Login.this, EstabDashboard.class);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(myIntent);
                     dp.toastershort(getApplicationContext(), "Hi " + dh.getEstOwner());
                 }
-//                finish();
+                finishAffinity();
             }
             else
             {

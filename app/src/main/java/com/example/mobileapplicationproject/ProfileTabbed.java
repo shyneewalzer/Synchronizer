@@ -174,7 +174,7 @@ public class ProfileTabbed extends AppCompatActivity implements NavigationView.O
             Intent startIntent=new Intent(ProfileTabbed.this, Login.class);
             startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startIntent);
-            finish();
+            finishAffinity();
         }
     }
 }
