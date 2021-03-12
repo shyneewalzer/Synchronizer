@@ -128,6 +128,7 @@ public class EstabDashboard extends AppCompatActivity implements NavigationView.
         if(purpose.equals("logout") && dialogResponse==true)
         {
             Intent startIntent=new Intent(EstabDashboard.this, Login.class);
+            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startIntent);
             finish();
         }

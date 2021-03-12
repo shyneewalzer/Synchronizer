@@ -113,6 +113,8 @@ public class FragmentProfileEstab extends Fragment implements View.OnClickListen
             {
                 edt_name.setEnabled(true);
                 edt_contact.setEnabled(true);
+                edt_owner.setEnabled(true);
+                edt_street.setEnabled(true);
 
                 btn_estUpdate.setText("SAVE");
                 btn_estUpload.setVisibility(View.VISIBLE);

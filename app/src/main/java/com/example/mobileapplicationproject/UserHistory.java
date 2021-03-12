@@ -160,6 +160,7 @@ public class UserHistory extends AppCompatActivity implements NavigationView.OnN
         if(purpose.equals("logout") && dialogResponse==true)
         {
             Intent startIntent=new Intent(UserHistory.this, Login.class);
+            startIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startIntent);
             finish();
         }
