@@ -2,9 +2,12 @@ package com.example.mobileapplicationproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,9 @@ public class Login extends AppCompatActivity {
     DataProcessor dp = new DataProcessor();
     DebugMode dm = new DebugMode();
 
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
+
     ProgressBar pbar;
     LinearLayout btns;
 
@@ -55,14 +61,25 @@ public class Login extends AppCompatActivity {
         pbar = findViewById(R.id.pbar);
         btns = findViewById(R.id.grpbuttons);
 
+        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String sessionemail= sharedpreferences.getString("Email",null);
+        String sessionpass= sharedpreferences.getString("Password",null);
+
+        if(sessionemail!=null || sessionpass!=null) {
+            emailInput.setText(sessionemail);
+            passwordInput.setText(sessionpass);
+            email = sessionemail;
+            password = sessionpass;
+            Dblogin dblogin = new Dblogin();
+            dblogin.execute();
+        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 email = emailInput.getText()+"";
                 password = passwordInput.getText()+"";
-//                email = "kamusta@gmail.com";
-//                password = "Jaudian29";
+
                 if(email.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please Input Email", Toast.LENGTH_SHORT).show();
                     return;
@@ -144,7 +161,7 @@ public class Login extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            Log.d("credit", email + " " + password);
             btns.setVisibility(View.GONE);
             pbar.setVisibility(View.VISIBLE);
         }
@@ -261,6 +278,11 @@ public class Login extends AppCompatActivity {
                     dp.toastershort(getApplicationContext(), "Hi " + dh.getEstOwner());
                 }
                 finishAffinity();
+
+                editor = sharedpreferences.edit();
+                editor.putString("Email", emailInput.getText().toString());
+                editor.putString("Password", passwordInput.getText().toString());
+                editor.apply();
             }
             else
             {
